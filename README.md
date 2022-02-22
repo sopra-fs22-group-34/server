@@ -1,4 +1,4 @@
-# SoPra RESTful Service Template FS22 
+# SoPra RESTful Service Template FS22
 
 ## Getting started with Spring Boot
 
