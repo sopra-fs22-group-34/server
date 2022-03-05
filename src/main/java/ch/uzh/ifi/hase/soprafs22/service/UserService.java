@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.yaml.snakeyaml.tokens.Token;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +40,13 @@ public class UserService {
     return this.userRepository.findAll();
   }
 
-
+  public User getUserById(Long ID) {
+      User userByID = userRepository.findUserById(ID);
+      if (userByID == null) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user (ID) you are looking for does not exist!");
+      }
+      return userByID;
+  }
 
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
