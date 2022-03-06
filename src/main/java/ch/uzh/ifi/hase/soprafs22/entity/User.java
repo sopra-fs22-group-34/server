@@ -13,7 +13,7 @@ import java.util.Date;
  * Every variable will be mapped into a database field with the @Column
  * annotation
  * - nullable = false -> this cannot be left empty
- * - unique = true -> this value must be unqiue across the database -> composes
+ * - unique = true -> this value must be unique across the database -> composes
  * the primary key
  */
 @Entity
@@ -26,11 +26,14 @@ public class User implements Serializable {
   @GeneratedValue
   private Long id;
 
-  @Column(nullable = false)
+  @Column()
   private String name;
 
   @Column(nullable = false, unique = true)
   private String username;
+
+  @Column(nullable = false)
+  private String password;
 
   @Column(nullable = false, unique = true)
   private String token;
@@ -39,7 +42,10 @@ public class User implements Serializable {
   private UserStatus status;
 
   @Column(nullable = false)
-  private final Date join_date = new Date();
+  private Date joinDate;
+
+  @Column()
+  private Date birthday;
 
   public Long getId() {
     return id;
@@ -81,5 +87,12 @@ public class User implements Serializable {
     this.status = status;
   }
 
-  public Date getJoinDate() { return join_date; }
+  public Date getBirthday() { return birthday; }
+    public void setBirthday(Date birthday) { this.birthday = birthday; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+  public void setJoinDate(Date joinDate) { this.joinDate = joinDate; }
+
+  public Date getJoinDate() { return joinDate; }
 }

@@ -9,8 +9,10 @@ public class UserGetDTO {
   private Long id;
   private String name;
   private String username;
+  private String password;
   private UserStatus status;
-  private Date join_date;
+  private Date joinDate;
+  private Date birthday;
 
   public Long getId() {
     return id;
@@ -36,6 +38,13 @@ public class UserGetDTO {
     this.username = username;
   }
 
+  public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
   public UserStatus getStatus() {
     return status;
   }
@@ -44,7 +53,17 @@ public class UserGetDTO {
     this.status = status;
   }
 
+  public void setJoinDate(Date joinDate) {
+        this.joinDate = joinDate;
+    }
   public Date getJoinDate() {
-        return join_date;
+        return joinDate;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+    public Date getBirthday() {
+        return birthday;
     }
 }
