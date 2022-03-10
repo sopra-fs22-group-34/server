@@ -33,19 +33,19 @@ public class User implements Serializable {
   private String username;
 
   @Column(nullable = false)
+  private Date creation_date;
+
+  @Column(nullable = false)
+  private boolean logged_in;
+
+  @Column()
+  private Date birthday;
+
+  @Column(nullable = false)
   private String password;
 
   @Column(nullable = false, unique = true)
   private String token;
-
-  @Column(nullable = false)
-  private UserStatus status;
-
-  @Column(nullable = false)
-  private Date joinDate;
-
-  @Column()
-  private Date birthday;
 
   public Long getId() {
     return id;
@@ -79,12 +79,12 @@ public class User implements Serializable {
     this.token = token;
   }
 
-  public UserStatus getStatus() {
-    return status;
+  public boolean getLogged_in() {
+    return logged_in;
   }
 
-  public void setStatus(UserStatus status) {
-    this.status = status;
+  public void setLogged_in(boolean logged_in) {
+    this.logged_in = logged_in;
   }
 
   public Date getBirthday() { return birthday; }
@@ -92,7 +92,7 @@ public class User implements Serializable {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-  public void setJoinDate(Date joinDate) { this.joinDate = joinDate; }
+  public void setCreation_date(Date creation_date) { this.creation_date = creation_date; }
 
-  public Date getJoinDate() { return joinDate; }
+  public Date getCreation_date() { return creation_date; }
 }

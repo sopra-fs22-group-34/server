@@ -58,60 +58,59 @@ public class UserController {
     return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
   }
 
+  @PostMapping("/users/{UN}")
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public UserGetDTO loginUser(@PathVariable String UN, @RequestBody UserPostDTO loginData) {
+    // fetch user by specified username
+    User user = userService.getUserByUsername(UN);
+
+    // verify password
+    User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(loginData);
+    userService.matchingPassword(user, loginData.getPassword());
+
+    // set logged_in to true
+    userService.loginUser(user);
+
+    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+  }
+
   @GetMapping("/users/{ID}")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public UserGetDTO getUserById(@PathVariable Long ID) {
+  public UserGetDTO getUserById(@PathVariable String ID) {
+      User user = new User();
+
       // fetch user by specified ID
-      User user = userService.getUserById(ID);
+      try { user = userService.getUserById(Long.parseLong(ID)); }
+      // if the path cannot be converted into an ID, it must be a username. Therefore, fetch by username
+      catch (NumberFormatException notID){ user = userService.getUserByUsername(ID); }
+
       return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
   }
 
+  @PutMapping("/users/{ID}/logout")
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public UserGetDTO logoutUser(@PathVariable Long ID) {
+    //set loggged_in to false
+    User user = userService.getUserById(ID);
+    userService.logoutUser(user);
+
+    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+
+  }
   @PutMapping("/users/{ID}")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public UserGetDTO setUserById(@PathVariable Long ID, @RequestBody User updatedUser) {
-      // don't create a copy; access and edit [userService.getUserById(ID)] directly
+      // check if new name already belongs to another user
+      userService.checkIfTaken(ID,updatedUser.getUsername());
 
-      // update all editable parameters
-      userService.getUserById(ID).setBirthday(updatedUser.getBirthday());
-      if (updatedUser.getUsername() != null) {userService.getUserById(ID).setUsername(updatedUser.getUsername());}
-      userService.getUserById(ID).setName(updatedUser.getName());
-      if (updatedUser.getPassword() != null) {userService.getUserById(ID).setPassword(updatedUser.getPassword());}
+      // update the user
+      User user = userService.updateUser(ID, updatedUser);
 
-      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.getUserById(ID));
+      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
   }
 
-  @PutMapping("/users/{ID}/birthday")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public UserGetDTO setBirthdayById(@PathVariable Long ID, @RequestBody User updatedUser) {
-      // don't create a copy; access and edit [userService.getUserById(ID)] directly
-      userService.getUserById(ID).setBirthday(updatedUser.getBirthday());
-      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.getUserById(ID));
-  }
-  @PutMapping("/users/{ID}/username")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public UserGetDTO setUsernameById(@PathVariable Long ID, @RequestBody User updatedUser) {
-      // don't create a copy; access and edit [userService.getUserById(ID)] directly
-      if (updatedUser.getUsername() != null) {userService.getUserById(ID).setUsername(updatedUser.getUsername());}
-      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.getUserById(ID));
-  }
-  @PutMapping("/users/{ID}/name")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public UserGetDTO setNameById(@PathVariable Long ID, @RequestBody User updatedUser) {
-      // don't create a copy; access and edit [userService.getUserById(ID)] directly
-      userService.getUserById(ID).setName(updatedUser.getName());
-      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.getUserById(ID));
-  }
-  @PutMapping("/users/{ID}/password")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public UserGetDTO setPasswordById(@PathVariable Long ID, @RequestBody User updatedUser) {
-      // don't create a copy; access and edit [userService.getUserById(ID)] directly
-      if (updatedUser.getPassword() != null) {userService.getUserById(ID).setPassword(updatedUser.getPassword());}
-      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.getUserById(ID));
-  }
 }

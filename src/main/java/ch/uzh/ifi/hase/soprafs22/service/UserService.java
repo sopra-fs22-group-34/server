@@ -44,15 +44,38 @@ public class UserService {
   public User getUserById(Long ID) {
       User userByID = userRepository.findUserById(ID);
       if (userByID == null) {
-          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user (ID) you are looking for does not exist!");
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with this ID exists.");
       }
       return userByID;
   }
 
+  public void checkIfTaken(Long id, String un){
+      User userByUN = userRepository.findByUsername(un);
+      if (userByUN != null && userRepository.findUserById(id) != userByUN) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "This username is already taken.");
+      }
+  }
+
+  public User getUserByUsername(String un) {
+      User userByUN = userRepository.findByUsername(un);
+      if (userByUN == null) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with this username exists.");
+      }
+      return userByUN;
+  }
+
+  public void logoutUser(User user){
+      user.setLogged_in(false);
+  }
+
+  public void loginUser(User user){
+      user.setLogged_in(true);
+  }
+
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
-    newUser.setStatus(UserStatus.ONLINE);
-    newUser.setJoinDate(new Date());
+    newUser.setLogged_in(true);
+    newUser.setCreation_date(new Date());
 
     checkIfUserExists(newUser);
 
@@ -63,6 +86,15 @@ public class UserService {
 
     log.debug("Created Information for User: {}", newUser);
     return newUser;
+  }
+
+  public User updateUser(Long ID, User updatedUser){
+
+      User userToEdit = getUserById(ID);
+      if (updatedUser.getBirthday() != null) { userToEdit.setBirthday(updatedUser.getBirthday()); }
+      if (updatedUser.getUsername() != null) { userToEdit.setUsername(updatedUser.getUsername()); }
+
+      return userToEdit;
   }
 
   /**
@@ -78,7 +110,18 @@ public class UserService {
   private void checkIfUserExists(User userToBeCreated) {
     User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
     if (userByUsername != null) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the user could not be created!");
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "A user with this username already exists.");
     }
+  }
+
+  /**
+   * Checks if a given password applies to a given user.
+   * @param user
+   * @param password
+   */
+  public void matchingPassword(User user, String password){
+      if (!user.getPassword().equals(password)){
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Incorrect password.");
+      };
   }
 }
