@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest {
@@ -84,6 +86,79 @@ public class UserServiceTest {
     // then -> attempt to create second user with same user -> check that an error
     // is thrown
     assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
+  @Test
+  public void getUserByIdTest() {
+      userService.createUser(testUser);
+      // throw error for nonexistent user
+      assertThrows(ResponseStatusException.class, () -> userService.getUserById(2L));
+      // find given user
+      Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser);
+      assertEquals(userService.getUserById(1L), testUser);
+  }
+
+  @Test
+  public void getUserByUsernameTest() {
+      userService.createUser(testUser);
+      // throw error for nonexistent user
+      assertThrows(ResponseStatusException.class, () -> userService.getUserByUsername("fakeUser"));
+      // find given user
+      Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
+      assertEquals(userService.getUserByUsername("testUsername"), testUser);
+  }
+
+  @Test
+  public void checkIfTakenTest() {
+      userService.createUser(testUser);
+      Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
+      // throw error for a different user wanting the same UN
+      assertThrows(ResponseStatusException.class, () -> userService.checkIfTaken(2L, "testUsername"));
+      // accept name change if it's the same user
+      Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser);
+      userService.checkIfTaken(1L, "testUsername");
+  }
+
+  @Test
+  public void logoutUserTest() {
+      userService.createUser(testUser);
+      userService.logoutUser(testUser);
+      assertFalse(testUser.getLogged_in());
+  }
+
+  @Test
+  public void loginUserTest() {
+      userService.createUser(testUser);
+      testUser.setLogged_in(false);
+      userService.loginUser(testUser);
+      assertTrue(testUser.getLogged_in());
+  }
+
+  @Test
+  public void updateUserTest() {
+      userService.createUser(testUser);
+      Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser);
+      //create new data
+      User updatedInfo = new User();
+      updatedInfo.setBirthday(new Date());
+      updatedInfo.setUsername("newUsername");
+
+      assertNotEquals(testUser.getUsername(), updatedInfo.getUsername());
+      assertNotEquals(testUser.getBirthday(), updatedInfo.getBirthday());
+
+      userService.updateUser(1L, updatedInfo);
+
+      assertEquals(testUser.getUsername(), updatedInfo.getUsername());
+      assertEquals(testUser.getBirthday(), updatedInfo.getBirthday());
+  }
+
+  @Test
+  public void matchingPasswordTest() {
+      userService.createUser(testUser);
+      // check if nothing happens when correct password is given
+      userService.matchingPassword(testUser,"testPassword");
+      // check that error is thrown with wrong password
+      assertThrows(ResponseStatusException.class, () -> userService.matchingPassword(testUser,"wrongPassword"));
   }
 
 }

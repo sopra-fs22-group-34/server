@@ -48,19 +48,19 @@ public class UserService {
       return userByID;
   }
 
-  public void checkIfTaken(Long id, String un){
-      User userByUN = userRepository.findByUsername(un);
-      if (userByUN != null && userRepository.findUserById(id) != userByUN) {
-          throw new ResponseStatusException(HttpStatus.CONFLICT, "This username is already taken.");
-      }
-  }
-
   public User getUserByUsername(String un) {
       User userByUN = userRepository.findByUsername(un);
       if (userByUN == null) {
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with this username exists.");
       }
       return userByUN;
+  }
+
+  public void checkIfTaken(Long id, String un){
+      User userByUN = userRepository.findByUsername(un);
+      if (userByUN != null && userRepository.findUserById(id) != userByUN) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "This username is already taken.");
+      }
   }
 
   public void logoutUser(User user){
@@ -121,6 +121,6 @@ public class UserService {
   public void matchingPassword(User user, String password){
       if (!user.getPassword().equals(password)){
           throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Incorrect password.");
-      };
+      }
   }
 }
