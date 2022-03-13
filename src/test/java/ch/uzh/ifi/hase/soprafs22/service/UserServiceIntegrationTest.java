@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
-import ch.uzh.ifi.hase.soprafs22.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +41,7 @@ public class UserServiceIntegrationTest {
     User testUser = new User();
     testUser.setName("testName");
     testUser.setUsername("testUsername");
+    testUser.setPassword("testPassword");
 
     // when
     User createdUser = userService.createUser(testUser);
@@ -50,8 +50,11 @@ public class UserServiceIntegrationTest {
     assertEquals(testUser.getId(), createdUser.getId());
     assertEquals(testUser.getName(), createdUser.getName());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
+    assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertNotNull(createdUser.getToken());
-    assertFalse(createdUser.getLogged_in());
+    assertTrue(createdUser.getLogged_in());
+    assertNotNull(createdUser.getCreation_date());
+    assertNull(createdUser.getBirthday());
   }
 
   @Test
@@ -61,6 +64,7 @@ public class UserServiceIntegrationTest {
     User testUser = new User();
     testUser.setName("testName");
     testUser.setUsername("testUsername");
+    testUser.setPassword("testPassword");
     User createdUser = userService.createUser(testUser);
 
     // attempt to create second user with same username
@@ -69,6 +73,7 @@ public class UserServiceIntegrationTest {
     // change the name but forget about the username
     testUser2.setName("testName2");
     testUser2.setUsername("testUsername");
+    testUser2.setPassword("testPassword");
 
     // check that an error is thrown
     assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));

@@ -90,27 +90,27 @@ public class UserController {
   }
 
   @PutMapping("/users/{ID}/logout")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @ResponseBody
-  public UserGetDTO logoutUser(@PathVariable Long ID) {
+  public void logoutUser(@PathVariable Long ID) {
     //set loggged_in to false
     User user = userService.getUserById(ID);
     userService.logoutUser(user);
 
-    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
-
   }
+
   @PutMapping("/users/{ID}")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @ResponseBody
-  public UserGetDTO setUserById(@PathVariable Long ID, @RequestBody User updatedUser) {
+  public void setUserById(@PathVariable Long ID, @RequestBody User updatedUser) {
+
+      userService.getUserById(ID);
+
       // check if new name already belongs to another user
       userService.checkIfTaken(ID,updatedUser.getUsername());
 
       // update the user
       User user = userService.updateUser(ID, updatedUser);
-
-      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
   }
 
 }

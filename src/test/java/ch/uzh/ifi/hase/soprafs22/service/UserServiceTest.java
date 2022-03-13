@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
-import ch.uzh.ifi.hase.soprafs22.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +31,7 @@ public class UserServiceTest {
     testUser.setId(1L);
     testUser.setName("testName");
     testUser.setUsername("testUsername");
+    testUser.setPassword("testPassword");
 
     // when -> any object is being save in the userRepository -> return the dummy
     // testUser
@@ -50,8 +50,11 @@ public class UserServiceTest {
     assertEquals(testUser.getId(), createdUser.getId());
     assertEquals(testUser.getName(), createdUser.getName());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
+    assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertNotNull(createdUser.getToken());
-    assertFalse(createdUser.getLogged_in());
+    assertNotNull(createdUser.getCreation_date());
+    assertNull(createdUser.getBirthday());
+    assertTrue(createdUser.getLogged_in());
   }
 
   @Test
@@ -61,7 +64,7 @@ public class UserServiceTest {
 
     // when -> setup additional mocks for UserRepository
     Mockito.when(userRepository.findByName(Mockito.any())).thenReturn(testUser);
-    Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
+    Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
 
     // then -> attempt to create second user with same user -> check that an error
     // is thrown
@@ -76,6 +79,7 @@ public class UserServiceTest {
     // when -> setup additional mocks for UserRepository
     Mockito.when(userRepository.findByName(Mockito.any())).thenReturn(testUser);
     Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
+    Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser);
 
     // then -> attempt to create second user with same user -> check that an error
     // is thrown
