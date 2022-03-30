@@ -28,4 +28,7 @@ public class LobbyService {
     public void kickPlayer() {
 
     }
+
+    //TODO: write the methods which are needed in the LobbyController
+
 }

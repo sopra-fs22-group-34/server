@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import javax.annotation.Resource;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Internal Lobby Representation
@@ -39,6 +42,10 @@ public class Lobby  {
 
     @Column(nullable = false)
     private Boolean isPrivate;
+
+    @OneToMany
+    @JoinColumn(nullable = false) //Go read les docs in case this does not work we just used @JoinColumn.
+    private List<User> users = new ArrayList<>(); //IMPORTANT: define a list always like this! It will not give you specific errors.
 
 
     public Long getLobbyId() {
