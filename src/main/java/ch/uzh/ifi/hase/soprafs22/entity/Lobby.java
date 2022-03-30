@@ -81,25 +81,5 @@ public class Lobby  {
         isPrivate = aPrivate;
     }
 
-    // these are placeholders -> not yet implemented;
-    // If Lobby is stored in a JPA Repo they need to get moved in LobbyService anyway
-
-    /**
-    public void startGame() {
-
-    }
-
-    public void setNumberOfPlayers() {
-
-    }
-
-    public void setColorScheme() {
-
-    }
-
-    public void kickPlayer() {
-
-    }
-    **/
 
 }
