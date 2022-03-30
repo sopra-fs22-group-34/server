@@ -1,15 +1,43 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+
+import org.springframework.beans.factory.annotation.Configurable;
+
+import javax.annotation.Resource;
+import javax.persistence.*;
+
+/**
+ * Internal Lobby Representation
+ * This class composes the internal representation of the Lobby and defines how
+ * the Lobby is stored in the database.
+ * Every variable will be mapped into a database field with the @Column
+ * annotation
+ * - nullable = false -> this cannot be left empty
+ * - unique = true -> this value must be unique across the database -> composes
+ * the primary key
+ */
+
+@Entity
+@Table(name="LOBBY")
 public class Lobby  {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue
     private Long lobbyId;
 
-    private Player host;
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private User host;
 
+    @Column(nullable = false)
     private String lobbyName;
 
+    @Column(nullable = false)
     private Boolean isPublic;
 
+    @Column(nullable = false)
     private Boolean isPrivate;
 
 
@@ -21,11 +49,11 @@ public class Lobby  {
         this.lobbyId = lobbyId;
     }
 
-    public Player getHost() {
+    public User getHost() {
         return host;
     }
 
-    public void setHost(Player host) {
+    public void setHost(User host) {
         this.host = host;
     }
 
@@ -53,7 +81,10 @@ public class Lobby  {
         isPrivate = aPrivate;
     }
 
-    //these are placeholders -> not yet implemented
+    // these are placeholders -> not yet implemented;
+    // If Lobby is stored in a JPA Repo they need to get moved in LobbyService anyway
+
+    /**
     public void startGame() {
 
     }
@@ -69,6 +100,6 @@ public class Lobby  {
     public void kickPlayer() {
 
     }
-
+    **/
 
 }
