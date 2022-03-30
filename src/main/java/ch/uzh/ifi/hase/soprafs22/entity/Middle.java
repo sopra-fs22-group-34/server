@@ -13,4 +13,8 @@ public class Middle implements Field {
     public void setColorAmounts(ArrayList<Integer> colorAmounts) {
         this.colorAmounts = colorAmounts;
     }
+
+    public void setupMiddle(){
+
+    }
 }

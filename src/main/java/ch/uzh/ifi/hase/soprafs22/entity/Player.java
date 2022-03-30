@@ -9,13 +9,13 @@ public class Player {
 
     private PlayerBoard playerBoard;
 
-    public int score;
+    private int score;
 
     public String playerName;
 
     public boolean loggedIn;
 
-    public boolean playersTurn;
+    private boolean playersTurn;
 
 
     public Long getPlayerId() {
@@ -33,4 +33,22 @@ public class Player {
     public void setPlayerBoard(PlayerBoard playerBoard) {
         this.playerBoard = playerBoard;
     }
+
+    public void login(){
+
+    }
+
+    public void logout(){
+
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public boolean getPlayersTurn(){
+        return playersTurn;
+    }
+
+
 }

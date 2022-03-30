@@ -34,4 +34,9 @@ public class PlayerBoard  {
     public void setFloorLine(FloorLine floorLine) {
         this.floorLine = floorLine;
     }
+
+    public int processEndOfRound(){
+        //PLACEHOLDER
+        return 0;
+    }
 }

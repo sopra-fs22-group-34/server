@@ -23,4 +23,14 @@ public class Wall {
     public void setPositionIsOccupiedArray(ArrayList<ArrayList<Boolean>> positionIsOccupiedArray) {
         this.positionIsOccupiedArray = positionIsOccupiedArray;
     }
+
+    public int processEndOfRound(){
+        //PLACEHOLDER
+        return 0;
+    }
+
+    public boolean isColorOccupied(int row, int colorIndex){
+        //PLACEHOLDER
+        return true;
+    }
 }

@@ -13,4 +13,9 @@ public class Stairs {
     public void setPatternLines(ArrayList<PatternLine> patternLines) {
         this.patternLines = patternLines;
     }
+
+    public int processEndOfRound(){
+        //PLACEHOLDER
+        return 0;
+    }
 }
