@@ -4,25 +4,9 @@ import java.util.ArrayList;
 
 public class Wall {
 
-    private ArrayList<ArrayList<Boolean>> colorIsOccupiedArray;
+    private Boolean[][] colorIsOccupiedArray = new Boolean[5][5];
 
-    private ArrayList<ArrayList<Boolean>> positionIsOccupiedArray;
-
-    public ArrayList<ArrayList<Boolean>> getColorIsOccupiedArray() {
-        return colorIsOccupiedArray;
-    }
-
-    public void setColorIsOccupiedArray(ArrayList<ArrayList<Boolean>> colorIsOccupiedArray) {
-        this.colorIsOccupiedArray = colorIsOccupiedArray;
-    }
-
-    public ArrayList<ArrayList<Boolean>> getPositionIsOccupiedArray() {
-        return positionIsOccupiedArray;
-    }
-
-    public void setPositionIsOccupiedArray(ArrayList<ArrayList<Boolean>> positionIsOccupiedArray) {
-        this.positionIsOccupiedArray = positionIsOccupiedArray;
-    }
+    private Boolean[][] positionIsOccupiedArray = new Boolean[5][5];
 
     public int processEndOfRound(){
         //PLACEHOLDER
@@ -32,5 +16,14 @@ public class Wall {
     public boolean isColorOccupied(int row, int colorIndex){
         //PLACEHOLDER
         return true;
+    }
+
+
+    public void placeTileInRowColumn(int row, int column){
+        positionIsOccupiedArray[row][column] = true;
+    }
+
+    public int getScoreFromTilePlacement(int row, int column){
+        return 0;
     }
 }
