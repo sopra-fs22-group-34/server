@@ -44,7 +44,7 @@ public class Lobby  {
     private Boolean isPrivate;
 
     @OneToMany
-    @JoinColumn(nullable = false) //Go read les docs in case this does not work we just used @JoinColumn.
+    //@JoinColumn(nullable = false) //Go read les docs in case this does not work we just used @JoinColumn.
     private List<User> users = new ArrayList<>(); //IMPORTANT: define a list always like this! It will not give you specific errors.
 
 
