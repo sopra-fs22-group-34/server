@@ -13,4 +13,9 @@ public class Factory implements Field {
     public void setColorAmounts(ArrayList<Integer> colorAmounts) {
         this.colorAmounts = colorAmounts;
     }
+
+    //these are placeholders -> not yet implemented
+    public void setupFactory() {
+
+    }
 }

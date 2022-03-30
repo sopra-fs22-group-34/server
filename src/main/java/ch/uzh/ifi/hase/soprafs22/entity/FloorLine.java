@@ -44,4 +44,14 @@ public class FloorLine {
     public void setMinusCount(int minusCount) {
         this.minusCount = minusCount;
     }
+
+    //these are placeholders -> not yet implemented
+    //TODO: discuss why this method is void. It should return something!
+    public void processEndOfRound() {
+
+    }
+
+    public void occupy() {
+
+    }
 }

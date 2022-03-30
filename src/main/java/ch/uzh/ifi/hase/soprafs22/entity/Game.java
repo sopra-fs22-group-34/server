@@ -55,4 +55,58 @@ public class Game  {
     public void setMiddle(Middle middle) {
         this.middle = middle;
     }
+
+    //these are placeholders -> not yet implemented
+    public void setupGame() {
+
+    }
+
+    public void playGame() {
+
+    }
+
+    public void startNextRound() {
+
+    }
+
+    public void endGame() {
+
+    }
+
+    //just returned some score so no error is thrown
+    public int countScore() {
+        return 420;
+    }
+
+    public void takeTileFromFactory() {
+
+    }
+
+    public void takeTileFromMiddle() {
+
+    }
+
+    public void takeMinusStone() {
+
+    }
+
+    public void placeTileOnStairs() {
+
+    }
+
+    public void moveTileToWall() {
+
+    }
+
+    public void placeTileOnFloorLine() {
+
+    }
+
+    public void nextPlayerTurn() {
+
+    }
+
+    public void viewPlayerBoard() {
+
+    }
 }

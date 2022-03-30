@@ -52,4 +52,23 @@ public class Lobby  {
     public void setPrivate(Boolean aPrivate) {
         isPrivate = aPrivate;
     }
+
+    //these are placeholders -> not yet implemented
+    public void startGame() {
+
+    }
+
+    public void setNumberOfPlayers() {
+
+    }
+
+    public void setColorScheme() {
+
+    }
+
+    public void kickPlayer() {
+
+    }
+
+
 }
