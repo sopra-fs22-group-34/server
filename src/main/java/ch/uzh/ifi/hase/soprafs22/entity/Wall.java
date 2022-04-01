@@ -7,11 +7,7 @@ public class Wall {
     private Boolean[][] colorIsOccupiedArray = new Boolean[5][5];
 
     private Boolean[][] positionIsOccupiedArray = new Boolean[5][5];
-
-    public int processEndOfRound(){
-        //PLACEHOLDER
-        return 0;
-    }
+    
 
     public boolean isColorOccupied(int row, int colorIndex){
         //PLACEHOLDER

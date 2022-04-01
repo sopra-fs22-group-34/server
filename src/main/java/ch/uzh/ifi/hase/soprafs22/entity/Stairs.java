@@ -1,21 +1,15 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import org.dom4j.rule.Pattern;
+
 import java.util.ArrayList;
 
 public class Stairs {
 
-    private ArrayList<PatternLine> patternLines;
+    private PatternLine[] patternLines = new PatternLine[5];
 
-    public ArrayList<PatternLine> getPatternLines() {
-        return patternLines;
-    }
 
-    public void setPatternLines(ArrayList<PatternLine> patternLines) {
-        this.patternLines = patternLines;
-    }
-
-    public int processEndOfRound(){
-        //PLACEHOLDER
-        return 0;
+    public int emptyFullPatternLine(int row){
+        return patternLines[row].emptyFullPatternLine();
     }
 }

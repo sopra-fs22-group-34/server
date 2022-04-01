@@ -33,4 +33,15 @@ public class PatternLine {
     public void setColorIndex(int colorIndex) {
         this.colorIndex = colorIndex;
     }
+
+
+    //return colorIndex of PatternLine if it is full, -1 otherwise to signify it isn't full
+    public int emptyFullPatternLine(){
+        if (length == tilesAmount) {
+            return colorIndex;
+        }
+        else {
+            return -1;
+        }
+    }
 }
