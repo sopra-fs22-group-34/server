@@ -8,7 +8,14 @@ public class Stairs {
 
     private PatternLine[] patternLines = new PatternLine[5];
 
+    //Initialize the 5 PatternLines, each with correct length
+    Stairs(){
+        for (int row = 0; row < 5; row++) {
+            patternLines[row] = new PatternLine(row+1);
+        }
+    }
 
+    //Attempt to empty the PatternLine indicated by row
     public int emptyFullPatternLine(int row){
         return patternLines[row].emptyFullPatternLine();
     }

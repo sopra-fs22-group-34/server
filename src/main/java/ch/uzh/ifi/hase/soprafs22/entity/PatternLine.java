@@ -7,15 +7,18 @@ public class PatternLine {
 
     private int tilesAmount;
 
+    //colorIndex is 0 through 4 for a color, -1 if the PatternLine is empty
     private int colorIndex;
+
+    PatternLine(int length){
+        this.length = length;
+        this.tilesAmount = 0;
+        this.colorIndex = -1;
+    }
 
 
     public int getLength() {
         return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
     }
 
     public int getTilesAmount() {
