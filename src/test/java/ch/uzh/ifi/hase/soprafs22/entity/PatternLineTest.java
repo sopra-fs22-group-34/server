@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.entity.PatternLine;
-import org.dom4j.rule.Pattern;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

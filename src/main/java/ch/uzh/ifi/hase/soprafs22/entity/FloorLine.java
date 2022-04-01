@@ -10,7 +10,16 @@ public class FloorLine {
 
     private boolean isOccupied;
 
+    //This variable keeps track of minus points, however it is always positive. e.g 9 means 9 minus points.
     private int minusCount;
+
+
+    FloorLine() {
+        tiles = new ArrayList<Integer>();
+        length = 0;
+        isOccupied = false;
+        minusCount = 0;
+    }
 
 
     public ArrayList<Integer> getTiles() {
@@ -45,10 +54,36 @@ public class FloorLine {
         this.minusCount = minusCount;
     }
 
-    //these are placeholders -> not yet implemented
-    //TODO: discuss why this method is void. It should return something!
-    public void processEndOfRound() {
 
+    public void placeTile(int colorIndex) {
+
+        //TODO: discuss how scoring works exactly
+        tiles.add(colorIndex);
+        isOccupied = true;
+        length = tiles.size();
+
+        if (length > 0 && length <= 2) {
+            minusCount += 1;
+        }
+
+        else if (length > 2 && length <= 5) {
+            minusCount += 2;
+        }
+
+        else {
+            minusCount += 3;
+        }
+
+    }
+
+
+    public int processEndOfRound() {
+        int minusPoints = getMinusCount();
+        tiles.clear();
+        setLength(0);
+        isOccupied = false;
+        setMinusCount(0);
+        return minusPoints;
     }
 
     public void occupy() {

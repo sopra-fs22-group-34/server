@@ -3,20 +3,9 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Stairs;
 import ch.uzh.ifi.hase.soprafs22.entity.PatternLine;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 public class StairsTest {
 
