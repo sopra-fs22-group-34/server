@@ -29,10 +29,13 @@ public class Lobby  {
     @Id
     @GeneratedValue
     private Long lobbyId;
-
+/*
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private User host;
+*/
+    @Column(nullable = false)
+    private Long hostId;
 
     @Column(nullable = false)
     private String lobbyName;
@@ -55,7 +58,7 @@ public class Lobby  {
     public void setLobbyId(Long lobbyId) {
         this.lobbyId = lobbyId;
     }
-
+/*
     public User getHost() {
         return host;
     }
@@ -63,7 +66,7 @@ public class Lobby  {
     public void setHost(User host) {
         this.host = host;
     }
-
+*/
     public String getLobbyName() {
         return lobbyName;
     }
@@ -72,21 +75,28 @@ public class Lobby  {
         this.lobbyName = lobbyName;
     }
 
-    public Boolean getPublic() {
+    public Boolean getisPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
+    public void setisPublic(Boolean aPublic) {
         isPublic = aPublic;
     }
 
-    public Boolean getPrivate() {
+    public Boolean getisPrivate() {
         return isPrivate;
     }
 
-    public void setPrivate(Boolean aPrivate) {
+    public void setisPrivate(Boolean aPrivate) {
         isPrivate = aPrivate;
     }
 
 
+    public Long getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(Long hostId) {
+        this.hostId = hostId;
+    }
 }

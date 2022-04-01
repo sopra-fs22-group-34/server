@@ -1,6 +1,9 @@
 package ch.uzh.ifi.hase.soprafs22.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
 import org.junit.jupiter.api.Test;
@@ -52,4 +55,43 @@ public class DTOMapperTest {
     assertEquals(user.getCreation_date(), userGetDTO.getCreation_date());
     assertEquals(user.getBirthday(), userGetDTO.getBirthday());
   }
+
+
+  @Test
+  public void testCreateLobby_fromLobbyPostDTO_toLobby_success() {
+      //create LobbyPostDTO
+      LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
+      lobbyPostDTO.setHostId(4L);
+      lobbyPostDTO.setLobbyName("1337Lobby");
+      lobbyPostDTO.setisPublic(true);
+      lobbyPostDTO.setisPrivate(false);
+
+      // MAP -> Create Lobby
+      Lobby lobby = DTOMapper.INSTANCE.convertLobbyPostDTOtoEntity(lobbyPostDTO);
+
+      // check content
+      assertEquals(lobby.getHostId(),lobbyPostDTO.getHostId());
+      assertEquals(lobby.getLobbyName(),lobbyPostDTO.getLobbyName());
+      assertEquals(lobby.getisPublic(),lobbyPostDTO.getisPublic());
+      assertEquals(lobby.getisPrivate(), lobbyPostDTO.getisPrivate());
+  }
+
+    @Test
+    public void testGetLobby_fromLobby_toLobbyGetDTO_success() {
+        // create User
+        Lobby lobby = new Lobby();
+        lobby.setLobbyName("ToxicMW2Lobby");
+        lobby.setHostId(7L);
+        lobby.setisPrivate(true);
+        lobby.setisPublic(false);
+
+        // MAP -> Create UserGetDTO
+        LobbyGetDTO lobbyGetDTO = DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
+
+        // check content
+        assertEquals(lobby.getHostId(), lobbyGetDTO.getHostId());
+        assertEquals(lobby.getLobbyName(), lobbyGetDTO.getLobbyName());
+        assertEquals(lobby.getisPrivate(), lobbyGetDTO.getisPrivate());
+        assertEquals(lobby.getisPublic(), lobbyGetDTO.getisPublic());
+    }
 }

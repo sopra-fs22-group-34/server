@@ -1,23 +1,37 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
-import ch.uzh.ifi.hase.soprafs22.entity.User;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
+import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
+import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLOutput;
 
+@RestController
 public class LobbyController {
 
 
+    private final LobbyService lobbyService;
+
+    LobbyController(LobbyService lobbyService) {
+        this.lobbyService = lobbyService;
+    }
 
     @PostMapping("/lobbies")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void createLobby() {
-        //PLACEHOLDER
+    public LobbyGetDTO createLobby(@RequestBody LobbyPostDTO lobbyPostDTO) {
+        // convert API lobby to internal representation
+        Lobby lobbyInput = DTOMapper.INSTANCE.convertLobbyPostDTOtoEntity(lobbyPostDTO);
+
+        // create the lobby
+        Lobby createdLobby = lobbyService.createLobby(lobbyInput);
+
+        //convert the internal representation of lobby back to API
+        return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(createdLobby);
     }
 
     @GetMapping("/lobbies/{lobbyId}")

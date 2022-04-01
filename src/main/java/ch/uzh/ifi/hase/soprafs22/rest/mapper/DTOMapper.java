@@ -1,6 +1,9 @@
 package ch.uzh.ifi.hase.soprafs22.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
 import org.mapstruct.*;
@@ -33,4 +36,17 @@ public interface DTOMapper {
   @Mapping(source = "logged_in", target = "logged_in")
   @Mapping(source = "birthday", target = "birthday")
   UserGetDTO convertEntityToUserGetDTO(User user);
+
+  @Mapping(source = "hostId", target = "hostId")
+  @Mapping(source = "lobbyName", target = "lobbyName")
+  @Mapping(source = "isPublic", target = "isPublic")
+  @Mapping(source = "isPrivate", target = "isPrivate")
+  Lobby convertLobbyPostDTOtoEntity(LobbyPostDTO lobbyPostDTO);
+
+  @Mapping(source = "lobbyId", target = "lobbyId")
+  @Mapping(source = "hostId", target = "hostId")
+  @Mapping(source = "lobbyName", target = "lobbyName")
+  @Mapping(source = "isPublic", target = "isPublic")
+  @Mapping(source = "isPrivate", target = "isPrivate")
+  LobbyGetDTO convertEntityToLobbyGetDTO(Lobby lobby);
 }
