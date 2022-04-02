@@ -41,7 +41,7 @@ public class LobbyControllerTest {
 
     // create a new user
     @Test
-    public void createUser_validInput_userCreated() throws Exception {
+    public void createLobby_validInput_lobbyCreated() throws Exception {
         // given
         Lobby lobby = new Lobby();
         lobby.setHostId(7L);

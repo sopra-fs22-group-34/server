@@ -1,7 +1,10 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.entity.Player;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
+import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +36,19 @@ public class LobbyService {
         this.lobbyRepository = lobbyRepository;
     }
 
-    public Lobby createLobby(Lobby lobby) {
-        Lobby newLobby = lobbyRepository.save(lobby);
+    public Lobby createLobby(Lobby newLobby) {
+        new Lobby();
+        newLobby.addPlayer(newLobby.getHostId());
+        newLobby = this.lobbyRepository.save(newLobby);
         lobbyRepository.flush();
-
         log.debug("Created Information for User: {}", newLobby);
         return newLobby;
+    }
+
+    public void joinLobby(Long lobbyId, Long id){
+        Lobby lobby = this.lobbyRepository.findLobbyByLobbyId(lobbyId);
+        lobby.addPlayer(id);
+        this.lobbyRepository.flush();
     }
 
     //these are placeholders

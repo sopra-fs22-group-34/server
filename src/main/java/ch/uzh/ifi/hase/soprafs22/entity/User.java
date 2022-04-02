@@ -86,9 +86,12 @@ public class User implements Serializable {
   }
 
   public Date getBirthday() { return birthday; }
-    public void setBirthday(Date birthday) { this.birthday = birthday; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+
+  public void setBirthday(Date birthday) { this.birthday = birthday; }
+
+  public String getPassword() { return password; }
+
+  public void setPassword(String password) { this.password = password; }
 
   public void setCreation_date(Date creation_date) { this.creation_date = creation_date; }
 

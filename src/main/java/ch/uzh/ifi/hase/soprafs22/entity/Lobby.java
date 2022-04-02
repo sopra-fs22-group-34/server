@@ -1,12 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 
-import org.springframework.beans.factory.annotation.Configurable;
-
-import javax.annotation.Resource;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -34,6 +30,7 @@ public class Lobby  {
     @JoinColumn
     private User host;
 */
+
     @Column(nullable = false)
     private Long hostId;
 
@@ -48,8 +45,8 @@ public class Lobby  {
 
     @OneToMany
     //@JoinColumn(nullable = false) //Go read les docs in case this does not work we just used @JoinColumn.
-    private List<User> users = new ArrayList<>(); //IMPORTANT: define a list always like this! It will not give you specific errors.
-
+    //private List<User> users = new ArrayList<>(); //IMPORTANT: define a list always like this! It will not give you specific errors.
+    private List<Long> listOfUserId = new ArrayList<>();
 
     public Long getLobbyId() {
         return lobbyId;
@@ -91,12 +88,15 @@ public class Lobby  {
         isPrivate = aPrivate;
     }
 
-
     public Long getHostId() {
         return hostId;
     }
 
     public void setHostId(Long hostId) {
         this.hostId = hostId;
+    }
+
+    public void addPlayer(Long id){
+        this.listOfUserId.add(id);
     }
 }
