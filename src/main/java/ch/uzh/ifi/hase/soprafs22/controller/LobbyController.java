@@ -36,7 +36,7 @@ public class LobbyController {
         return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(createdLobby);
     }
 
-    @GetMapping("/lobby")
+    @GetMapping("/lobbies")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<LobbyGetDTO> getAllLobbies() {
