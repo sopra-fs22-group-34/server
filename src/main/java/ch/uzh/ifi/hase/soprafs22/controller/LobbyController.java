@@ -40,11 +40,11 @@ public class LobbyController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<LobbyGetDTO> getAllLobbies() {
-        // fetch all users in the internal representation
+        // fetch all lobbies in the internal representation
         List<Lobby> lobbies = lobbyService.getLobbies();
         List<LobbyGetDTO> lobbyGetDTOs = new ArrayList<>();
 
-        // convert each user to the API representation
+        // convert each lobby to the API representation
         for (Lobby lobby : lobbies) {
             lobbyGetDTOs.add(DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby));
         }
