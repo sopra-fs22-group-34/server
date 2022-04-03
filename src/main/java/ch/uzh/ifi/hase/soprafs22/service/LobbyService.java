@@ -52,6 +52,14 @@ public class LobbyService {
         return lobbyByID;
     }
 
+    public Lobby getLobbyByLobbyname(String lobbyname) {
+        Lobby lobbyByLobbyname = lobbyRepository.findLobbyByLobbyName(lobbyname);
+        if (lobbyByLobbyname == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No lobby with this lobbyname exists.");
+        }
+        return lobbyByLobbyname;
+    }
+
     public Lobby createLobby(Lobby newLobby) {
         new Lobby();
         newLobby.addPlayer(newLobby.getHostId());

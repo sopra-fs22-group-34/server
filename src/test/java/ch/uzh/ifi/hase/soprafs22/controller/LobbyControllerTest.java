@@ -70,6 +70,32 @@ public class LobbyControllerTest {
                 .andExpect(jsonPath("$.isPublic", is(lobby.getisPublic())));
     }
 
+    // is this valid? because the get request does not send anything with it in ints body -> notign to compare
+    @Test
+    public void getLobby_validInput() throws Exception {
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHostId(7L);
+        lobby.setLobbyName("ToxicMW2Lobby");
+        lobby.setisPublic(false);
+        lobby.setisPrivate(true);
+        lobby.setLobbyId(1L);
+        System.out.println("This is the lobby's ID " + lobby.getLobbyId());
+
+        given(lobbyService.getLobbyById(7L)).willReturn(lobby);
+
+        // when
+        MockHttpServletRequestBuilder getRequest = get("/lobbies/"+lobby.getLobbyId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk());
+
+
+
+    }
+
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input
      * can be processed

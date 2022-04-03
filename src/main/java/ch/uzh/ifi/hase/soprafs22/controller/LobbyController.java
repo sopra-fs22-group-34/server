@@ -1,16 +1,13 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +51,15 @@ public class LobbyController {
     @GetMapping("/lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void getLobbyById(@PathVariable long lobbyId) {
-        //PLACEHOLDER
+    public LobbyGetDTO getLobbyById(@PathVariable String lobbyId) {
+        Lobby lobby = new Lobby();
+
+        // fetch lobby by specified ID
+        try { lobby = lobbyService.getLobbyById(Long.parseLong(lobbyId)); }
+        // if the path cannot be converted into an ID, it must be a lobbyname. Therefore, fetch by username
+        catch (NumberFormatException notID){ lobby = lobbyService.getLobbyByLobbyname(lobbyId); }
+
+        return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
     }
 
     @PutMapping("/lobbies/{lobbyId}/users/{userId}")
