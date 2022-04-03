@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -94,6 +96,49 @@ public class LobbyControllerTest {
 
 
 
+    }
+
+    @Test
+    public void validInput_whenPutLobbyId_thenReturnNoContent() throws Exception {
+        //204 no content update lobby name
+        Lobby lobby = new Lobby();
+        lobby.setLobbyId(1L);
+        lobby.setLobbyName("NoobsOnly");
+
+        doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
+                .when(lobbyService)
+                .updateLobby(1L, lobby);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/{lobbyId}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(lobby));
+
+        // then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    public void invalidId_whenPutUserId_thenReturnNotFound() throws Exception {
+        // given put 404
+        Lobby lobby = new Lobby();
+        lobby.setLobbyId(1L);
+        lobby.setLobbyName("Pros");
+
+        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .when(lobbyService)
+                .updateLobby(Mockito.any(), Mockito.any());
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/{lobbyId}", 2)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(lobby));
+
+        // then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isNotFound());
     }
 
     /**
