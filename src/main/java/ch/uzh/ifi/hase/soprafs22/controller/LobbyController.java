@@ -72,7 +72,7 @@ public class LobbyController {
         //PLACEHOLDER
     }
 
-    @PutMapping("/lobby/{lobbyId}")
+    @PutMapping("/lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void updateLobby(@PathVariable long lobbyId, @RequestBody Lobby updatedLobby){
