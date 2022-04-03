@@ -10,8 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 /**
  * Lobby Service
@@ -36,6 +40,18 @@ public class LobbyService {
         this.lobbyRepository = lobbyRepository;
     }
 
+    public List<Lobby> getLobbies() {
+        return this.lobbyRepository.findAll();
+    }
+
+    public Lobby getLobbyById(Long ID) {
+        Lobby lobbyByID = lobbyRepository.findLobbyByLobbyId(ID);
+        if (lobbyByID == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Lobby with this ID exists.");
+        }
+        return lobbyByID;
+    }
+
     public Lobby createLobby(Lobby newLobby) {
         new Lobby();
         newLobby.addPlayer(newLobby.getHostId());
@@ -49,6 +65,22 @@ public class LobbyService {
         Lobby lobby = this.lobbyRepository.findLobbyByLobbyId(lobbyId);
         lobby.addPlayer(id);
         this.lobbyRepository.flush();
+    }
+
+    public Lobby updateLobby(Long ID, Lobby updatedLobby){
+
+        Lobby lobbyToEdit = getLobbyById(ID);
+        if (updatedLobby.getLobbyName() != null) { lobbyToEdit.setLobbyName(updatedLobby.getLobbyName()); }
+        //if (updatedLobby.getPlayerAmount() != null) { lobbyToEdit.setPlayerAmount(updatedLobby.getPlayerAmount()); }
+
+        return lobbyToEdit;
+    }
+
+    public void checkIfTaken(Long id, String un){
+        Lobby lobbyByUN = lobbyRepository.findLobbyByLobbyName(un);
+        if (lobbyByUN != null && lobbyRepository.findLobbyByLobbyId(id) != lobbyByUN) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This LobbyName is already taken.");
+        }
     }
 
     //these are placeholders

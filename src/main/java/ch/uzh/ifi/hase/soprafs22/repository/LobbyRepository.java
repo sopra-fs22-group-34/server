@@ -10,5 +10,7 @@ public interface LobbyRepository extends JpaRepository<Lobby, Long> {
 
     Lobby findLobbyByLobbyId(Long ID);
 
+    Lobby findLobbyByLobbyName(String lobbyName);
+
 
 }

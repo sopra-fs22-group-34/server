@@ -1,14 +1,18 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class LobbyController {
@@ -32,6 +36,21 @@ public class LobbyController {
         return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(createdLobby);
     }
 
+    @GetMapping("/lobby")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<LobbyGetDTO> getAllLobbies() {
+        // fetch all users in the internal representation
+        List<Lobby> lobbies = lobbyService.getLobbies();
+        List<LobbyGetDTO> lobbyGetDTOs = new ArrayList<>();
+
+        // convert each user to the API representation
+        for (Lobby lobby : lobbies) {
+            lobbyGetDTOs.add(DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby));
+        }
+        return lobbyGetDTOs;
+    }
+
     @GetMapping("/lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -52,6 +71,20 @@ public class LobbyController {
     public void getGameOfLobby(@PathVariable long lobbyId) {
         //PLACEHOLDER
     }
+
+    @PutMapping("/lobby/{lobbyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void updateLobby(@PathVariable long lobbyId, @RequestBody Lobby updatedLobby){
+        lobbyService.getLobbyById(lobbyId);
+
+        // check if new name already belongs to another Lobby
+        lobbyService.checkIfTaken(lobbyId,updatedLobby.getLobbyName());
+
+        // update the Lobby
+        Lobby lobby = lobbyService.updateLobby(lobbyId, updatedLobby);
+    }
+
 
     //TODO: Discuss how to implement checking if a move is possible
 
