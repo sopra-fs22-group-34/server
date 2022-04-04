@@ -37,16 +37,21 @@ public interface DTOMapper {
   @Mapping(source = "birthday", target = "birthday")
   UserGetDTO convertEntityToUserGetDTO(User user);
 
-  @Mapping(source = "hostId", target = "hostId")
-  @Mapping(source = "lobbyName", target = "lobbyName")
-  @Mapping(source = "isPublic", target = "isPublic")
-  @Mapping(source = "isPrivate", target = "isPrivate")
+  @Mapping(source = "host_id", target = "host_id")
+  @Mapping(source = "name", target = "name")
+  @Mapping(source = "is_public", target = "is_public")
+  @Mapping(source = "total_players", target = "total_players")
   Lobby convertLobbyPostDTOtoEntity(LobbyPostDTO lobbyPostDTO);
 
-  @Mapping(source = "lobbyId", target = "lobbyId")
-  @Mapping(source = "hostId", target = "hostId")
-  @Mapping(source = "lobbyName", target = "lobbyName")
-  @Mapping(source = "isPublic", target = "isPublic")
-  @Mapping(source = "isPrivate", target = "isPrivate")
+  @Mapping(source = "id", target = "id")
+  @Mapping(source = "name", target = "name")
+  @Mapping(source = "host_id", target = "host_id")
+  @Mapping(source = "host_name", target = "host_name")
+  @Mapping(source = "current_players", target = "current_players")
+  @Mapping(source = "total_players", target = "total_players")
+  @Mapping(source = "is_open", target = "is_open")
+  @Mapping(source = "is_public", target = "is_public")
+  @Mapping(source = "players", target = "players")
+
   LobbyGetDTO convertEntityToLobbyGetDTO(Lobby lobby);
 }

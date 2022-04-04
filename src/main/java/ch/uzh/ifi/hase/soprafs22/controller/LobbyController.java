@@ -76,18 +76,6 @@ public class LobbyController {
         //PLACEHOLDER
     }
 
-    @PutMapping("/lobbies/{lobbyId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
-    public void updateLobby(@PathVariable long lobbyId, @RequestBody Lobby updatedLobby){
-        lobbyService.getLobbyById(lobbyId);
-
-        // check if new name already belongs to another Lobby
-        lobbyService.checkIfTaken(lobbyId,updatedLobby.getLobbyName());
-
-        // update the Lobby
-        Lobby lobby = lobbyService.updateLobby(lobbyId, updatedLobby);
-    }
 
 
     //TODO: Discuss how to implement checking if a move is possible

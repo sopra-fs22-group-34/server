@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,16 +45,14 @@ public class LobbyControllerTest {
     public void createLobby_validInput_lobbyCreated() throws Exception {
         // given
         Lobby lobby = new Lobby();
-        lobby.setHostId(7L);
-        lobby.setLobbyName("ToxicMW2Lobby");
-        lobby.setisPublic(false);
-        lobby.setisPrivate(true);
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
 
         LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
-        lobbyPostDTO.setHostId(7L);
-        lobbyPostDTO.setLobbyName("ToxicMW2Lobby");
-        lobbyPostDTO.setisPrivate(true);
-        lobbyPostDTO.setisPublic(false);
+        lobbyPostDTO.setHost_id(7L);
+        lobbyPostDTO.setName("ToxicMW2Lobby");
+        lobbyPostDTO.setIs_public(false);
 
         given(lobbyService.createLobby(Mockito.any())).willReturn(lobby);
 
@@ -67,9 +64,9 @@ public class LobbyControllerTest {
         // then
         mockMvc.perform(postRequest)
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.hostId", is(lobby.getHostId().intValue())))
-                .andExpect(jsonPath("$.lobbyName", is(lobby.getLobbyName())))
-                .andExpect(jsonPath("$.isPublic", is(lobby.getisPublic())));
+                .andExpect(jsonPath("$.host_id", is(lobby.getHost_id().intValue())))
+                .andExpect(jsonPath("$.name", is(lobby.getName())))
+                .andExpect(jsonPath("$.is_public", is(lobby.getIs_public())));
     }
 
     // is this valid? because the get request does not send anything with it in ints body -> notign to compare
@@ -77,17 +74,16 @@ public class LobbyControllerTest {
     public void getLobby_validInput() throws Exception {
         //given
         Lobby lobby = new Lobby();
-        lobby.setHostId(7L);
-        lobby.setLobbyName("ToxicMW2Lobby");
-        lobby.setisPublic(false);
-        lobby.setisPrivate(true);
-        lobby.setLobbyId(1L);
-        System.out.println("This is the lobby's ID " + lobby.getLobbyId());
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+        System.out.println("This is the lobby's ID " + lobby.getId());
 
         given(lobbyService.getLobbyById(7L)).willReturn(lobby);
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/lobbies/"+lobby.getLobbyId())
+        MockHttpServletRequestBuilder getRequest = get("/lobbies/"+lobby.getId())
                 .contentType(MediaType.APPLICATION_JSON);
 
         // then
@@ -102,8 +98,8 @@ public class LobbyControllerTest {
     public void validInput_whenPutLobbyId_thenReturnNoContent() throws Exception {
         //204 no content update lobby name
         Lobby lobby = new Lobby();
-        lobby.setLobbyId(1L);
-        lobby.setLobbyName("NoobsOnly");
+        lobby.setId(1L);
+        lobby.setName("NoobsOnly");
 
         doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
                 .when(lobbyService)
@@ -124,8 +120,8 @@ public class LobbyControllerTest {
     public void invalidId_whenPutUserId_thenReturnNotFound() throws Exception {
         // given put 404
         Lobby lobby = new Lobby();
-        lobby.setLobbyId(1L);
-        lobby.setLobbyName("Pros");
+        lobby.setId(1L);
+        lobby.setName("Pros");
 
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND))
                 .when(lobbyService)

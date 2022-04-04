@@ -1,54 +1,90 @@
 package ch.uzh.ifi.hase.soprafs22.rest.dto;
 
-import ch.uzh.ifi.hase.soprafs22.entity.User;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LobbyGetDTO {
 
-    private Long lobbyId;
-    private Long hostId;
-    private String lobbyName;
-    private Boolean isPublic;
-    private Boolean isPrivate;
+    private Long id;
+    private Long host_id;
+    private String name;
+    private Boolean is_public;
+    private Boolean is_open;
+    private Long total_players;
+    private Long current_players;
+    private List<Long> players;
+    private String host_name;
 
 
-    public Long getlobbyId() {
-        return lobbyId;
+    public Long getId() {
+        return id;
     }
 
-    public void setlobbyId(Long lobbyId) {
-        this.lobbyId = lobbyId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getHostId() {
-        return hostId;
+    public Long getHost_id() {
+        return host_id;
     }
 
-    public void setHostId(Long hostId) {
-        this.hostId = hostId;
+    public void setHost_id(Long host_id) {
+        this.host_id = host_id;
     }
 
-    public String getLobbyName() {
-        return lobbyName;
+    public String getName() {
+        return name;
     }
 
-    public void setLobbyName(String lobbyName) {
-        this.lobbyName = lobbyName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Boolean getisPublic() {
-        return isPublic;
+    public Boolean getIs_public() {
+        return is_public;
     }
 
-    public void setisPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setIs_public(Boolean aPublic) {
+        is_public = aPublic;
     }
 
-    public Boolean getisPrivate() {
-        return isPrivate;
+    public Boolean getIs_open() {
+        return is_open;
     }
 
-    public void setisPrivate(Boolean aPrivate) {
-        isPrivate = aPrivate;
+    public void setIs_open(Boolean open) {
+        is_open = open;
     }
 
+    public Long getTotal_players() {
+        return total_players;
+    }
+
+    public void setTotal_players(Long total_players) {
+        this.total_players = total_players;
+    }
+
+    public Long getCurrent_players() {
+        return current_players;
+    }
+
+    public void setCurrent_players(Long current_players) {
+        this.current_players = current_players;
+    }
+
+    public List<Long> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Long> players) {
+        this.players = players;
+    }
+
+    public String getHost_name() {
+        return host_name;
+    }
+
+    public void setHost_name(String host_name) {
+        this.host_name = host_name;
+    }
 }

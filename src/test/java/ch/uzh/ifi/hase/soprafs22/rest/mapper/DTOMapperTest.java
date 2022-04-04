@@ -61,37 +61,37 @@ public class DTOMapperTest {
   public void testCreateLobby_fromLobbyPostDTO_toLobby_success() {
       //create LobbyPostDTO
       LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
-      lobbyPostDTO.setHostId(4L);
-      lobbyPostDTO.setLobbyName("1337Lobby");
-      lobbyPostDTO.setisPublic(true);
-      lobbyPostDTO.setisPrivate(false);
+      lobbyPostDTO.setHost_id(4L);
+      lobbyPostDTO.setName("1337Lobby");
+      lobbyPostDTO.setIs_public(true);
+      lobbyPostDTO.setTotal_players(4L);
 
       // MAP -> Create Lobby
       Lobby lobby = DTOMapper.INSTANCE.convertLobbyPostDTOtoEntity(lobbyPostDTO);
 
       // check content
-      assertEquals(lobby.getHostId(),lobbyPostDTO.getHostId());
-      assertEquals(lobby.getLobbyName(),lobbyPostDTO.getLobbyName());
-      assertEquals(lobby.getisPublic(),lobbyPostDTO.getisPublic());
-      assertEquals(lobby.getisPrivate(), lobbyPostDTO.getisPrivate());
+      assertEquals(lobby.getHost_id(),lobbyPostDTO.getHost_id());
+      assertEquals(lobby.getName(),lobbyPostDTO.getName());
+      assertEquals(lobby.getIs_public(),lobbyPostDTO.getIs_public());
+      assertEquals(lobby.getTotal_players(), lobbyPostDTO.getTotal_players());
   }
 
     @Test
     public void testGetLobby_fromLobby_toLobbyGetDTO_success() {
         // create User
         Lobby lobby = new Lobby();
-        lobby.setLobbyName("ToxicMW2Lobby");
-        lobby.setHostId(7L);
-        lobby.setisPrivate(true);
-        lobby.setisPublic(false);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setHost_id(7L);
+        lobby.setIs_open(true);
+        lobby.setIs_public(false);
 
         // MAP -> Create UserGetDTO
         LobbyGetDTO lobbyGetDTO = DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
 
         // check content
-        assertEquals(lobby.getHostId(), lobbyGetDTO.getHostId());
-        assertEquals(lobby.getLobbyName(), lobbyGetDTO.getLobbyName());
-        assertEquals(lobby.getisPrivate(), lobbyGetDTO.getisPrivate());
-        assertEquals(lobby.getisPublic(), lobbyGetDTO.getisPublic());
+        assertEquals(lobby.getHost_id(), lobbyGetDTO.getHost_id());
+        assertEquals(lobby.getName(), lobbyGetDTO.getName());
+        assertEquals(lobby.getIs_open(), lobbyGetDTO.getIs_open());
+        assertEquals(lobby.getIs_public(), lobbyGetDTO.getIs_public());
     }
 }

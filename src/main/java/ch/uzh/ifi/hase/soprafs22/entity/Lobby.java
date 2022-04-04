@@ -24,7 +24,10 @@ public class Lobby  {
 
     @Id
     @GeneratedValue
-    private Long lobbyId;
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
 /*
     @OneToOne
     @JoinColumn
@@ -32,71 +35,102 @@ public class Lobby  {
 */
 
     @Column(nullable = false)
-    private Long hostId;
+    private Long host_id;
 
     @Column(nullable = false)
-    private String lobbyName;
+    private String host_name;
 
     @Column(nullable = false)
-    private Boolean isPublic;
+    private Long current_players;
 
     @Column(nullable = false)
-    private Boolean isPrivate;
+    private Long total_players;
+
+    @Column(nullable = false)
+    private Boolean is_open;
+
+    @Column(nullable = false)
+    private Boolean is_public;
+
 
     @ElementCollection
     //@JoinColumn(nullable = false) //Go read les docs in case this does not work we just used @JoinColumn.
     //private List<User> users = new ArrayList<>(); //IMPORTANT: define a list always like this! It will not give you specific errors.
-    private List<Long> listOfUserId = new ArrayList<>();
+    private List<Long> players = new ArrayList<>();
 
-    public Long getLobbyId() {
-        return lobbyId;
-    }
-
-    public void setLobbyId(Long lobbyId) {
-        this.lobbyId = lobbyId;
-    }
-/*
-    public User getHost() {
-        return host;
+    public Long getId() {
+        return id;
     }
 
-    public void setHost(User host) {
-        this.host = host;
-    }
-*/
-    public String getLobbyName() {
-        return lobbyName;
+    public void setId(Long lobbyId) {
+        this.id = lobbyId;
     }
 
-    public void setLobbyName(String lobbyName) {
-        this.lobbyName = lobbyName;
+    public String getName() {
+        return name;
     }
 
-    public Boolean getisPublic() {
-        return isPublic;
+    public void setName(String lobbyName) {
+        this.name = lobbyName;
     }
 
-    public void setisPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public Boolean getIs_public() {
+        return is_public;
     }
 
-    public Boolean getisPrivate() {
-        return isPrivate;
+    public void setIs_public(Boolean aPublic) {
+        is_public = aPublic;
     }
 
-    public void setisPrivate(Boolean aPrivate) {
-        isPrivate = aPrivate;
+    public Boolean getIs_open() {
+        return is_open;
     }
 
-    public Long getHostId() {
-        return hostId;
+    public void setIs_open(Boolean open) {
+        is_open = open;
     }
 
-    public void setHostId(Long hostId) {
-        this.hostId = hostId;
+    public Long getHost_id() {
+        return host_id;
+    }
+
+    public void setHost_id(Long hostId) {
+        this.host_id = hostId;
     }
 
     public void addPlayer(Long id){
-        this.listOfUserId.add(id);
+        this.players.add(id);
+    }
+
+    public String getHost_name() {
+        return host_name;
+    }
+
+    public void setHost_name(String host_name) {
+        this.host_name = host_name;
+    }
+
+    public Long getTotal_players() {
+        return total_players;
+    }
+
+    public void setTotal_players(Long total_players) {
+        this.total_players = total_players;
+    }
+
+    public Long getCurrent_players() {
+        return current_players;
+    }
+
+    public void setCurrent_players(Long current_players) {
+        this.current_players = current_players;
+    }
+
+    public List<Long> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Long> players) {
+        this.players = players;
     }
 }

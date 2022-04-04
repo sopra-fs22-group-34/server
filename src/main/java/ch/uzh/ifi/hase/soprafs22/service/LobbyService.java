@@ -1,11 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
-import ch.uzh.ifi.hase.soprafs22.entity.Player;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +31,14 @@ public class LobbyService {
 
     private final LobbyRepository lobbyRepository;
 
+    private final UserRepository userRepository;
+
     // no idea what this does
     @Autowired
-    public LobbyService(@Qualifier("lobbyRepository") LobbyRepository lobbyRepository) {
+    public LobbyService(@Qualifier("lobbyRepository") LobbyRepository lobbyRepository,
+                        @Qualifier("userRepository") UserRepository userRepository) {
         this.lobbyRepository = lobbyRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Lobby> getLobbies() {
@@ -45,7 +46,7 @@ public class LobbyService {
     }
 
     public Lobby getLobbyById(Long ID) {
-        Lobby lobbyByID = lobbyRepository.findLobbyByLobbyId(ID);
+        Lobby lobbyByID = lobbyRepository.findLobbyById(ID);
         if (lobbyByID == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Lobby with this ID exists.");
         }
@@ -53,7 +54,7 @@ public class LobbyService {
     }
 
     public Lobby getLobbyByLobbyname(String lobbyname) {
-        Lobby lobbyByLobbyname = lobbyRepository.findLobbyByLobbyName(lobbyname);
+        Lobby lobbyByLobbyname = lobbyRepository.findLobbyByName(lobbyname);
         if (lobbyByLobbyname == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No lobby with this lobbyname exists.");
         }
@@ -62,7 +63,10 @@ public class LobbyService {
 
     public Lobby createLobby(Lobby newLobby) {
         new Lobby();
-        newLobby.addPlayer(newLobby.getHostId());
+        newLobby.setIs_open(true);
+        newLobby.setCurrent_players(1L);
+        newLobby.addPlayer(newLobby.getHost_id());
+        newLobby.setHost_name(userRepository.findUserById(newLobby.getHost_id()).getUsername());
         newLobby = this.lobbyRepository.save(newLobby);
         lobbyRepository.flush();
         log.debug("Created Information for User: {}", newLobby);
@@ -70,23 +74,34 @@ public class LobbyService {
     }
 
     public void joinLobby(Long lobbyId, Long id){
-        Lobby lobby = this.lobbyRepository.findLobbyByLobbyId(lobbyId);
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         lobby.addPlayer(id);
+        lobby.setCurrent_players(lobby.getCurrent_players()+1);
+        lobby = updateLobby(lobby.getId(), lobby);
         this.lobbyRepository.flush();
     }
+
+    public void leaveLobby(Long lobbyId, Long id){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        // TODO lobby.removePlayer(id);
+        lobby.setCurrent_players(lobby.getCurrent_players()-1);
+        lobby = updateLobby(lobby.getId(), lobby);
+        this.lobbyRepository.flush();
+    }
+
+
 
     public Lobby updateLobby(Long ID, Lobby updatedLobby){
 
         Lobby lobbyToEdit = getLobbyById(ID);
-        if (updatedLobby.getLobbyName() != null) { lobbyToEdit.setLobbyName(updatedLobby.getLobbyName()); }
-        //if (updatedLobby.getPlayerAmount() != null) { lobbyToEdit.setPlayerAmount(updatedLobby.getPlayerAmount()); }
+        if (updatedLobby.getCurrent_players() == updatedLobby.getTotal_players()) { lobbyToEdit.setIs_open(false); }
 
         return lobbyToEdit;
     }
 
     public void checkIfTaken(Long id, String un){
-        Lobby lobbyByUN = lobbyRepository.findLobbyByLobbyName(un);
-        if (lobbyByUN != null && lobbyRepository.findLobbyByLobbyId(id) != lobbyByUN) {
+        Lobby lobbyByUN = lobbyRepository.findLobbyByName(un);
+        if (lobbyByUN != null && lobbyRepository.findLobbyById(id) != lobbyByUN) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "This LobbyName is already taken.");
         }
     }

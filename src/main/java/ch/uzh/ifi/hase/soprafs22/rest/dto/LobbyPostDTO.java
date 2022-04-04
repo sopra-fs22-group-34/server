@@ -1,47 +1,45 @@
 package ch.uzh.ifi.hase.soprafs22.rest.dto;
 
-import ch.uzh.ifi.hase.soprafs22.entity.User;
-
 public class LobbyPostDTO {
 
-    private Long hostId;
+    private Long host_id;
 
-    private String lobbyName;
+    private String name;
 
-    private Boolean isPublic;
+    private Boolean is_public;
 
-    private Boolean isPrivate;
+    private Long total_players;
 
-    public Long getHostId() {
-        return hostId;
+    public Long getHost_id() {
+        return host_id;
     }
 
-    public void setHostId(Long hostId) {
-        this.hostId = hostId;
+    public void setHost_id(Long host_id) {
+        this.host_id = host_id;
     }
 
-    public String getLobbyName() {
-        return lobbyName;
+    public String getName() {
+        return name;
     }
 
-    public void setLobbyName(String lobbyName) {
-        this.lobbyName = lobbyName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Boolean getisPublic() {
-        return isPublic;
+    public Boolean getIs_public() {
+        return is_public;
     }
 
-    public void setisPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setIs_public(Boolean aPublic) {
+        is_public = aPublic;
     }
 
-    public Boolean getisPrivate() {
-        return isPrivate;
+
+    public Long getTotal_players() {
+        return total_players;
     }
 
-    public void setisPrivate(Boolean aPrivate) {
-        isPrivate = aPrivate;
+    public void setTotal_players(Long total_players) {
+        this.total_players = total_players;
     }
-
 }
