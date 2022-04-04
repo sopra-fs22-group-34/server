@@ -94,48 +94,49 @@ public class LobbyControllerTest {
 
     }
 
-    @Test
-    public void validInput_whenPutLobbyId_thenReturnNoContent() throws Exception {
-        //204 no content update lobby name
-        Lobby lobby = new Lobby();
-        lobby.setId(1L);
-        lobby.setName("NoobsOnly");
-
-        doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
-                .when(lobbyService)
-                .updateLobby(1L, lobby);
-
-        // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder putRequest = put("/lobbies/{lobbyId}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(lobby));
-
-        // then
-        mockMvc.perform(putRequest)
-                .andExpect(status().isNoContent());
-
-    }
-
-    @Test
-    public void invalidId_whenPutUserId_thenReturnNotFound() throws Exception {
-        // given put 404
-        Lobby lobby = new Lobby();
-        lobby.setId(1L);
-        lobby.setName("Pros");
-
-        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND))
-                .when(lobbyService)
-                .updateLobby(Mockito.any(), Mockito.any());
-
-        // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder putRequest = put("/lobbies/{lobbyId}", 2)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(lobby));
-
-        // then
-        mockMvc.perform(putRequest)
-                .andExpect(status().isNotFound());
-    }
+//    TODO update these tests as soon as a new put rekwest is there
+//    @Test
+//    public void validInput_whenPutLobbyId_thenReturnNoContent() throws Exception {
+//        //204 no content update lobby name
+//        Lobby lobby = new Lobby();
+//        lobby.setId(1L);
+//        lobby.setName("NoobsOnly");
+//
+//        doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
+//                .when(lobbyService)
+//                .updateLobby(1L, lobby);
+//
+//        // when/then -> do the request + validate the result
+//        MockHttpServletRequestBuilder putRequest = put("/lobbies/{lobbyId}", 1)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(asJsonString(lobby));
+//
+//        // then
+//        mockMvc.perform(putRequest)
+//                .andExpect(status().isNoContent());
+//
+//    }
+//
+//    @Test
+//    public void invalidId_whenPutUserId_thenReturnNotFound() throws Exception {
+//        // given put 404
+//        Lobby lobby = new Lobby();
+//        lobby.setId(1L);
+//        lobby.setName("Pros");
+//
+//        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND))
+//                .when(lobbyService)
+//                .updateLobby(Mockito.any(), Mockito.any());
+//
+//        // when/then -> do the request + validate the result
+//        MockHttpServletRequestBuilder putRequest = put("/lobbies/{lobbyId}", 2)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(asJsonString(lobby));
+//
+//        // then
+//        mockMvc.perform(putRequest)
+//                .andExpect(status().isNotFound());
+//    }
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input
