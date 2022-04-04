@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
@@ -62,11 +63,18 @@ public class LobbyController {
         return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
     }
 
-    @PutMapping("/lobbies/{lobbyId}/users/{userId}")
+    @PutMapping("/lobbies/{lobbyId}/users/{userId}/join")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void joinLobbyWithUser(@PathVariable long lobbyId, @PathVariable long userId){
-        //PLACEHOLDER
+        lobbyService.joinLobby(lobbyId, userId);
+    }
+
+    @PutMapping("/lobbies/{lobbyId}/users/{userId}/leave")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void leaveLobbyWithUser(@PathVariable long lobbyId, @PathVariable long userId){
+        lobbyService.leaveLobby(lobbyId, userId);
     }
 
     @GetMapping("/lobbies/{lobbyId}/game")

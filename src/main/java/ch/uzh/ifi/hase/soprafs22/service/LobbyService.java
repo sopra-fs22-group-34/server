@@ -83,7 +83,9 @@ public class LobbyService {
 
     public void leaveLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        // TODO lobby.removePlayer(id);
+        long longNum = id;
+        List<Long> lobbyList = lobby.getPlayers();
+        lobbyList.remove(longNum);
         lobby.setCurrent_players(lobby.getCurrent_players()-1);
         lobby = updateLobby(lobby.getId(), lobby);
         this.lobbyRepository.flush();
@@ -92,9 +94,9 @@ public class LobbyService {
 
 
     public Lobby updateLobby(Long ID, Lobby updatedLobby){
-
+        // checks if lobby is full and if lobby is full it sets is_open to false
         Lobby lobbyToEdit = getLobbyById(ID);
-        if (updatedLobby.getCurrent_players() == updatedLobby.getTotal_players()) { lobbyToEdit.setIs_open(false); }
+        if (updatedLobby.getCurrent_players() == updatedLobby.getTotal_players() || updatedLobby.getCurrent_players() ==0) { lobbyToEdit.setIs_open(false); }
 
         return lobbyToEdit;
     }
