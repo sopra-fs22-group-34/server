@@ -98,10 +98,6 @@ public class Lobby  {
         this.host_id = hostId;
     }
 
-    public void addPlayer(Long id){
-        this.players.add(id);
-    }
-
     public String getHost_name() {
         return host_name;
     }
@@ -132,5 +128,13 @@ public class Lobby  {
 
     public void setPlayers(List<Long> players) {
         this.players = players;
+    }
+
+    public void addPlayer(Long id){
+        this.players.add(id);
+    }
+
+    public void removePlayer(Long id){
+        this.players.remove(id);
     }
 }

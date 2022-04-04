@@ -75,30 +75,33 @@ public class LobbyService {
 
     public void joinLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        lobby.addPlayer(id);
-        lobby.setCurrent_players(lobby.getCurrent_players()+1);
-        lobby = updateLobby(lobby.getId(), lobby);
+        lobby.addPlayer(id); //add Host into players
+        lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
+        lobby = updateLobby(lobbyId); //update the lobby via its id
         this.lobbyRepository.flush();
     }
 
     public void leaveLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (lobby.getPlayers().contains(id)) { //if Player is in players remove item from List
+            lobby.removePlayer(id);
+            lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
+            lobby = updateLobby(lobbyId); //update the lobby via its id
+            this.lobbyRepository.flush();
+        }
+        else {throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player with this Id exists.");} //If Player is not in players throw Error and don't go further
+        /*
         long longNum = id;
         List<Long> lobbyList = lobby.getPlayers();
         lobbyList.remove(longNum);
-        lobby.setCurrent_players(lobby.getCurrent_players()-1);
-        lobby = updateLobby(lobby.getId(), lobby);
-        this.lobbyRepository.flush();
+         */
     }
 
-
-
-    public Lobby updateLobby(Long ID, Lobby updatedLobby){
-        // checks if lobby is full and if lobby is full it sets is_open to false
-        Lobby lobbyToEdit = getLobbyById(ID);
-        if (updatedLobby.getCurrent_players() == updatedLobby.getTotal_players() || updatedLobby.getCurrent_players() ==0) { lobbyToEdit.setIs_open(false); }
-
-        return lobbyToEdit;
+    public Lobby updateLobby(Long lobbyId){
+        // checks if lobby is full or completely empty and if true sets is_open to false in order to close the lobby
+        Lobby updatedLobby = getLobbyById(lobbyId);
+        if (updatedLobby.getCurrent_players() == updatedLobby.getTotal_players() || updatedLobby.getCurrent_players() == null) {updatedLobby.setIs_open(false);}
+        return updatedLobby;
     }
 
     public void checkIfTaken(Long id, String un){
