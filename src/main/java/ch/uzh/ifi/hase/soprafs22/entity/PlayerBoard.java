@@ -10,6 +10,12 @@ public class PlayerBoard  {
 
     private FloorLine floorLine;
 
+    PlayerBoard() {
+        stairs = new Stairs();
+        wall = new Wall();
+        floorLine = new FloorLine();
+    }
+
 
     public Stairs getStairs() {
         return stairs;
@@ -36,7 +42,21 @@ public class PlayerBoard  {
     }
 
     public int processEndOfRound(){
-        //PLACEHOLDER
-        return 0;
+        int scoreDifference = 0;
+
+        for (int row = 0; row < 5; row++) {
+            int returnedColor = stairs.emptyFullPatternLine(row);
+            if (returnedColor != -1){
+                scoreDifference += wall.placeTileInRowAndColor(row, returnedColor);
+            }
+        }
+
+        scoreDifference -= floorLine.processEndOfRound();
+
+        return scoreDifference;
     }
+
+    /*public void placeTileOnFloorLine(int colorIndex) {
+        floorLine.placeTile(colorIndex);
+    }*/
 }
