@@ -54,12 +54,10 @@ public class LobbyController {
     @ResponseBody
     public LobbyGetDTO getLobbyById(@PathVariable String lobbyId) {
         Lobby lobby = new Lobby();
-
         // fetch lobby by specified ID
         try { lobby = lobbyService.getLobbyById(Long.parseLong(lobbyId)); }
         // if the path cannot be converted into an ID, it must be a lobbyname. Therefore, fetch by username
         catch (NumberFormatException notID){ lobby = lobbyService.getLobbyByLobbyname(lobbyId); }
-
         return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
     }
 
@@ -83,7 +81,6 @@ public class LobbyController {
     public void getGameOfLobby(@PathVariable long lobbyId) {
         //PLACEHOLDER
     }
-
 
 
     //TODO: Discuss how to implement checking if a move is possible

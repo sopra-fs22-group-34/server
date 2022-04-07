@@ -17,7 +17,6 @@ public class Player {
 
     private boolean playersTurn;
 
-
     public Long getPlayerId() {
         return playerId;
     }

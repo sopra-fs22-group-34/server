@@ -34,11 +34,16 @@ class LobbyServiceTest {
         testLobby.setId(1L);
         testLobby.setName("testLobby");
         testLobby.setHost_name("Sam");
-
-
+        testLobby.setTotal_players(4L);
         // when -> any object is being save in the lobbyRepository -> return the dummy
         // testLobby
         Mockito.when(lobbyRepository.save(Mockito.any())).thenReturn(testLobby);
+    }
+
+    public void startGameTest(){
+        lobbyService.createLobby(testLobby);
+        testLobby.setCurrent_players(4L);
+        assertEquals(testLobby.getCurrent_players(), testLobby.getTotal_players());
     }
 
 //    TODO update this updateLobbyTest so that it tests if the current_player count and also if it is_open will be closed if its full updates correctly
@@ -47,18 +52,13 @@ class LobbyServiceTest {
 //        lobbyService.createLobby(testLobby);
 //        Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
 //        //create new data
-//        Lobby updatedLobby = new Lobby();
-//        updatedLobby.setName("newLobbyName");
+//        Lobby updatedLobby = testLobby;
+//        updatedLobby.setCurrent_players(3L);
+//        lobbyService.updateLobby(1L);
 //
-//        assertNotEquals(testLobby.getName(), updatedLobby.getName());
-//        // update test for total play limit
-//        //assertNotEquals(testLobby.getTotalCount(), updatedLobby.getTotalCount());
-//
-//        lobbyService.updateLobby(1L, updatedLobby);
-//
-//        assertEquals(testLobby.getName(), updatedLobby.getName());
-//        // update test for total play limit
-//        // assertEquals(testLobby.getTotalCount(), updatedLobby.getTotalCount());
+//        //check that current players count of the updated lobby has changed
+//        assertEquals(testLobby.getCurrent_players(), updatedLobby.getCurrent_players());
+//        assertEquals(testLobby.setIs_open(false), updatedLobby.setIs_open(false));
 //    }
 
 }

@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.entity.Game;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import org.slf4j.Logger;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.Date;
 
 /**
  * Lobby Service
@@ -111,11 +115,17 @@ public class LobbyService {
         }
     }
 
-    //these are placeholders
-    public void startGame() {
-
+    public Game startGame(Game newGame, Long lobbyId) throws InterruptedException {
+        Lobby lobbyToStart = this.lobbyRepository.findLobbyById(lobbyId); //find specific Lobby in database
+        //check if the current players are equal to the total players needed for specific game
+        if (lobbyToStart.getCurrent_players() == lobbyToStart.getTotal_players()){
+            TimeUnit.SECONDS.sleep(10L); //should add a 10 seconds delay until newGame is created
+            new Game(); //create a new Game
+        }
+        return newGame;
     }
 
+    //these are placeholders
     public void setNumberOfPlayers() {
 
     }

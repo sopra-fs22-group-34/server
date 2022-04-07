@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Game  {
@@ -15,14 +16,11 @@ public class Game  {
 
     private Middle middle;
 
-
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
+    public void setPlayers(ArrayList<Player> players) { this.players = players; }
 
     public int getRoundCount() {
         return roundCount;
