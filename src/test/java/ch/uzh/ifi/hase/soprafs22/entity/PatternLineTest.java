@@ -10,9 +10,9 @@ public class PatternLineTest {
     @Test
     public void constructorCorrect() {
         PatternLine testPatternLine = new PatternLine(3);
-        assertEquals(testPatternLine.getLength(),3);
-        assertEquals(testPatternLine.getTilesAmount(),0);
-        assertEquals(testPatternLine.getColorIndex(),-1);
+        assertEquals(3,testPatternLine.getLength());
+        assertEquals(0,testPatternLine.getTilesAmount());
+        assertEquals(-1,testPatternLine.getColorIndex());
     }
 
     @Test
@@ -21,7 +21,7 @@ public class PatternLineTest {
         testPatternLine.setTilesAmount(3);
         testPatternLine.setColorIndex(2);
 
-        assertEquals(testPatternLine.emptyFullPatternLine(), -1);
+        assertEquals(-1,testPatternLine.emptyFullPatternLine());
     }
 
     @Test
@@ -30,10 +30,10 @@ public class PatternLineTest {
         testPatternLine.setTilesAmount(4);
         testPatternLine.setColorIndex(2);
 
-        assertEquals(testPatternLine.emptyFullPatternLine(), 2);
-        assertEquals(testPatternLine.getTilesAmount(),0);
-        assertEquals(testPatternLine.getColorIndex(),-1);
-        assertEquals(testPatternLine.getLength(),4);
+        assertEquals(2,testPatternLine.emptyFullPatternLine());
+        assertEquals(0,testPatternLine.getTilesAmount());
+        assertEquals(-1,testPatternLine.getColorIndex());
+        assertEquals(4,testPatternLine.getLength());
     }
 
 

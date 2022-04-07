@@ -11,8 +11,8 @@ public class WallTest {
     @Test
     public void constructorCorrect() {
         Wall testWall = new Wall();
-        assertEquals(testWall.isColorOccupied(0,1),false);
-        assertEquals(testWall.isColumnOccupied(0,1),false);
+        assertFalse(testWall.isColorOccupied(0, 1));
+        assertFalse(testWall.isColumnOccupied(0, 1));
     }
 
     @Test
@@ -21,11 +21,11 @@ public class WallTest {
         testWall.placeTileInRowAndColor(0,0);
         testWall.placeTileInRowAndColor(2,3);
 
-        assertEquals(testWall.isColorOccupied(0,0),true);
-        assertEquals(testWall.isColumnOccupied(0,0),true);
+        assertTrue(testWall.isColorOccupied(0, 0));
+        assertTrue(testWall.isColumnOccupied(0, 0));
 
-        assertEquals(testWall.isColorOccupied(2,3),true);
-        assertEquals(testWall.isColumnOccupied(2,0),true);
+        assertTrue(testWall.isColorOccupied(2, 3));
+        assertTrue(testWall.isColumnOccupied(2, 0));
     }
 
     @Test
@@ -33,24 +33,24 @@ public class WallTest {
         Wall testWall = new Wall();
 
         //place tile in row 2, column 2 ("center" tile of wall)
-        assertEquals(testWall.placeTileInRowAndColor(2,0),1);
+        assertEquals(1,testWall.placeTileInRowAndColor(2,0));
 
 
         //place tile in row 2, column 3 (right of center)
-        assertEquals(testWall.placeTileInRowAndColor(2,1),2);
+        assertEquals(2,testWall.placeTileInRowAndColor(2,1));
 
         //place tile in row 2, column 1 (left of center)
-        assertEquals(testWall.placeTileInRowAndColor(2,4),3);
+        assertEquals(3,testWall.placeTileInRowAndColor(2,4));
 
 
         //place tile in row 1, column 2 (upward of center)
-        assertEquals(testWall.placeTileInRowAndColor(1,1),2);
+        assertEquals(2,testWall.placeTileInRowAndColor(1,1));
 
         //place tile in row 3, column 2 (downward of center)
-        assertEquals(testWall.placeTileInRowAndColor(3,4),3);
+        assertEquals(3,testWall.placeTileInRowAndColor(3,4));
 
 
         //place tile in row 3, column 3 (down right of center)
-        assertEquals(testWall.placeTileInRowAndColor(3,0),4);
+        assertEquals(4,testWall.placeTileInRowAndColor(3,0));
     }
 }

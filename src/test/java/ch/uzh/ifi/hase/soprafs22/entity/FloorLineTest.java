@@ -10,27 +10,27 @@ public class FloorLineTest {
     @Test
     public void constructorCorrect() {
         FloorLine testFloorLine = new FloorLine();
-        assertEquals(testFloorLine.getLength(),0);
-        assertEquals(testFloorLine.isOccupied(),false);
-        assertEquals(testFloorLine.getMinusCount(),0);
+        assertEquals(0,testFloorLine.getLength());
+        assertEquals(false,testFloorLine.isOccupied());
+        assertEquals(0,testFloorLine.getMinusCount());
     }
 
     @Test
     public void tilePlacement() {
         FloorLine testFloorLine = new FloorLine();
         testFloorLine.placeTile(2);
-        assertEquals(testFloorLine.getLength(),1);
-        assertEquals(testFloorLine.isOccupied(),true);
-        assertEquals(testFloorLine.getMinusCount(),1);
+        assertEquals(1,testFloorLine.getLength());
+        assertEquals(true,testFloorLine.isOccupied());
+        assertEquals(1,testFloorLine.getMinusCount());
     }
 
     @Test
     public void scoring() {
         FloorLine testFloorLine = new FloorLine();
         testFloorLine.placeTile(2);
-        assertEquals(testFloorLine.processEndOfRound(),1);
-        assertEquals(testFloorLine.getLength(),0);
-        assertEquals(testFloorLine.isOccupied(),false);
-        assertEquals(testFloorLine.getMinusCount(),0);
+        assertEquals(1,testFloorLine.processEndOfRound());
+        assertEquals(0,testFloorLine.getLength());
+        assertEquals(false,testFloorLine.isOccupied());
+        assertEquals(0,testFloorLine.getMinusCount());
     }
 }
