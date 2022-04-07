@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Game  {
 
-    private ArrayList<Player> players;
+    private List<Long> players;
 
     private int roundCount;
 
@@ -16,11 +16,11 @@ public class Game  {
 
     private Middle middle;
 
-    public ArrayList<Player> getPlayers() {
+    public List<Long> getPlayers() {
         return players;
     }
 
-    public void setPlayers(ArrayList<Player> players) { this.players = players; }
+    public void setPlayers(List<Long> players) { this.players = players; }
 
     public int getRoundCount() {
         return roundCount;

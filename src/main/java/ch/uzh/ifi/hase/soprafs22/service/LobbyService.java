@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs22.entity.Game;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
+import com.sun.xml.bind.v2.TODO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.Date;
 
 /**
  * Lobby Service
@@ -79,7 +79,7 @@ public class LobbyService {
 
     public void joinLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        lobby.addPlayer(id); //add Host into players
+        lobby.addPlayer(id); //add User into players
         lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
         lobby = updateLobby(lobbyId); //update the lobby via its id
         this.lobbyRepository.flush();
@@ -87,7 +87,7 @@ public class LobbyService {
 
     public void leaveLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getPlayers().contains(id)) { //if Player is in players remove item from List
+        if (lobby.getPlayers().contains(id)) { //if User is in players remove item from List
             lobby.removePlayer(id);
             lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
             lobby = updateLobby(lobbyId); //update the lobby via its id
@@ -115,12 +115,14 @@ public class LobbyService {
         }
     }
 
-    public Game startGame(Game newGame, Long lobbyId) throws InterruptedException {
+    public Game startGame(Game newGame, Long lobbyId, List<Long> players) throws InterruptedException {
         Lobby lobbyToStart = this.lobbyRepository.findLobbyById(lobbyId); //find specific Lobby in database
         //check if the current players are equal to the total players needed for specific game
         if (lobbyToStart.getCurrent_players() == lobbyToStart.getTotal_players()){
-            TimeUnit.SECONDS.sleep(10L); //should add a 10 seconds delay until newGame is created
+            TimeUnit.SECONDS.sleep(10L); //should add a 10 seconds delay until newGame is created -> check java.util.concurrent.TimeUnit for information
             new Game(); //create a new Game
+            newGame.setPlayers(players); //add current players List from Lobby into Game
+            // TODO how can we add all Users from players via their User id but give them in the same time a player id (from 1-4) with which they play in the Game
         }
         return newGame;
     }
