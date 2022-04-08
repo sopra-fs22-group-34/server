@@ -56,6 +56,10 @@ public class PlayerBoard  {
         return scoreDifference;
     }
 
+    public boolean checkIfMoveValid(Move attemptedMove) {
+        return stairs.checkIfMoveValid(attemptedMove);
+    }
+
     /*public void placeTileOnFloorLine(int colorIndex) {
         floorLine.placeTile(colorIndex);
     }*/

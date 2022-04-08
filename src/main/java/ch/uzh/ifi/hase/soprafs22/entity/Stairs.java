@@ -15,6 +15,10 @@ public class Stairs {
         }
     }
 
+    public boolean checkIfMoveValid(Move attemptedMove) {
+        return false;
+    }
+
     //Attempt to empty the PatternLine indicated by row
     public int emptyFullPatternLine(int row){
         return patternLines[row].emptyFullPatternLine();
