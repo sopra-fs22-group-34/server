@@ -22,8 +22,51 @@ public class StairsTest {
     @Test
     public void notFullPatternLine() {
         Stairs testStairs = new Stairs();
-        assertEquals(-1,testStairs.emptyFullPatternLine(0));
+        Move testMove = new Move(0,2,1,1,0);
+        testStairs.executeMove(testMove);
+        assertEquals(-1,testStairs.emptyFullPatternLine(1));
     }
 
-    //TODO: add test for emptying full pattern line, need methods to place tiles in PatternLine first though
+    @Test
+    public void fullPatternLine() {
+        Stairs testStairs = new Stairs();
+        Move testMove = new Move(0,2,1,2,0);
+        testStairs.executeMove(testMove);
+        assertEquals(2,testStairs.emptyFullPatternLine(1));
+    }
+
+    @Test
+    public void emptyPatternLineMoveValid() {
+        Stairs testStairs = new Stairs();
+        Move testMove = new Move(0,0,0,1,0);
+        assertTrue(testStairs.checkIfMoveValid(testMove));
+    }
+
+    @Test
+    public void matchingColorPatternLineMoveValid() {
+        Stairs testStairs = new Stairs();
+        Move firstMove = new Move(0,0,1,1,0);
+        testStairs.executeMove(firstMove);
+        Move testMove = new Move(0,0,1,1,0);
+        assertTrue(testStairs.checkIfMoveValid(testMove));
+    }
+
+    @Test
+    public void matchingColorPatternLineNoSpaceMoveInvalid() {
+        Stairs testStairs = new Stairs();
+        Move firstMove = new Move(0,0,1,2,0);
+        testStairs.executeMove(firstMove);
+        Move testMove = new Move(0,0,1,1,0);
+        assertFalse(testStairs.checkIfMoveValid(testMove));
+    }
+
+    @Test
+    public void wrongColorPatternLineMoveInvalid() {
+        Stairs testStairs = new Stairs();
+        Move firstMove = new Move(0,0,1,1,0);
+        testStairs.executeMove(firstMove);
+        Move testMove = new Move(0,1,1,1,0);
+        assertFalse(testStairs.checkIfMoveValid(testMove));
+    }
+
 }

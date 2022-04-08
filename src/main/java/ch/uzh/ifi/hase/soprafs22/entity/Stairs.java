@@ -16,7 +16,40 @@ public class Stairs {
     }
 
     public boolean checkIfMoveValid(Move attemptedMove) {
-        return false;
+        PatternLine targetLine = patternLines[attemptedMove.getTargetLineIndex()];
+
+        //if targetLine is empty, check if there's enough space
+        if (targetLine.getColorIndex() == -1) {
+            if (targetLine.getLength() >= attemptedMove.getTileAmount()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        //if targetLine is not empty, but not full either, and colors match, move is valid
+        else if (targetLine.getColorIndex() == attemptedMove.getColorIndex()) {
+            int spaceLeft = targetLine.getLength() - targetLine.getTilesAmount();
+            if (spaceLeft > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        //if targetLine not empty and colors don't match, move invalid
+        else {
+            return false;
+        }
+    }
+
+    public void executeMove(Move move) {
+
+        //TODO: add excess tiles to FloorLine
+        patternLines[move.getTargetLineIndex()].setColorIndex(move.getColorIndex());
+        patternLines[move.getTargetLineIndex()].setTilesAmount(move.getTileAmount());
     }
 
     //Attempt to empty the PatternLine indicated by row
