@@ -22,17 +22,28 @@ public class PlayerBoardTest {
         assertFalse(testPlayerBoard.checkIfMoveValid(testMove));
     }
 
+    //TODO: possibly work with Mockito more
     @Test
     public void emptyPatternLinesNoChange() {
         PlayerBoard testPlayerBoard = new PlayerBoard();
         assertEquals(0, testPlayerBoard.processEndOfRound());
     }
 
-    //TODO: write more test cases once tile placement functions exist
-    /*@Test
+    @Test
+    public void partiallyFullPatternLineCorrectScoring() {
+        PlayerBoard testPlayerBoard = new PlayerBoard();
+        Move testMove = new Move(0,0,1,1,0);
+        testPlayerBoard.getStairs().executeMove(testMove);
+        assertEquals(0, testPlayerBoard.processEndOfRound());
+
+    }
+
+    @Test
     public void fullPatternLineCorrectScoring() {
         PlayerBoard testPlayerBoard = new PlayerBoard();
+        Move testMove = new Move(0,0,0,1,0);
+        testPlayerBoard.getStairs().executeMove(testMove);
+        assertEquals(1, testPlayerBoard.processEndOfRound());
 
-
-    }*/
+    }
 }
