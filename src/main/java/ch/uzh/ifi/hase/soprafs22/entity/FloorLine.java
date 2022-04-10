@@ -58,21 +58,30 @@ public class FloorLine {
     public void placeTile(int colorIndex) {
 
         //TODO: discuss how scoring works exactly
-        tiles.add(colorIndex);
-        isOccupied = true;
+
         length = tiles.size();
 
-        if (length > 0 && length <= 2) {
+        if (length > -1 && length <= 1) {
             minusCount += 1;
+            tiles.add(colorIndex);
+            isOccupied = true;
+            length = tiles.size();
         }
 
-        else if (length > 2 && length <= 5) {
+        else if (length > 1 && length <= 4) {
             minusCount += 2;
+            tiles.add(colorIndex);
+            isOccupied = true;
+            length = tiles.size();
         }
 
-        else {
+        else if (length > 4 && length <= 6){
             minusCount += 3;
+            tiles.add(colorIndex);
+            isOccupied = true;
+            length = tiles.size();
         }
+
 
     }
 

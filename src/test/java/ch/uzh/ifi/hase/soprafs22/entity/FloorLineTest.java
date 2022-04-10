@@ -16,12 +16,33 @@ public class FloorLineTest {
     }
 
     @Test
-    public void tilePlacement() {
+    public void tilePlacementNotFullFloorLine() {
         FloorLine testFloorLine = new FloorLine();
         testFloorLine.placeTile(2);
-        assertEquals(1,testFloorLine.getLength());
+        testFloorLine.placeTile(3);
+        testFloorLine.placeTile(0);
+        testFloorLine.placeTile(1);
+        testFloorLine.placeTile(2);
+        assertEquals(5,testFloorLine.getLength());
         assertEquals(true,testFloorLine.isOccupied());
-        assertEquals(1,testFloorLine.getMinusCount());
+        assertEquals(8,testFloorLine.getMinusCount());
+    }
+
+    @Test
+    public void tilePlacementOverFullFloorLine() {
+        FloorLine testFloorLine = new FloorLine();
+        testFloorLine.placeTile(2);
+        testFloorLine.placeTile(3);
+        testFloorLine.placeTile(0);
+        testFloorLine.placeTile(1);
+        testFloorLine.placeTile(2);
+        testFloorLine.placeTile(3);
+        testFloorLine.placeTile(2);
+        testFloorLine.placeTile(1);
+        testFloorLine.placeTile(1);
+        assertEquals(7,testFloorLine.getLength());
+        assertEquals(true,testFloorLine.isOccupied());
+        assertEquals(14,testFloorLine.getMinusCount());
     }
 
     @Test
