@@ -18,14 +18,9 @@ public class Stairs {
     public boolean checkIfMoveValid(Move attemptedMove) {
         PatternLine targetLine = patternLines[attemptedMove.getTargetLineIndex()];
 
-        //if targetLine is empty, check if there's enough space
+        //if targetLine is empty, move is valid
         if (targetLine.getColorIndex() == -1) {
-            if (targetLine.getLength() >= attemptedMove.getTileAmount()) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return true;
         }
 
         //if targetLine is not empty, but not full either, and colors match, move is valid

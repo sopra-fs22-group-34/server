@@ -43,11 +43,27 @@ public class StairsTest {
     }
 
     @Test
+    public void emptyPatternLineOverFillMoveValid() {
+        Stairs testStairs = new Stairs();
+        Move testMove = new Move(0,0,0,2,0);
+        assertTrue(testStairs.checkIfMoveValid(testMove));
+    }
+
+    @Test
     public void matchingColorPatternLineMoveValid() {
         Stairs testStairs = new Stairs();
         Move firstMove = new Move(0,0,1,1,0);
         testStairs.executeMove(firstMove);
         Move testMove = new Move(0,0,1,1,0);
+        assertTrue(testStairs.checkIfMoveValid(testMove));
+    }
+
+    @Test
+    public void matchingColorPatternLineOverFillMoveValid() {
+        Stairs testStairs = new Stairs();
+        Move firstMove = new Move(0, 0, 1, 1, 0);
+        testStairs.executeMove(firstMove);
+        Move testMove = new Move(0, 0, 1, 2, 0);
         assertTrue(testStairs.checkIfMoveValid(testMove));
     }
 
