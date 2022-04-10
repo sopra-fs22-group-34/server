@@ -57,7 +57,15 @@ public class PlayerBoard  {
     }
 
     public boolean checkIfMoveValid(Move attemptedMove) {
-        return stairs.checkIfMoveValid(attemptedMove);
+        boolean wallSpotOccupied = wall.isColorOccupied(attemptedMove.getTargetRowIndex(), attemptedMove.getColorIndex());
+        if (!wallSpotOccupied) {
+            return stairs.checkIfMoveValid(attemptedMove);
+        }
+
+        else {
+            return false;
+        }
+
     }
 
     /*public void placeTileOnFloorLine(int colorIndex) {

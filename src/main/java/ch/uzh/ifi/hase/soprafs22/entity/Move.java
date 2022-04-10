@@ -3,14 +3,14 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 public class Move {
     private final int originIndex;
     private final int colorIndex;
-    private final int targetLineIndex;
+    private final int targetRowIndex;
     private final int tileAmount;
     private final int playerIndex;
 
-    Move(int originIndex, int colorIndex, int targetLineIndex, int tileAmount, int playerIndex) {
+    Move(int originIndex, int colorIndex, int targetRowIndex, int tileAmount, int playerIndex) {
         this.originIndex = originIndex;
         this.colorIndex = colorIndex;
-        this.targetLineIndex = targetLineIndex;
+        this.targetRowIndex = targetRowIndex;
         this.tileAmount = tileAmount;
         this.playerIndex = playerIndex;
     }
@@ -23,8 +23,8 @@ public class Move {
         return colorIndex;
     }
 
-    public int getTargetLineIndex() {
-        return targetLineIndex;
+    public int getTargetRowIndex() {
+        return targetRowIndex;
     }
 
     public int getTileAmount() {
