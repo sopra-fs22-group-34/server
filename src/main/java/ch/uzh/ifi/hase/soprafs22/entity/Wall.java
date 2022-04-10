@@ -96,6 +96,11 @@ public class Wall {
             rowScore = 0;
         }
 
+        //if full horizontal row was formed, grant 2 bonus points
+        if (rowScore == 5) {
+            rowScore = 7;
+        }
+
         return rowScore;
     }
 
@@ -136,6 +141,11 @@ public class Wall {
         //if no column was formed, no special points for column formation are given
         if (columnScore == 1) {
             columnScore = 0;
+        }
+
+        //if full vertical row was formed, grant 7 bonus points
+        if (columnScore == 5) {
+            columnScore = 12;
         }
 
         return columnScore;

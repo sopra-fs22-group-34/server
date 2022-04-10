@@ -53,4 +53,26 @@ public class WallTest {
         //place tile in row 3, column 3 (down right of center)
         assertEquals(4,testWall.placeTileInRowAndColor(3,0));
     }
+
+    @Test
+    public void fullHorizontalRow() {
+        Wall testWall = new Wall();
+
+        testWall.placeTileInRowAndColor(0,0);
+        testWall.placeTileInRowAndColor(0,1);
+        testWall.placeTileInRowAndColor(0,2);
+        testWall.placeTileInRowAndColor(0,3);
+        assertEquals(7, testWall.placeTileInRowAndColor(0,4));
+    }
+
+    @Test
+    public void fullVerticalRow() {
+        Wall testWall = new Wall();
+
+        testWall.placeTileInRowAndColor(0,0);
+        testWall.placeTileInRowAndColor(1,4);
+        testWall.placeTileInRowAndColor(2,3);
+        testWall.placeTileInRowAndColor(3,2);
+        assertEquals(12, testWall.placeTileInRowAndColor(4,1));
+    }
 }
