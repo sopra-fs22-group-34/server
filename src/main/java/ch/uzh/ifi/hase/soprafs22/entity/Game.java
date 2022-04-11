@@ -109,7 +109,7 @@ public class Game  {
     }
 
     //assigns playerID from 1-4 when Game starts
-    public List<Long> playersIndex(List<Long> players){
+    public List<Long> playersIndexEqualsTurnOrder(List<Long> players){
         List<Long> playersIndexEqualsTurnOrder = new ArrayList<>();
         //access the users in players and give them a Long which should be used as their playerID and for knowing which turn it is
         //hence every game has playerIDs from 1-4
