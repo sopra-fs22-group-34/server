@@ -78,6 +78,13 @@ public class LobbyService {
     }
 
     public void joinLobby(Long lobbyId, Long id){
+        List<Lobby> allLobbies = getLobbies();
+        for (Lobby lobby: allLobbies
+             ) {
+            if (lobby.isUserInLobby(id)){
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Player is already in a Lobby");
+            }
+        }
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         lobby.addPlayer(id); //add User into players
         lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count

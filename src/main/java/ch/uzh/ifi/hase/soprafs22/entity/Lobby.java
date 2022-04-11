@@ -137,4 +137,9 @@ public class Lobby  {
     public void removePlayer(Long id){
         this.players.remove(id);
     }
+
+    // is user in lobby
+    public boolean isUserInLobby(Long id){
+        return this.players.contains(id);
+    }
 }
