@@ -79,13 +79,18 @@ public class LobbyService {
 
     public void joinLobby(Long lobbyId, Long id){
         List<Lobby> allLobbies = getLobbies();
-        for (Lobby lobby: allLobbies
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        //check if id is already in players
+        if (lobby.getPlayers().contains(id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is already in this Lobby");
+        }
+        for (Lobby lobby1: allLobbies
              ) {
-            if (lobby.isUserInLobby(id)){
+            if (lobby1.isUserInLobby(id)){
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Player is already in a Lobby");
             }
+
         }
-        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         lobby.addPlayer(id); //add User into players
         lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
         lobby = updateLobby(lobbyId); //update the lobby via its id
