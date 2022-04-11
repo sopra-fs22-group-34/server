@@ -99,7 +99,11 @@ public class LobbyService {
 
     public void leaveLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getPlayers().contains(id)) { //if User is in players remove item from List
+        if (lobby.getHost_id() == id){
+            lobbyRepository.deleteById(lobbyId);
+            this.lobbyRepository.flush();
+            }
+        else if (lobby.getPlayers().contains(id)) { //if User is in players remove item from List
             lobby.removePlayer(id);
             lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
             lobby = updateLobby(lobbyId); //update the lobby via its id
