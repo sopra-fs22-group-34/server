@@ -107,4 +107,23 @@ public class Game  {
     public void viewPlayerBoard() {
 
     }
+
+    //assigns playerID from 1-4 when Game starts
+    public List<Long> playersIndex(List<Long> players){
+        List<Long> playersIndexEqualsTurnOrder = new ArrayList<>();
+        //access the users in players and give them a Long which should be used as their playerID and for knowing which turn it is
+        //hence every game has playerIDs from 1-4
+        try{
+            Long player1 = players.set(1, 1L);
+            playersIndexEqualsTurnOrder.add(player1);
+            Long player2 = players.set(2, 2L);
+            playersIndexEqualsTurnOrder.add(player2);
+            Long player3 = players.set(3, 3L);
+            playersIndexEqualsTurnOrder.add(player3);
+            Long player4 = players.set(3, 4L);
+            playersIndexEqualsTurnOrder.add(player4);
+        //if players is out of bounds because not 4 players are in there return the already finished playersIndex
+        } catch (Exception e){return playersIndexEqualsTurnOrder;}
+        return playersIndexEqualsTurnOrder;
+    }
 }

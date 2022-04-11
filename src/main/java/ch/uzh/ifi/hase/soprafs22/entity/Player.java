@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import java.io.Serializable;
+import ch.uzh.ifi.hase.soprafs22.entity.Game;
 
 
 public class Player {
