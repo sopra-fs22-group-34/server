@@ -33,7 +33,7 @@ public class PlayerBoardTest {
     public void partiallyFullPatternLineCorrectScoring() {
         PlayerBoard testPlayerBoard = new PlayerBoard();
         Move testMove = new Move(0,0,1,1,0);
-        testPlayerBoard.getStairs().executeMove(testMove);
+        testPlayerBoard.executeMove(testMove);
         assertEquals(0, testPlayerBoard.processEndOfRound());
 
     }
@@ -42,8 +42,27 @@ public class PlayerBoardTest {
     public void fullPatternLineCorrectScoring() {
         PlayerBoard testPlayerBoard = new PlayerBoard();
         Move testMove = new Move(0,0,0,1,0);
-        testPlayerBoard.getStairs().executeMove(testMove);
+        testPlayerBoard.executeMove(testMove);
         assertEquals(1, testPlayerBoard.processEndOfRound());
 
+    }
+
+    @Test
+    public void executeMoveNoExcessTiles() {
+        PlayerBoard testPlayerBoard = new PlayerBoard();
+        Move testMove = new Move(0,0,0,1,0);
+        testPlayerBoard.executeMove(testMove);
+
+        int minusCount = testPlayerBoard.getFloorLine().getMinusCount();
+        assertEquals(0, minusCount);
+    }
+
+    @Test
+    public void executeMoveWithExcessTiles() {
+        PlayerBoard testPlayerBoard = new PlayerBoard();
+        Move testMove = new Move(0,0,0,2,0);
+        testPlayerBoard.executeMove(testMove);
+        int minusCount = testPlayerBoard.getFloorLine().getMinusCount();
+        assertEquals(1, minusCount);
     }
 }

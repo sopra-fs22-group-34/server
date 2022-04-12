@@ -56,7 +56,14 @@ public class PlayerBoard  {
 
     }
 
-    /*public void placeTileOnFloorLine(int colorIndex) {
-        floorLine.placeTile(colorIndex);
-    }*/
+    public void executeMove(Move move) {
+        int excessTiles = stairs.executeMove(move);
+
+        //place excess tiles in FloorLine
+
+        for (int i = 0; i < excessTiles; i++) {
+            floorLine.placeTile(move.getColorIndex());
+        }
+    }
+
 }
