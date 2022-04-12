@@ -40,11 +40,24 @@ public class Stairs {
         }
     }
 
-    public void executeMove(Move move) {
+    public int executeMove(Move move) {
+        //place tiles in PatternLine, returns number of excess tiles that need to go into the FloorLine
 
-        //TODO: add excess tiles to FloorLine
-        patternLines[move.getTargetRowIndex()].setColorIndex(move.getColorIndex());
-        patternLines[move.getTargetRowIndex()].setTilesAmount(move.getTileAmount());
+        int targetRow = move.getTargetRowIndex();
+        patternLines[targetRow].setColorIndex(move.getColorIndex());
+        int length = patternLines[targetRow].getLength();
+        int tilesAmount = patternLines[targetRow].getTilesAmount();
+        int spaceLeft = length - tilesAmount;
+
+        if (move.getTileAmount() <= spaceLeft) {
+            patternLines[targetRow].setTilesAmount(tilesAmount + move.getTileAmount());
+            return 0;
+        }
+
+        else {
+            patternLines[targetRow].setTilesAmount(length);
+            return move.getTileAmount() - spaceLeft;
+        }
     }
 
     //Attempt to empty the PatternLine indicated by row

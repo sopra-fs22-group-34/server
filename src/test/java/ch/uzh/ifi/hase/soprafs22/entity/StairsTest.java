@@ -85,4 +85,18 @@ public class StairsTest {
         assertFalse(testStairs.checkIfMoveValid(testMove));
     }
 
+    @Test
+    public void executeMoveNoExcessTiles() {
+        Stairs testStairs = new Stairs();
+        Move testMove = new Move(0,1,1,1,0);
+        assertEquals(0, testStairs.executeMove(testMove));
+    }
+
+    @Test
+    public void executeMoveExcessTiles() {
+        Stairs testStairs = new Stairs();
+        Move testMove = new Move(0,1,1,3,0);
+        assertEquals(1, testStairs.executeMove(testMove));
+    }
+
 }
