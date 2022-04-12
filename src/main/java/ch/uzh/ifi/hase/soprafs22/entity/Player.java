@@ -14,32 +14,21 @@ public class Player {
 
     public String playerName;
 
-    public boolean loggedIn;
-
     private boolean playersTurn;
+
+    Player(Long playerId, String playerName) {
+        this.playerId = playerId;
+        this.playerBoard = new PlayerBoard();
+        this.playerName = playerName;
+        this.score = 0;
+    }
 
     public Long getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
-    }
-
     public PlayerBoard getPlayerBoard() {
         return playerBoard;
-    }
-
-    public void setPlayerBoard(PlayerBoard playerBoard) {
-        this.playerBoard = playerBoard;
-    }
-
-    public void login(){
-
-    }
-
-    public void logout(){
-
     }
 
     public int getScore(){

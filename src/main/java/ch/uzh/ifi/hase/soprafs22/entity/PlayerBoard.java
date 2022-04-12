@@ -21,24 +21,12 @@ public class PlayerBoard  {
         return stairs;
     }
 
-    public void setStairs(Stairs stairs) {
-        this.stairs = stairs;
-    }
-
     public Wall getWall() {
         return wall;
     }
 
-    public void setWall(Wall wall) {
-        this.wall = wall;
-    }
-
     public FloorLine getFloorLine() {
         return floorLine;
-    }
-
-    public void setFloorLine(FloorLine floorLine) {
-        this.floorLine = floorLine;
     }
 
     public int processEndOfRound(){
