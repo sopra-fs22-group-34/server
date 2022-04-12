@@ -75,6 +75,13 @@ public class LobbyController {
         lobbyService.leaveLobby(lobbyId, userId);
     }
 
+    @PutMapping("/lobbies/{lobbyId}/host/{hostId}/users/{userToKickId}/kick")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void kickUserFromLobbyWithHost(@PathVariable long lobbyId, @PathVariable long hostId, @PathVariable long userToKickId){
+        lobbyService.kickUserFromLobby(lobbyId, hostId, userToKickId);
+    }
+
     @GetMapping("/lobbies/{lobbyId}/game")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
