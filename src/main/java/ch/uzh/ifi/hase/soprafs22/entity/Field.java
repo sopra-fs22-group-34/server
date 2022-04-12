@@ -5,6 +5,6 @@ import java.util.ArrayList;
 
 public interface Field {
 
-    public ArrayList<Integer> colorAmounts = new ArrayList<>();
+    public Integer[] colorAmounts = new Integer[5];
 
 }
