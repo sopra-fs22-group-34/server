@@ -117,6 +117,26 @@ public class LobbyService {
          */
     }
 
+    public void kickUserFromLobby(Long lobbyId, Long hostId, Long userToKickId){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (lobby.getHost_id() == hostId && lobby.getPlayers().contains(userToKickId)){
+            lobby.removePlayer(userToKickId);
+            lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
+            updateLobby(lobbyId); //update the lobby via its id
+            this.lobbyRepository.flush();
+        }
+        else if (lobby.getHost_id() != hostId) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can kick players. Make sure you are the host of the lobby before trying to kick someone.");
+        }
+
+        else if (!lobby.getPlayers().contains(userToKickId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player to kick with this Id exists.");
+        }
+
+        else {throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Something went wrong while kicking the Player. Make sure you are in the right Lobby as the host and the Player you want to kick exists.");} //If Player is not in players throw Error and don't go further
+
+    }
+
     public Lobby updateLobby(Long lobbyId){
         // checks if lobby is full or completely empty and if true sets is_open to false in order to close the lobby
         Lobby updatedLobby = getLobbyById(lobbyId);
