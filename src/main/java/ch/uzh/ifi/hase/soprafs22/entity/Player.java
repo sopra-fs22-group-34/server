@@ -39,5 +39,11 @@ public class Player {
         return playersTurn;
     }
 
+    public void processEndOfRound() {
+        score += playerBoard.processEndOfRound();
+    }
+
+
+
 
 }
