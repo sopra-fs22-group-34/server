@@ -208,14 +208,14 @@ class LobbyServiceTest {
 //
 //    }
 
-// TODO:   @Test public void startGameValidInput(){
+// TODO: has been implemented but is never used  @Test public void startGameValidInput(){
 
 //        lobbyService.createLobby(testLobby);
 //        testLobby.setCurrent_players(4L);
 //        assertEquals(testLobby.getCurrent_players(), testLobby.getTotal_players());
 //    }
 
-// TODO:    @Test public void startGameInvalidInput(){
+// TODO: has been implemented but is never used @Test public void startGameInvalidInput(){
 //
 //    }
 
