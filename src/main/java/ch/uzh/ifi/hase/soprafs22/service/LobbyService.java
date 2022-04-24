@@ -65,9 +65,11 @@ public class LobbyService {
         return lobbyByLobbyname;
     }
 
+    //TODO add function to frontend which asks user how to set up PrivacySettings
     public Lobby createLobby(Lobby newLobby) {
         new Lobby();
         newLobby.setIs_open(true);
+        newLobby.setIs_public(true); //public by default if one wants to change to private host has to change with updatePrivacy
         newLobby.setCurrent_players(1L);
         newLobby.addPlayer(newLobby.getHost_id());
         newLobby.setHost_name(userRepository.findUserById(newLobby.getHost_id()).getUsername());
@@ -134,7 +136,38 @@ public class LobbyService {
         }
 
         else {throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Something went wrong while kicking the Player. Make sure you are in the right Lobby as the host and the Player you want to kick exists.");} //If Player is not in players throw Error and don't go further
+    }
 
+    //As a host I want to have a private lobby in order to only play with friends
+    public void updatePrivacy(Long lobbyId, Long hostId){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (lobby.getHost_id() == hostId){
+            lobby.setIs_public(false);
+            updateLobby(lobbyId);
+            this.lobbyRepository.flush();
+        }
+        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can change the Privacy.");}
+    }
+
+    //Host can change the lobby name
+    public void changeLobbyName(Long lobbyId, Long hostId){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (lobby.getHost_id() == hostId) {
+            lobby.getName();
+            updateLobby(lobbyId);
+            this.lobbyRepository.flush();
+        }
+        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can change the Name of the Lobby.");}
+    }
+
+    public void changeLobbySize(Long lobbyId, Long hostId){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (lobby.getHost_id() == hostId){
+            lobby.getTotal_players();
+            updateLobby(lobbyId);
+            this.lobbyRepository.flush();
+        }
+        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can change the maximum number of players.");}
     }
 
     public Lobby updateLobby(Long lobbyId){
@@ -158,7 +191,7 @@ public class LobbyService {
             TimeUnit.SECONDS.sleep(10L); //should add a 10 seconds delay until newGame is created -> check java.util.concurrent.TimeUnit for information
             new Game(); //create a new Game
             newGame.setPlayers(players); //add current players List from Lobby into Game, which sets the Players for the Game process
-            newGame.playersIndexEqualsTurnOrder(players); //invokes a new list in Game.java where each User gets a playerID, which is then used for playing the Game
+            newGame.playersIndex(players); //invokes a new list in Game.java where each User gets a playerID, which is then used for playing the Game
         }
         return newGame;
     }

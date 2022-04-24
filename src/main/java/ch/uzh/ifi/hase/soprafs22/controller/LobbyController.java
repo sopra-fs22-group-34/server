@@ -82,6 +82,27 @@ public class LobbyController {
         lobbyService.kickUserFromLobby(lobbyId, hostId, userToKickId);
     }
 
+    @PutMapping("/lobbies/{lobbyId}/host/{hostId}/users/{updatePrivacy}/changePrivacy")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void updatePrivacyAsHost(@PathVariable long lobbyId, @PathVariable long hostId){
+        lobbyService.updatePrivacy(lobbyId, hostId);
+    }
+
+    @PutMapping("/lobbies/{lobbyId}/{changeName}/changeName")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void changeLobbyNameAsHost(@PathVariable long lobbyId, long hostId){
+        lobbyService.changeLobbyName(lobbyId, hostId);
+    }
+
+    @PutMapping("/lobbies/{lobbyId}/{changeSize}/changeSize")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void changeLobbySizeAsHost(@PathVariable long lobbyId, long hostId){
+        lobbyService.changeLobbySize(lobbyId, hostId);
+    }
+
     @GetMapping("/lobbies/{lobbyId}/game")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
