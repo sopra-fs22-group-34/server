@@ -65,6 +65,8 @@ class LobbyServiceTest {
         // testUser
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(testUser);
         Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser);
+        Mockito.when(userRepository.findByUsername("Sam")).thenReturn(testUser);
+        Mockito.when(userRepository.findByUsername("Joiner")).thenReturn(testUser2);
     }
 
 
@@ -133,7 +135,7 @@ class LobbyServiceTest {
         assertTrue(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(2, testLobby.getCurrent_players());
 
-        lobbyService.leaveLobby(testLobby.getId(), testUser2.getId());
+        lobbyService.leaveLobby(testLobby.getId(), testUser2.getUsername());
         assertFalse(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(1, testLobby.getCurrent_players());
     }
@@ -145,7 +147,7 @@ class LobbyServiceTest {
         assertTrue(lobbyToDelete.getPlayers().contains(testUser.getId()));
         assertEquals(1, lobbyToDelete.getCurrent_players());
 
-        lobbyService.leaveLobby(lobbyToDelete.getId(), testUser.getId());
+        lobbyService.leaveLobby(lobbyToDelete.getId(), testUser.getUsername());
         Mockito.verify(lobbyRepository, Mockito.times(1)).deleteById(Mockito.any());
 
     }
@@ -154,7 +156,7 @@ class LobbyServiceTest {
         lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
 
-        assertThrows(ResponseStatusException.class, () -> lobbyService.leaveLobby(testLobby.getId(), 69L));
+        assertThrows(ResponseStatusException.class, () -> lobbyService.leaveLobby(testLobby.getId(), "69"));
 
     }
 

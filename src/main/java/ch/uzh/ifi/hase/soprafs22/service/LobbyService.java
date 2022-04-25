@@ -99,24 +99,34 @@ public class LobbyService {
         this.lobbyRepository.flush();
     }
 
-    public void leaveLobby(Long lobbyId, Long id){
+    public void leaveLobby(Long lobbyId, String id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getHost_id() == id){
-            lobbyRepository.deleteById(lobbyId);
-            this.lobbyRepository.flush();
-            }
-        else if (lobby.getPlayers().contains(id)) { //if User is in players remove item from List
-            lobby.removePlayer(id);
-            lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
-            lobby = updateLobby(lobbyId); //update the lobby via its id
-            this.lobbyRepository.flush();
+        try {
+            if (lobby.getHost_id() == Long.parseLong(id)){
+                lobbyRepository.deleteById(lobbyId);
+                this.lobbyRepository.flush();
+                }
+            else if (lobby.getPlayers().contains(Long.parseLong(id))) { //if User is in players remove item from List
+                lobby.removePlayer(Long.parseLong(id));
+                lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
+                updateLobby(lobbyId); //update the lobby via its id
+                this.lobbyRepository.flush();}
+            else{throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player with this Id exists.");} //If Player is not in players throw Error and don't go further
         }
-        else {throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player with this Id exists.");} //If Player is not in players throw Error and don't go further
-        /*
-        long longNum = id;
-        List<Long> lobbyList = lobby.getPlayers();
-        lobbyList.remove(longNum);
-         */
+        catch (NumberFormatException notID) { // if input cannot be converted into an ID, it must be a username
+            Long newId = userRepository.findByUsername(id).getId();
+            if (lobby.getHost_id().equals(newId)){
+                lobbyRepository.deleteById(lobbyId);
+                this.lobbyRepository.flush();
+            }
+            else if (lobby.getPlayers().contains(newId)) { //if User is in players remove item from List
+                lobby.removePlayer(newId);
+                lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
+                updateLobby(lobbyId); //update the lobby via its id
+                this.lobbyRepository.flush();
+            }
+            else{throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player with this Id exists.");} //If Player is not in players throw Error and don't go further
+        }
     }
 
     public void kickUserFromLobby(Long lobbyId, Long hostId, Long userToKickId){

@@ -71,7 +71,7 @@ public class LobbyController {
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/leave")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void leaveLobbyWithUser(@PathVariable long lobbyId, @PathVariable long userId){
+    public void leaveLobbyWithUser(@PathVariable long lobbyId, @PathVariable String userId){
         lobbyService.leaveLobby(lobbyId, userId);
     }
 
