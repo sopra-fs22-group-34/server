@@ -39,6 +39,14 @@ public class Player {
         return playersTurn;
     }
 
+    public boolean checkIfMoveValid(Move attemptedMove) {
+        return playerBoard.checkIfMoveValid(attemptedMove);
+    }
+
+    public void executeMove(Move move) {
+        playerBoard.executeMove(move);
+    }
+
     public void processEndOfRound() {
         score += playerBoard.processEndOfRound();
     }
