@@ -49,6 +49,9 @@ public class Player {
 
     public void processEndOfRound() {
         score += playerBoard.processEndOfRound();
+        if (score < 0) {
+            score = 0;
+        }
     }
 
 
