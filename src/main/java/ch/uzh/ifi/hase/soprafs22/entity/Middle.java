@@ -7,7 +7,7 @@ public class Middle implements Field {
 
     private Integer[] colorAmounts = new Integer[5];
 
-    private boolean hasMinusTile = false;
+    private boolean hasMinusTile = true;
 
     public Integer[] getColorAmounts() {
         return colorAmounts;
