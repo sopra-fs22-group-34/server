@@ -54,6 +54,10 @@ public class Player {
         }
     }
 
+    public boolean hasFullWallRow() {
+        return playerBoard.hasFullWallRow();
+    }
+
 
 
 

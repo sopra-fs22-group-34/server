@@ -150,4 +150,25 @@ public class Wall {
 
         return columnScore;
     }
+
+    public boolean hasFullWallRow() {
+        for (int row = 0; row < 5; row++) {
+
+            //for every individual row, check whether all positions are occupied
+            boolean rowIsFull = true;
+            for (int column = 0; column < 5; column++) {
+                if (positionIsOccupiedArray[row][column] == false) {
+                    rowIsFull = false;
+                }
+            }
+
+            //if a row is full, return true
+            if (rowIsFull) {
+                return true;
+            }
+        }
+
+        //if loop was fully iterated through and no full row found, return false
+        return false;
+    }
 }

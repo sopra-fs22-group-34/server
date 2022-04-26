@@ -75,4 +75,19 @@ public class WallTest {
         testWall.placeTileInRowAndColor(3,2);
         assertEquals(12, testWall.placeTileInRowAndColor(4,1));
     }
+
+    @Test
+    public void fullWallRowDetection() {
+        Wall testWall = new Wall();
+
+        assertFalse(testWall.hasFullWallRow());
+
+        testWall.placeTileInRowAndColor(0,0);
+        testWall.placeTileInRowAndColor(0,1);
+        testWall.placeTileInRowAndColor(0,2);
+        testWall.placeTileInRowAndColor(0,3);
+        testWall.placeTileInRowAndColor(0,4);
+
+        assertTrue(testWall.hasFullWallRow());
+    }
 }
