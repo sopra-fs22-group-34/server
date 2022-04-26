@@ -53,4 +53,13 @@ public class Middle implements Field {
             colorAmounts[i] += leftoverColorAmounts[i];
         }
     }
+
+    public boolean isEmpty() {
+        for (int i = 0; i < 5; i++) {
+            if (colorAmounts[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

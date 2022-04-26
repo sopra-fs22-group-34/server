@@ -51,4 +51,13 @@ public class Factory implements Field {
         //set all colorAmounts to 0, since Factory now empty, and return leftover tiles
         return leftoverColorAmounts;
     }
+
+    public boolean isEmpty() {
+        for (int i = 0; i < 5; i++) {
+            if (colorAmounts[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

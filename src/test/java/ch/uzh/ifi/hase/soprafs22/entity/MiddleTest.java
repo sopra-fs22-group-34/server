@@ -71,4 +71,16 @@ public class MiddleTest {
         Move testMoveTwo = new Move(0,2,0,1,0);
         assertFalse(testMiddle.executeMove(testMoveTwo));
     }
+
+    @Test
+    public void isEmptyTest() {
+        Middle testMiddle = new Middle();
+
+        assertTrue(testMiddle.isEmpty());
+
+        Integer[] leftoverTiles = {0,2,1,0,0};
+        testMiddle.placeLeftoverTiles(leftoverTiles);
+
+        assertFalse(testMiddle.isEmpty());
+    }
 }

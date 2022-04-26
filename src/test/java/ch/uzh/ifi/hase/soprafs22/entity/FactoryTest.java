@@ -92,4 +92,32 @@ public class FactoryTest {
         assertArrayEquals(expectedLeftoverColorAmounts, testFactory.executeMove(testMove));
         assertArrayEquals(emptyFactoryColorAmounts, testFactory.getColorAmounts());
     }
+
+    @Test
+    public void isEmptyTest() {
+        Factory testFactory = new Factory();
+
+        assertFalse(testFactory.isEmpty());
+
+
+        Integer[] colorAmounts = testFactory.getColorAmounts();
+
+        int colorIndex = 0;
+        int tileAmount = 0;
+
+        //find first nonzero entry in colorAmounts, create Move with this colorIndex and tileAmount
+        for (int i = 0; i < 5; i++) {
+            if (colorAmounts[i] != 0) {
+                colorIndex = i;
+                tileAmount = colorAmounts[i];
+                break;
+            }
+        }
+
+        Move testMove = new Move(0,colorIndex,0,tileAmount,0);
+
+        testFactory.executeMove(testMove);
+
+        assertTrue(testFactory.isEmpty());
+    }
 }
