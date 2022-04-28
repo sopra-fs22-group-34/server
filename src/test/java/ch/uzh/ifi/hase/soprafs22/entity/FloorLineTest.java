@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
-import ch.uzh.ifi.hase.soprafs22.entity.FloorLine;
-import org.dom4j.rule.Pattern;
+import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,5 +52,20 @@ public class FloorLineTest {
         assertEquals(0,testFloorLine.getLength());
         assertEquals(false,testFloorLine.isOccupied());
         assertEquals(0,testFloorLine.getMinusCount());
+    }
+
+    @Test
+    public void jsonifyTest() {
+        FloorLine testFloorLine = new FloorLine();
+        JSONArray json = testFloorLine.jsonify();
+        String expected = "[]";
+        assertEquals(expected,json.toString());
+
+        testFloorLine.placeTile(2);
+        testFloorLine.placeTile(4);
+        json = testFloorLine.jsonify();
+        expected = "[2,4]";
+        assertEquals(expected,json.toString());
+
     }
 }

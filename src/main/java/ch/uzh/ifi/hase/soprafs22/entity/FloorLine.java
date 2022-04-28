@@ -1,5 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class FloorLine {
@@ -79,7 +82,11 @@ public class FloorLine {
         return minusPoints;
     }
 
-    public void occupy() {
-
+    public JSONArray jsonify() {
+        JSONArray array = new JSONArray();
+        for(int i = 0; i < tiles.size(); i++) {
+            array.put(tiles.get(i));
+        }
+        return array;
     }
 }
