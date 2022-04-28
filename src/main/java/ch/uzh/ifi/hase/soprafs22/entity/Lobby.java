@@ -33,6 +33,8 @@ public class Lobby  {
     @JoinColumn
     private User host;
 */
+    @Column(nullable = false)
+    private Game game;
 
     @Column(nullable = false)
     private Long host_id;
