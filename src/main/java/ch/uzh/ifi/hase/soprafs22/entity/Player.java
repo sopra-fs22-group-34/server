@@ -6,26 +6,18 @@ import ch.uzh.ifi.hase.soprafs22.entity.Game;
 
 public class Player {
 
-    private Long playerId;
+    private int playerId;
 
     private PlayerBoard playerBoard;
 
     private int score;
 
-    public String playerName;
-
-    private boolean playersTurn;
-
-    Player(Long playerId, String playerName) {
+    Player(int playerId) {
         this.playerId = playerId;
         this.playerBoard = new PlayerBoard();
-        this.playerName = playerName;
         this.score = 0;
     }
 
-    public Long getPlayerId() {
-        return playerId;
-    }
 
     public PlayerBoard getPlayerBoard() {
         return playerBoard;
@@ -35,9 +27,6 @@ public class Player {
         return score;
     }
 
-    public boolean getPlayersTurn(){
-        return playersTurn;
-    }
 
     public boolean checkIfMoveValid(Move attemptedMove) {
         return playerBoard.checkIfMoveValid(attemptedMove);

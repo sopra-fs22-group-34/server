@@ -6,107 +6,98 @@ import java.util.List;
 
 public class Game  {
 
-    private List<Long> players;
+    int playerCount = 0;
+    int factoryCount = 0;
+    Player[] players = null;
+    Factory[] factories = null;
+    Middle middle = new Middle();
 
-    private int roundCount;
+    int playerTurn = 1;
 
-    private int currentPlayerIndex;
+    Game(int playerNumber) {
+        int playerCount = playerNumber;
+        int factoryCount = 2*playerCount+1;
 
-    private ArrayList<Factory> factories;
 
-    private Middle middle;
+        for (int i = 0; i < playerCount; i++) {
+            players[i] = new Player(i);
+        }
 
-    public List<Long> getPlayers() {
-        return players;
-    }
+        Factory[] factories = new Factory[factoryCount];
 
-    public void setPlayers(List<Long> players) { this.players = players; }
-
-    public int getRoundCount() {
-        return roundCount;
-    }
-
-    public void setRoundCount(int roundCount) {
-        this.roundCount = roundCount;
-    }
-
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
-    }
-
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
-    }
-
-    public ArrayList<Factory> getFactories() {
-        return factories;
-    }
-
-    public void setFactories(ArrayList<Factory> factories) {
-        this.factories = factories;
-    }
-
-    public Middle getMiddle() {
-        return middle;
-    }
-
-    public void setMiddle(Middle middle) {
-        this.middle = middle;
-    }
-
-    //these are placeholders -> not yet implemented
-    public void setupGame() {
+        int playerTurn = 1;
 
     }
 
-    public void playGame() {
+    public boolean checkIfMoveValid(Move attemptedMove) {
+        if (playerTurn != attemptedMove.getPlayerIndex()) {
+            return false;
+        }
+        if (players[attemptedMove.getPlayerIndex()].checkIfMoveValid(attemptedMove) == false) {
+            return false;
+        }
 
+        if (attemptedMove.getOriginIndex() == -1) {
+            if (middle.checkIfMoveValid(attemptedMove) == false) {
+                return false;
+            }
+        }
+
+        else if (attemptedMove.getOriginIndex() < factoryCount) {
+            if (factories[attemptedMove.getOriginIndex()].checkIfMoveValid(attemptedMove) == false) {
+                return false;
+            }
+        }
+
+        else {
+            return false;
+        }
+
+        return true;
     }
 
-    public void startNextRound() {
+    public void executeMove(Move move) {
+        if (move.getOriginIndex() == -1) {
+            middle.executeMove(move);
+        }
 
+        else {
+            factories[move.getOriginIndex()].executeMove(move);
+        }
+
+        players[move.getPlayerIndex()].executeMove(move);
+
+        if (isRoundOver()){
+            processEndOfRound();
+        }
+
+        else {
+            playerTurn = (playerTurn+1)%playerCount;
+        }
     }
 
-    public void endGame() {
+    public boolean isRoundOver() {
+        boolean result = true;
 
+        if (!middle.isEmpty()) {
+            result = false;
+        }
+
+        for (int i = 0; i < factoryCount; i++) {
+            if (!factories[i].isEmpty()) {
+                result = false;
+            }
+        }
+
+        return result;
     }
 
-    //just returned some score so no error is thrown
-    public int countScore() {
-        return 420;
+    public void processEndOfRound() {
+        for (int i = 0; i < playerCount; i++) {
+            players[i].processEndOfRound();
+        }
     }
 
-    public void takeTileFromFactory() {
-
-    }
-
-    public void takeTileFromMiddle() {
-
-    }
-
-    public void takeMinusStone() {
-
-    }
-
-    public void placeTileOnStairs() {
-
-    }
-
-    public void moveTileToWall() {
-
-    }
-
-    public void placeTileOnFloorLine() {
-
-    }
-
-    public void nextPlayerTurn() {
-
-    }
-
-    public void viewPlayerBoard() {
-
-    }
 
     //assigns playerID from 1-4 when Game starts
     public List<Long> playersIndex(List<Long> players){

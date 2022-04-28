@@ -9,7 +9,7 @@ public class PlayerTest {
 
     @Test
     public void processEndOfRound() {
-        Player testPlayer = new Player(0l, "Harambe");
+        Player testPlayer = new Player(0);
         testPlayer.processEndOfRound();
         assertEquals(0, testPlayer.getScore());
 
@@ -26,7 +26,7 @@ public class PlayerTest {
 
     @Test
     public void noNegativeScore() {
-        Player testPlayer = new Player(0l, "Harambe");
+        Player testPlayer = new Player(0);
 
         Move testMoveOne = new Move(0,1,1,1,0);
         testPlayer.executeMove(testMoveOne);

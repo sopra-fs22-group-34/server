@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 public class Move {
+    //-1 stands for Middle, any nonnegative integer n stands for n-th Factory
     private final int originIndex;
     private final int colorIndex;
     private final int targetRowIndex;

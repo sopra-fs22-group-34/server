@@ -194,17 +194,7 @@ public class LobbyService {
         }
     }
 
-    public Game startGame(Game newGame, Long lobbyId, List<Long> players) throws InterruptedException {
-        Lobby lobbyToStart = this.lobbyRepository.findLobbyById(lobbyId); //find specific Lobby in database
-        //check if the current players are equal to the total players needed for specific game
-        if (lobbyToStart.getCurrent_players() == lobbyToStart.getTotal_players()){
-            TimeUnit.SECONDS.sleep(10L); //should add a 10 seconds delay until newGame is created -> check java.util.concurrent.TimeUnit for information
-            new Game(); //create a new Game
-            newGame.setPlayers(players); //add current players List from Lobby into Game, which sets the Players for the Game process
-            newGame.playersIndex(players); //invokes a new list in Game.java where each User gets a playerID, which is then used for playing the Game
-        }
-        return newGame;
-    }
+
 
     //these are placeholders
     public void setNumberOfPlayers() {
