@@ -1,11 +1,64 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
+
+    @Test
+    public void validFactoryMove() {
+        Game testGame = new Game(2);
+        JSONObject json = testGame.jsonify();
+        JSONArray factories = (JSONArray) json.get("factories");
+        JSONObject factory = (JSONObject) factories.get(0);
+        Integer[] colorAmounts = (Integer[]) factory.get("colorAmounts");
+
+        int colorIndex = 0;
+        int tileAmount = 0;
+
+        //find first nonzero entry in colorAmounts, create Move with this colorIndex and tileAmount
+        for (int i = 0; i < 5; i++) {
+            if (colorAmounts[i] != 0) {
+                colorIndex = i;
+                tileAmount = colorAmounts[i];
+                break;
+            }
+        }
+
+
+        Move testMove = new Move(0,colorIndex,4,tileAmount,0);
+
+        assertTrue(testGame.checkIfMoveValid(testMove));
+    }
+
+    @Test
+    public void invalidFactoryMove() {
+        Game testGame = new Game(2);
+        JSONObject json = testGame.jsonify();
+        JSONArray factories = (JSONArray) json.get("factories");
+        JSONObject factory = (JSONObject) factories.get(0);
+        Integer[] colorAmounts = (Integer[]) factory.get("colorAmounts");
+
+        int colorIndex = 0;
+        int tileAmount = 0;
+
+        //find first nonzero entry in colorAmounts, create Move with this colorIndex and tileAmount
+        for (int i = 0; i < 5; i++) {
+            if (colorAmounts[i] != 0) {
+                colorIndex = i;
+                tileAmount = colorAmounts[i];
+                break;
+            }
+        }
+
+
+        Move testMove = new Move(0,colorIndex,4,5,0);
+
+        assertFalse(testGame.checkIfMoveValid(testMove));
+    }
 
     
 }

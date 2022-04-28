@@ -19,7 +19,7 @@ public class Game implements Serializable {
 
     Middle middle = new Middle();
 
-    int playerTurn = 1;
+    int playerTurn = 0;
 
     Game(int playerNumber) {
         playerCount = playerNumber;
@@ -37,7 +37,7 @@ public class Game implements Serializable {
             factories[i] = new Factory();
         }
 
-        int playerTurn = 1;
+        int playerTurn = 0;
 
     }
 
