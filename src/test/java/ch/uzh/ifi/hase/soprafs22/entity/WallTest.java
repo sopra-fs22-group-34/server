@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Wall;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,5 +90,20 @@ public class WallTest {
         testWall.placeTileInRowAndColor(0,4);
 
         assertTrue(testWall.hasFullWallRow());
+    }
+
+    @Test
+    public void jsonifyTest() {
+        Wall testWall = new Wall();
+
+        JSONObject jsonOne = testWall.jsonify();
+        String expected = "{\"colorsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}";
+        assertEquals(expected,jsonOne.toString());
+
+        testWall.placeTileInRowAndColor(0,0);
+        JSONObject jsonTwo = testWall.jsonify();
+        expected = "{\"colorsOccupied\":[[true,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[true,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}";
+        assertEquals(expected,jsonTwo.toString());
+
     }
 }
