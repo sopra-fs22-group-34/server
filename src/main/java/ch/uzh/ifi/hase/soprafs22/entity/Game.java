@@ -1,29 +1,40 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Game  {
 
-    int playerCount = 0;
-    int factoryCount = 0;
-    Player[] players = null;
-    Factory[] factories = null;
+    int playerCount;
+    int factoryCount;
+
+    Player[] players;
+
+    Factory[] factories;
+
     Middle middle = new Middle();
 
     int playerTurn = 1;
 
     Game(int playerNumber) {
-        int playerCount = playerNumber;
-        int factoryCount = 2*playerCount+1;
+        playerCount = playerNumber;
+        factoryCount = 2*playerCount+1;
 
+        players = new Player[playerCount];
 
         for (int i = 0; i < playerCount; i++) {
             players[i] = new Player(i);
         }
 
-        Factory[] factories = new Factory[factoryCount];
+        factories = new Factory[factoryCount];
+
+        for (int i = 0; i < factoryCount; i++) {
+            factories[i] = new Factory();
+        }
 
         int playerTurn = 1;
 
@@ -116,5 +127,29 @@ public class Game  {
         //if players is out of bounds because not 4 players are in there return the already finished playersIndex
         } catch (Exception e){return playersIndexEqualsTurnOrder;}
         return playersIndexEqualsTurnOrder;
+    }
+
+    public JSONObject jsonify() {
+        JSONObject json = new JSONObject();
+        json.put("middle",middle.jsonify());
+        json.put("factoryAmount",factoryCount);
+
+        JSONArray factoryArray = new JSONArray();
+        for (int i = 0; i < factoryCount; i++) {
+            factoryArray.put(factories[i].jsonify());
+        }
+        json.put("factories", factoryArray);
+
+        json.put("playerAmount", playerCount);
+
+        JSONArray playersArray = new JSONArray();
+        for (int i = 0; i < playerCount; i++) {
+            playersArray.put(players[i].jsonify());
+        }
+        json.put("players", playersArray);
+
+        json.put("playerTurnId", playerTurn);
+
+        return json;
     }
 }
