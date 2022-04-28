@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 import org.dom4j.rule.Pattern;
 
 import java.util.ArrayList;
+import org.json.*;
 
 public class Stairs {
 
@@ -63,5 +64,11 @@ public class Stairs {
     //Attempt to empty the PatternLine indicated by row
     public int emptyFullPatternLine(int row){
         return patternLines[row].emptyFullPatternLine();
+    }
+
+    public JSONArray jsonify() {
+        JSONArray json = new JSONArray();
+        for (int i = 0; i < 5; i++){json.put(patternLines[i].jsonify());}
+        return json;
     }
 }

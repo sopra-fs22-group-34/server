@@ -3,6 +3,8 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 import org.json.*;
 import java.util.ArrayList;
 
+import org.json.*;
+
 public class Wall {
 
     private Boolean[][] colorIsOccupiedArray = new Boolean[5][5];

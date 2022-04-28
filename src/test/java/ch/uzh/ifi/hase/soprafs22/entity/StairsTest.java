@@ -4,6 +4,8 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 import ch.uzh.ifi.hase.soprafs22.entity.Stairs;
 import ch.uzh.ifi.hase.soprafs22.entity.PatternLine;
 import org.junit.jupiter.api.Test;
+import org.json.*;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,4 +101,11 @@ public class StairsTest {
         assertEquals(1, testStairs.executeMove(testMove));
     }
 
+    @Test
+    void jsonifyTest(){
+        Stairs testStairs = new Stairs();
+        JSONArray json = testStairs.jsonify();
+        String expected = "[{\"length\":1,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":2,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":3,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":4,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":5,\"colorIndex\":-1,\"tilesAmount\":0}]";
+        assertEquals(expected, json.toString());
+    }
 }

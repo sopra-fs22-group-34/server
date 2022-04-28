@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import org.json.*;
+
 
 public class PatternLine {
 
@@ -49,5 +51,13 @@ public class PatternLine {
         else {
             return -1;
         }
+    }
+
+    public JSONObject jsonify() {
+        JSONObject json = new JSONObject();
+        json.put("length", length);
+        json.put("tilesAmount", tilesAmount);
+        json.put("colorIndex", colorIndex);
+        return json;
     }
 }
