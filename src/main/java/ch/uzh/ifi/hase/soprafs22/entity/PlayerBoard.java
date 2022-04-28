@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 
+import org.json.JSONObject;
 
 public class PlayerBoard  {
 
@@ -68,6 +69,14 @@ public class PlayerBoard  {
 
     public boolean hasFullWallRow() {
         return wall.hasFullWallRow();
+    }
+
+    public JSONObject jsonify() {
+        JSONObject json = new JSONObject();
+        json.put("wall", wall.jsonify());
+        json.put("stairs", stairs.jsonify());
+        json.put("floorLine", floorLine.jsonify());
+        return json;
     }
 
 }

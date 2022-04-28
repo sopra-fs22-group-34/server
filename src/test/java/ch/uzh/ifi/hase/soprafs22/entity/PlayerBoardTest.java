@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.entity.PlayerBoard;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,5 +65,17 @@ public class PlayerBoardTest {
         testPlayerBoard.executeMove(testMove);
         int minusCount = testPlayerBoard.getFloorLine().getMinusCount();
         assertEquals(1, minusCount);
+    }
+
+    @Test
+    public void jsonifyTest() {
+        PlayerBoard testPlayerBoard = new PlayerBoard();
+
+        JSONObject json = testPlayerBoard.jsonify();
+        String expected = "{\"stairs\":[{\"length\":1,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":2,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":3,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":4,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":5,\"colorIndex\":-1,\"tilesAmount\":0}],\"floorLine\":[],\"wall\":{\"colorsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}}";
+        assertEquals(expected,json.toString());
+
+
+
     }
 }
