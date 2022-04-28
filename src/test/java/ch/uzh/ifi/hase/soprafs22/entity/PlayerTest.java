@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,4 +38,16 @@ public class PlayerTest {
         testPlayer.processEndOfRound();
         assertEquals(0, testPlayer.getScore());
     }
+
+    @Test
+    public void jsonifyTest() {
+        Player testPlayer = new Player(1);
+        JSONObject json = testPlayer.jsonify();
+        String expected = "{\"score\":0,\"playerId\":1,\"playerBoard\":{\"stairs\":[{\"length\":1,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":2,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":3,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":4,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":5,\"colorIndex\":-1,\"tilesAmount\":0}],\"floorLine\":[],\"wall\":{\"colorsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}}}";
+        assertEquals(expected,json.toString());
+
+
+
+    }
+
 }

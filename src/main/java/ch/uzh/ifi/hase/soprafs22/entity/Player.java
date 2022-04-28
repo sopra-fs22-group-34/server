@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import java.io.Serializable;
 import ch.uzh.ifi.hase.soprafs22.entity.Game;
+import org.json.JSONObject;
 
 
 public class Player {
@@ -47,6 +48,13 @@ public class Player {
         return playerBoard.hasFullWallRow();
     }
 
+    public JSONObject jsonify() {
+        JSONObject json = new JSONObject();
+        json.put("playerId", playerId);
+        json.put("score", score);
+        json.put("playerBoard", playerBoard.jsonify());
+        return json;
+    }
 
 
 
