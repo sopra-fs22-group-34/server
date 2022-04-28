@@ -61,6 +61,20 @@ public class LobbyController {
         return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
     }
 
+    @GetMapping("/lobbies/{lobbyId}/users/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public boolean isUserInLobby(@PathVariable long lobbyId, @PathVariable long userId){
+        return lobbyService.isInThisLobby(lobbyId, userId);
+    }
+
+    @GetMapping("/users/{userId}/lobbies")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public boolean isUserInAnyLobby(@PathVariable long userId){
+        return lobbyService.isInAnyLobby(userId);
+    }
+
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/join")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
@@ -82,25 +96,25 @@ public class LobbyController {
         lobbyService.kickUserFromLobby(lobbyId, hostId, userToKickId);
     }
 
-    @PutMapping("/lobbies/{lobbyId}/host/{hostId}/users/{updatePrivacy}/changePrivacy")
+    @PutMapping("/lobbies/{lobbyId}/privacy")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void updatePrivacyAsHost(@PathVariable long lobbyId, @PathVariable long hostId){
-        lobbyService.updatePrivacy(lobbyId, hostId);
+    public void updatePrivacyAsHost(@PathVariable long lobbyId, @RequestBody boolean privacy){
+        lobbyService.updatePrivacy(lobbyId, privacy);
     }
 
-    @PutMapping("/lobbies/{lobbyId}/{changeName}/changeName")
+    @PutMapping("/lobbies/{lobbyId}/name")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void changeLobbyNameAsHost(@PathVariable long lobbyId, long hostId){
-        lobbyService.changeLobbyName(lobbyId, hostId);
+    public void changeLobbyNameAsHost(@PathVariable long lobbyId, @RequestBody String name){
+        lobbyService.changeLobbyName(lobbyId, name);
     }
 
-    @PutMapping("/lobbies/{lobbyId}/{changeSize}/changeSize")
+    @PutMapping("/lobbies/{lobbyId}/size")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void changeLobbySizeAsHost(@PathVariable long lobbyId, long hostId){
-        lobbyService.changeLobbySize(lobbyId, hostId);
+    public void changeLobbySizeAsHost(@PathVariable long lobbyId, @RequestBody Long size){
+        lobbyService.changeLobbySize(lobbyId, size);
     }
 
     @GetMapping("/lobbies/{lobbyId}/game")

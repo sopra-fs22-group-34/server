@@ -79,23 +79,30 @@ public class LobbyService {
         return newLobby;
     }
 
-    public void joinLobby(Long lobbyId, Long id){
-        List<Lobby> allLobbies = getLobbies();
+    public boolean isInThisLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        //check if id is already in players
-        if (lobby.getPlayers().contains(id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is already in this Lobby");
-        }
-        for (Lobby lobby1: allLobbies
-             ) {
-            if (lobby1.isUserInLobby(id)){
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Player is already in a Lobby");
-            }
+        return lobby.getPlayers().contains(id);
+    }
 
+    public boolean isInAnyLobby(Long id){
+        List<Lobby> allLobbies = getLobbies();
+        for (Lobby lobby1: allLobbies) {
+            if (lobby1.isUserInLobby(id)) { return true; }
+        }
+        return false;
+    }
+
+    public void joinLobby(Long lobbyId, Long id){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (isInThisLobby(lobbyId, id)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are already in this Lobby");
+        }
+        if (isInAnyLobby(id)){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already in a Lobby");
         }
         lobby.addPlayer(id); //add User into players
         lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
-        lobby = updateLobby(lobbyId); //update the lobby via its id
+        updateLobby(lobbyId); //update the lobby via its id
         this.lobbyRepository.flush();
     }
 
@@ -131,13 +138,13 @@ public class LobbyService {
 
     public void kickUserFromLobby(Long lobbyId, Long hostId, Long userToKickId){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getHost_id() == hostId && lobby.getPlayers().contains(userToKickId)){
+        if (lobby.getHost_id().equals(hostId) && lobby.getPlayers().contains(userToKickId)){
             lobby.removePlayer(userToKickId);
             lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
             updateLobby(lobbyId); //update the lobby via its id
             this.lobbyRepository.flush();
         }
-        else if (lobby.getHost_id() != hostId) {
+        else if (!lobby.getHost_id().equals(hostId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can kick players. Make sure you are the host of the lobby before trying to kick someone.");
         }
 
@@ -148,43 +155,30 @@ public class LobbyService {
         else {throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Something went wrong while kicking the Player. Make sure you are in the right Lobby as the host and the Player you want to kick exists.");} //If Player is not in players throw Error and don't go further
     }
 
-    //As a host I want to have a private lobby in order to only play with friends
-    public void updatePrivacy(Long lobbyId, Long hostId){
+    public void updatePrivacy(Long lobbyId, boolean privacy){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getHost_id() == hostId){
-            lobby.setIs_public(false);
+        lobby.setIs_public(privacy);
+    }
+
+    public void changeLobbyName(Long lobbyId, String name){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        lobby.setName(name);
+    }
+
+    public void changeLobbySize(Long lobbyId, Long size){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (lobby.getCurrent_players() < size){
+            lobby.setTotal_players(size);
             updateLobby(lobbyId);
             this.lobbyRepository.flush();
         }
-        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can change the Privacy.");}
+        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "You can't make the lobby smaller since all slots are full!");}
     }
 
-    //Host can change the lobby name
-    public void changeLobbyName(Long lobbyId, Long hostId){
-        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getHost_id() == hostId) {
-            lobby.getName();
-            updateLobby(lobbyId);
-            this.lobbyRepository.flush();
-        }
-        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can change the Name of the Lobby.");}
-    }
-
-    public void changeLobbySize(Long lobbyId, Long hostId){
-        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getHost_id() == hostId){
-            lobby.getTotal_players();
-            updateLobby(lobbyId);
-            this.lobbyRepository.flush();
-        }
-        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can change the maximum number of players.");}
-    }
-
-    public Lobby updateLobby(Long lobbyId){
+    public void updateLobby(Long lobbyId){
         // checks if lobby is full or completely empty and if true sets is_open to false in order to close the lobby
         Lobby updatedLobby = getLobbyById(lobbyId);
-        if (updatedLobby.getCurrent_players() == updatedLobby.getTotal_players() || updatedLobby.getCurrent_players() == null) {updatedLobby.setIs_open(false);}
-        return updatedLobby;
+        if (updatedLobby.getCurrent_players().equals(updatedLobby.getTotal_players()) || updatedLobby.getCurrent_players() == null) {updatedLobby.setIs_open(false);}
     }
 
     public void checkIfTaken(Long id, String un){
@@ -193,8 +187,6 @@ public class LobbyService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "This LobbyName is already taken.");
         }
     }
-
-
 
     //these are placeholders
     public void setNumberOfPlayers() {
