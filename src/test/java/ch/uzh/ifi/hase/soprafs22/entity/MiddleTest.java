@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Middle;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,5 +84,13 @@ public class MiddleTest {
         testMiddle.placeLeftoverTiles(leftoverTiles);
 
         assertFalse(testMiddle.isEmpty());
+    }
+
+    @Test
+    void jsonifyTest(){
+        Middle testMiddle = new Middle();
+        JSONObject json = testMiddle.jsonify();
+        String expected = "{\"hasMinusTile\":true,\"colorAmounts\":[0,0,0,0,0]}";
+        assertEquals(expected, json.toString());
     }
 }

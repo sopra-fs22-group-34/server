@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import java.util.ArrayList;
 import java.util.Random;
+import org.json.*;
 
 public class Middle implements Field {
 
@@ -61,5 +62,18 @@ public class Middle implements Field {
             }
         }
         return true;
+    }
+
+    public JSONObject jsonify() {
+        JSONObject json = new JSONObject();
+        json.put("hasMinusTile", hasMinusTile);
+        json.put("colorAmounts", jsonifyColorAmounts());
+        return json;
+    }
+
+    public JSONArray jsonifyColorAmounts(){
+        JSONArray json = new JSONArray();
+        for (int i = 0; i < 5; i++){json.put(colorAmounts[i]);}
+        return json;
     }
 }
