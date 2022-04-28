@@ -201,7 +201,10 @@ public class LobbyService {
 
     }
 
-
+    public void startGame(Long lobbyId){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        lobby.startGame(lobby.getCurrent_players().intValue());
+    }
 
     //TODO: write the methods which are needed in the LobbyController
 

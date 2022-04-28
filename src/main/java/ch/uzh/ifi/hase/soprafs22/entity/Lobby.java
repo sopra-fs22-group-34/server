@@ -144,4 +144,8 @@ public class Lobby  {
     public boolean isUserInLobby(Long id){
         return this.players.contains(id);
     }
+
+    public void startGame(int playerCount){
+        game = new Game(playerCount);
+    }
 }
