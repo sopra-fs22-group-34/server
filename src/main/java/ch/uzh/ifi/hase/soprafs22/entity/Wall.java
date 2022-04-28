@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import org.json.*;
 import java.util.ArrayList;
 
 public class Wall {
@@ -170,5 +171,12 @@ public class Wall {
 
         //if loop was fully iterated through and no full row found, return false
         return false;
+    }
+
+    public JSONObject jsonify() {
+        JSONObject json = new JSONObject();
+        json.put("colorsOccupied", colorIsOccupiedArray);
+        json.put("positionsOccupied", positionIsOccupiedArray);
+        return json;
     }
 }
