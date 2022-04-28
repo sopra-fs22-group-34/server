@@ -2,8 +2,9 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Factory;
 import org.junit.jupiter.api.Test;
-
+import org.json.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 public class FactoryTest {
 
 

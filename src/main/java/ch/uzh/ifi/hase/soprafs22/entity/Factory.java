@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import java.util.ArrayList;
 import java.util.Random;
+import org.json.*;
 
 public class Factory implements Field {
 
@@ -59,5 +60,11 @@ public class Factory implements Field {
             }
         }
         return true;
+    }
+
+    public JSONObject jsonify(){
+        JSONObject json = new JSONObject();
+        json.put("colorAmounts", colorAmounts);
+        return json;
     }
 }
