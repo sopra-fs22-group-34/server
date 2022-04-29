@@ -122,5 +122,19 @@ public class GameTest {
 
     }
 
+    @Test
+    public void roundNotOver() {
+        //make sure that round is detected as ongoing upon invoking constructor
+        Game testGame = new Game(2);
+        assertFalse(testGame.isRoundOver());
+    }
+
+    @Test
+    public void gameNotOver() {
+        //make sure that game is detected as ongoing upon invoking constructor
+        Game testGame = new Game(2);
+        assertFalse(testGame.isGameOver());
+    }
+
     
 }

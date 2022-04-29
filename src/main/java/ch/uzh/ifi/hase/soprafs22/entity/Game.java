@@ -112,6 +112,13 @@ public class Game implements Serializable {
         if (isGameOver()) {
             processEndOfGame();
         }
+
+        for (int i = 0; i < factoryCount; i++) {
+            factories[i] = new Factory();
+        }
+
+        middle = new Middle();
+
     }
 
     public boolean isGameOver() {
