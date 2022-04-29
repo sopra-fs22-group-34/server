@@ -108,6 +108,24 @@ public class Game implements Serializable {
         for (int i = 0; i < playerCount; i++) {
             players[i].processEndOfRound();
         }
+
+        if (isGameOver()) {
+            processEndOfGame();
+        }
+    }
+
+    public boolean isGameOver() {
+        for (int i = 0; i < playerCount; i++) {
+            if (players[i].hasFullWallRow()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void processEndOfGame() {
+
     }
 
 
