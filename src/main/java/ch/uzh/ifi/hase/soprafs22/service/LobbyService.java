@@ -95,64 +95,49 @@ public class LobbyService {
     public void joinLobby(Long lobbyId, Long id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         if (isInThisLobby(lobbyId, id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are already in this Lobby");
-        }
-        if (isInAnyLobby(id)){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already in a Lobby");
-        }
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are already in this Lobby"); }
+        else if (isInAnyLobby(id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already in a Lobby"); }
         lobby.addPlayer(id); //add User into players
         lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
         updateLobby(lobbyId); //update the lobby via its id
         this.lobbyRepository.flush();
     }
 
+    public void hostLeaves(Long lobbyId){
+        lobbyRepository.deleteById(lobbyId);
+        this.lobbyRepository.flush();
+    }
+
+    public void playerLeaves(Lobby lobby, Long id){
+        if (lobby.getPlayers().contains(id)) {
+            lobby.removePlayer(id);
+            lobby.setCurrent_players(lobby.getCurrent_players() - 1); //adjust player count
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player is not in this lobby.");
+        }
+    }
+
     public void leaveLobby(Long lobbyId, String id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         try {
-            if (lobby.getHost_id() == Long.parseLong(id)){
-                lobbyRepository.deleteById(lobbyId);
-                this.lobbyRepository.flush();
-                }
-            else if (lobby.getPlayers().contains(Long.parseLong(id))) { //if User is in players remove item from List
-                lobby.removePlayer(Long.parseLong(id));
-                lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
-                updateLobby(lobbyId); //update the lobby via its id
-                this.lobbyRepository.flush();}
-            else{throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player with this Id exists.");} //If Player is not in players throw Error and don't go further
-        }
-        catch (NumberFormatException notID) { // if input cannot be converted into an ID, it must be a username
-            Long newId = userRepository.findByUsername(id).getId();
-            if (lobby.getHost_id().equals(newId)){
-                lobbyRepository.deleteById(lobbyId);
-                this.lobbyRepository.flush();
-            }
-            else if (lobby.getPlayers().contains(newId)) { //if User is in players remove item from List
-                lobby.removePlayer(newId);
-                lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
-                updateLobby(lobbyId); //update the lobby via its id
-                this.lobbyRepository.flush();
-            }
-            else{throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player with this Id exists.");} //If Player is not in players throw Error and don't go further
+            if (lobby.getHost_id() == Long.parseLong(id)){ hostLeaves(lobbyId); } // delete the lobby if the host leaves
+            else { playerLeaves(lobby, Long.parseLong(id)); }// remove player from the list of joined players
+        } catch (NumberFormatException notID) { // if input cannot be converted into an ID, it must be a username
+            Long newId = userRepository.findByUsername(id).getId(); // generate ID from the username
+            if (lobby.getHost_id().equals(newId)){ hostLeaves(lobbyId); }
+            else { playerLeaves(lobby, newId); }
         }
     }
 
     public void kickUserFromLobby(Long lobbyId, Long hostId, Long userToKickId){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (lobby.getHost_id().equals(hostId) && lobby.getPlayers().contains(userToKickId)){
-            lobby.removePlayer(userToKickId);
-            lobby.setCurrent_players(lobby.getCurrent_players()-1); //adjust player count
-            updateLobby(lobbyId); //update the lobby via its id
-            this.lobbyRepository.flush();
-        }
+        if (lobby.getHost_id().equals(hostId) && isInThisLobby(lobbyId, userToKickId)){
+            playerLeaves(lobby, userToKickId); }
         else if (!lobby.getHost_id().equals(hostId)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can kick players. Make sure you are the host of the lobby before trying to kick someone.");
-        }
-
-        else if (!lobby.getPlayers().contains(userToKickId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player to kick with this Id exists.");
-        }
-
-        else {throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Something went wrong while kicking the Player. Make sure you are in the right Lobby as the host and the Player you want to kick exists.");} //If Player is not in players throw Error and don't go further
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can kick players. Make sure you are the host of the lobby before trying to kick someone."); }
+        else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player to kick with this Id exists."); }
     }
 
     public void updatePrivacy(Long lobbyId, boolean privacy){
@@ -176,9 +161,9 @@ public class LobbyService {
     }
 
     public void updateLobby(Long lobbyId){
-        // checks if lobby is full or completely empty and if true sets is_open to false in order to close the lobby
+        // checks if lobby is full and if true sets is_open to false in order to close the lobby
         Lobby updatedLobby = getLobbyById(lobbyId);
-        if (updatedLobby.getCurrent_players().equals(updatedLobby.getTotal_players()) || updatedLobby.getCurrent_players() == null) {updatedLobby.setIs_open(false);}
+        if (updatedLobby.getCurrent_players().equals(updatedLobby.getTotal_players())) {updatedLobby.setIs_open(false);}
     }
 
     public void checkIfTaken(Long id, String un){
