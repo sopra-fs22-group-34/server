@@ -147,15 +147,29 @@ public class LobbyController {
     @PutMapping("/lobbies/{lobbyId}/game/moves")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void executeGameMove(@PathVariable long lobbyId, @RequestBody JSONObject move) {
+    public void executeGameMove(@PathVariable long lobbyId, @RequestBody JSONObject moveJson) {
+        int originIndex = moveJson.getInt("originIndex");
+        int colorIndex = moveJson.getInt("colorIndex");
+        int targetRowIndex = moveJson.getInt("targetRowIndex");
+        int tileAmount = moveJson.getInt("tileAmount");
+        int playerIndex = moveJson.getInt("playerIndex");
 
+        Move move = new Move(originIndex,colorIndex,targetRowIndex,tileAmount,playerIndex);
+        lobbyService.executeMove(move, lobbyId);
 
     }
 
     @GetMapping("/lobbies/{lobbyId}/game/moves")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void checkIfMoveValid(@PathVariable long lobbyId, @RequestBody JSONObject attemptedMove) {
-        //PLACEHOLDER
+    public void checkIfMoveValid(@PathVariable long lobbyId, @RequestBody JSONObject attemptedMoveJson) {
+        int originIndex = attemptedMoveJson.getInt("originIndex");
+        int colorIndex = attemptedMoveJson.getInt("colorIndex");
+        int targetRowIndex = attemptedMoveJson.getInt("targetRowIndex");
+        int tileAmount = attemptedMoveJson.getInt("tileAmount");
+        int playerIndex = attemptedMoveJson.getInt("playerIndex");
+
+        Move attemptedMove = new Move(originIndex,colorIndex,targetRowIndex,tileAmount,playerIndex);
+        lobbyService.executeMove(attemptedMove, lobbyId);
     }
 }

@@ -32,7 +32,7 @@ public class LobbyServiceIntergrationTest {
     @Autowired
     private UserService userService;
 
-    @BeforeEach
+    /*@BeforeEach
     public void setup() {
         //a user to work with
         // (these are all the properties a UserPostDTO object has to have.
@@ -67,6 +67,33 @@ public class LobbyServiceIntergrationTest {
         assertEquals(testLobby.getTotal_players(), createdLobby.getTotal_players());
         assertEquals(testLobby.getIs_open(), createdLobby.getIs_open());
         assertEquals(testLobby.getIs_public(), createdLobby.getIs_public());
+
+    }*/
+
+    @Test
+    public void startGameInLobby() {
+
+        User hostUser = new User();
+        hostUser.setName("Till");
+        hostUser.setUsername("LIFAD");
+        hostUser.setPassword("Zeit");
+        userService.createUser(hostUser);
+
+        Lobby testLobby = new Lobby();
+        //add all the attributes of a LobbyPostDTO
+
+        testLobby.setHost_id(userRepository.findUserById(1L).getId());
+        testLobby.setName("Lobby");
+        testLobby.setIs_public(true);
+        testLobby.setIs_open(true);
+        testLobby.setTotal_players(4L);
+
+        //when
+        Lobby createdLobby = lobbyService.createLobby(testLobby);
+        createdLobby.startGame(4);
+
+        assertNotNull(createdLobby.getGame());
+        System.out.println(createdLobby.getGame().jsonify());
 
     }
 

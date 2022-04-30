@@ -8,7 +8,7 @@ public class Move {
     private final int tileAmount;
     private final int playerIndex;
 
-    Move(int originIndex, int colorIndex, int targetRowIndex, int tileAmount, int playerIndex) {
+    public Move(int originIndex, int colorIndex, int targetRowIndex, int tileAmount, int playerIndex) {
         this.originIndex = originIndex;
         this.colorIndex = colorIndex;
         this.targetRowIndex = targetRowIndex;
