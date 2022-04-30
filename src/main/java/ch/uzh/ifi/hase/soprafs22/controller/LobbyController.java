@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,6 +74,13 @@ public class LobbyController {
     @ResponseBody
     public boolean isUserInAnyLobby(@PathVariable long userId){
         return lobbyService.isInAnyLobby(userId);
+    }
+
+    @GetMapping("/users/{userId}/game")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public JSONObject getGameOfUser(@PathVariable long userId){
+        return lobbyService.getGameOfUser(userId);
     }
 
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/join")

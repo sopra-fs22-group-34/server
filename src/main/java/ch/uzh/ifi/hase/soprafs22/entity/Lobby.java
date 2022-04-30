@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 
+import org.json.JSONObject;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -147,5 +149,13 @@ public class Lobby  {
 
     public void startGame(int playerCount){
         game = new Game(playerCount);
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

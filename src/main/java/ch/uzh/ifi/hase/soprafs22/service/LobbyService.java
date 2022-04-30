@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import com.sun.xml.bind.v2.TODO;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,26 @@ public class LobbyService {
             if (lobby1.isUserInLobby(id)) { return true; }
         }
         return false;
+    }
+
+    public Lobby getLobbyOfUser(Long id){
+        List<Lobby> allLobbies = getLobbies();
+        for (Lobby lobby1: allLobbies) {
+            if (lobby1.isUserInLobby(id)) { return lobby1; }
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not in any lobby");
+    }
+
+    public JSONObject getGameOfUser(Long id) {
+
+        Lobby lobby = getLobbyOfUser(id);
+
+        if (lobby.getGame() == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
+        }
+
+        return lobby.getGame().jsonify();
+
     }
 
     public void joinLobby(Long lobbyId, Long id){
