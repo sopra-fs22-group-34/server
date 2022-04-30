@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.service;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs22.entity.Game;
+import ch.uzh.ifi.hase.soprafs22.entity.Move;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
@@ -203,6 +204,16 @@ public class LobbyService {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         //lobby.startGame(lobby.getCurrent_players().intValue());
         lobby.setGame(new Game(lobby.getCurrent_players().intValue()));
+    }
+
+    public void executeMove(Move move, Long lobbyId) {
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        lobby.executeMove(move);
+    }
+
+    public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        return lobby.checkIfMoveValid(attemptedMove);
     }
 
     //TODO: write the methods which are needed in the LobbyController

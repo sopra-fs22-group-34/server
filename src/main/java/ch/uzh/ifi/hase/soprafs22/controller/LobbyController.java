@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.entity.Move;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
@@ -143,11 +144,18 @@ public class LobbyController {
 
     //TODO: Discuss how to implement checking if a move is possible
 
-    @PutMapping("/lobbies/{lobbyId}/game/players/{playerId}")
+    @PutMapping("/lobbies/{lobbyId}/game/moves")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void executeGameMove(@PathVariable long lobbyId, @PathVariable long playerId){
-        //TODO: Add @RequestBody function parameter once Move class is implemented
+    public void executeGameMove(@PathVariable long lobbyId, @RequestBody JSONObject move) {
+
+
+    }
+
+    @GetMapping("/lobbies/{lobbyId}/game/moves")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void checkIfMoveValid(@PathVariable long lobbyId, @RequestBody JSONObject attemptedMove) {
         //PLACEHOLDER
     }
 }

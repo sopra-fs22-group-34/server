@@ -159,4 +159,12 @@ public class Lobby  {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public void executeMove(Move move) {
+        game.executeMove(move);
+    }
+
+    public boolean checkIfMoveValid(Move attemptedMove) {
+        return game.checkIfMoveValid(attemptedMove);
+    }
 }
