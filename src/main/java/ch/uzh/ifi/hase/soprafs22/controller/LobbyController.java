@@ -76,6 +76,14 @@ public class LobbyController {
         return lobbyService.isInAnyLobby(userId);
     }
 
+
+    @PostMapping("/lobbies/{lobbyId}/game")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void startGame(@PathVariable long lobbyId){
+        lobbyService.startGame(lobbyId);
+    }
+
     @GetMapping("/users/{userId}/game")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
