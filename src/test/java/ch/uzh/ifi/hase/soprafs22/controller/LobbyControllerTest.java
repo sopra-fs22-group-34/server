@@ -263,12 +263,13 @@ public class LobbyControllerTest {
 
     @Test
     public void joinLobby_withUser_alreadyInThis() throws Exception{
-        //given
+        //given lobby
         Lobby lobby = new Lobby();
         lobby.setHost_id(7L);
         lobby.setName("ToxicMW2Lobby");
         lobby.setIs_public(false);
         lobby.setId(1L);
+
         // user
         User user = new User();
         user.setId(7L);
@@ -276,47 +277,58 @@ public class LobbyControllerTest {
         user.setToken("1");
         user.setLogged_in(true);
 
-
+        // mocking lobbyService.joinLobby, when the user (which is the host) wants to join the lobby again
+        // it will throw a FORBIDDEN because he is already in that lobby
         doThrow(new ResponseStatusException(HttpStatus.FORBIDDEN))
                 .when(lobbyService)
                 .joinLobby(1L, 7L);
 
-        // when
-        MockHttpServletRequestBuilder getRequest = put("/lobbies/"+lobby.getId()+"/users/"+user.getId()+"/join")
+        // the reuest to join the lobby
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/users/"+user.getId()+"/join")
                 .contentType(MediaType.APPLICATION_JSON);
 
-        // then
-        mockMvc.perform(getRequest)
+        // checking if the isForbidden is thrown
+        mockMvc.perform(putRequest)
                 .andExpect(status().isForbidden());
 
     }
 
     @Test
     public void joinLobby_withUser_alreadyInAny() throws Exception{
-        //given
+        //given first lobby
         Lobby lobby = new Lobby();
         lobby.setHost_id(7L);
         lobby.setName("ToxicMW2Lobby");
         lobby.setIs_public(false);
         lobby.setId(1L);
-        // user
+
+        // user that goes inside 2nd lobby
         User user = new User();
-        user.setId(7L);
-        user.setUsername("testUsername");
+        user.setId(8L);
+        user.setUsername("XchDestroyerX");
         user.setToken("1");
         user.setLogged_in(true);
 
+        //given 2nd lobby
+        Lobby lobby2 = new Lobby();
+        lobby2.setHost_id(10L);
+        lobby2.setName("BO2ForEver");
+        lobby2.setIs_public(false);
+        lobby2.setId(9L);
+        lobby.addPlayer(8L);
 
-        doThrow(new ResponseStatusException(HttpStatus.CONFLICT))
+
+        // when user with id 8L wants to join another the 1st Lobby it will throw a CONFLICT because he is already in Lobby2
+        doThrow(new ResponseStatusException(HttpStatus.CONFLICT, "User is already in another Lobby. Can't Join 2 Lobbies"))
                 .when(lobbyService)
-                .joinLobby(1L, 7L);
+                .joinLobby(lobby.getId(), user.getId());
 
-        // when
-        MockHttpServletRequestBuilder getRequest = put("/lobbies/"+lobby.getId()+"/users/"+user.getId()+"/join")
+        // join lobby put reuest
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/users/"+user.getId()+"/join")
                 .contentType(MediaType.APPLICATION_JSON);
 
-        // then
-        mockMvc.perform(getRequest)
+        // then we expect a isConflict().
+        mockMvc.perform(putRequest)
                 .andExpect(status().isConflict());
 
     }
