@@ -3,9 +3,10 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FloorLine {
+public class FloorLine implements Serializable {
 
     private ArrayList<Integer> tiles;
 

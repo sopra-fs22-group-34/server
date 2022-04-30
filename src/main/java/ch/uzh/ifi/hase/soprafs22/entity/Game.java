@@ -21,7 +21,7 @@ public class Game implements Serializable {
 
     int playerTurn = 0;
 
-    Game(int playerNumber) {
+    public Game(int playerNumber) {
         playerCount = playerNumber;
         factoryCount = 2*playerCount+1;
 

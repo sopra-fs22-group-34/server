@@ -5,7 +5,7 @@ import ch.uzh.ifi.hase.soprafs22.entity.Game;
 import org.json.JSONObject;
 
 
-public class Player {
+public class Player implements Serializable {
 
     private int playerId;
 

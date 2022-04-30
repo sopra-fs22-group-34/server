@@ -1,10 +1,11 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import org.json.*;
 
-public class Factory implements Field {
+public class Factory implements Field, Serializable {
 
     private Integer[] colorAmounts = new Integer[5];
 

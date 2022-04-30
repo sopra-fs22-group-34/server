@@ -2,8 +2,10 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import org.json.*;
 
+import java.io.Serializable;
 
-public class PatternLine {
+
+public class PatternLine implements Serializable {
 
     private int length;
 

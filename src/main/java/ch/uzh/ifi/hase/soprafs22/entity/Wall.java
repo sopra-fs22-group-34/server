@@ -1,11 +1,13 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 import org.json.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.json.*;
 
-public class Wall {
+public class Wall implements Serializable {
 
     private Boolean[][] colorIsOccupiedArray = new Boolean[5][5];
 

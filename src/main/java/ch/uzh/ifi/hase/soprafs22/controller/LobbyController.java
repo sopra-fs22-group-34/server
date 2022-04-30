@@ -87,8 +87,8 @@ public class LobbyController {
     @GetMapping("/users/{userId}/game")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public JSONObject getGameOfUser(@PathVariable long userId){
-        return lobbyService.getGameOfUser(userId);
+    public String getGameOfUser(@PathVariable long userId){
+        return lobbyService.getGameOfUser(userId).toString();
     }
 
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/join")

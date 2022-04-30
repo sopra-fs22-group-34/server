@@ -3,7 +3,9 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import org.json.JSONObject;
 
-public class PlayerBoard  {
+import java.io.Serializable;
+
+public class PlayerBoard implements Serializable {
 
     private Stairs stairs;
 

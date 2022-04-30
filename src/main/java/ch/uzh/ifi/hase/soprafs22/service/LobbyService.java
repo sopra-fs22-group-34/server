@@ -108,7 +108,7 @@ public class LobbyService {
         if (lobby.getGame() == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
-
+        System.out.println("THIS IS THE SHIT" + lobby.getGame().jsonify());
         return lobby.getGame().jsonify();
 
     }
@@ -201,7 +201,8 @@ public class LobbyService {
 
     public void startGame(Long lobbyId){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        lobby.startGame(lobby.getCurrent_players().intValue());
+        //lobby.startGame(lobby.getCurrent_players().intValue());
+        lobby.setGame(new Game(lobby.getCurrent_players().intValue()));
     }
 
     //TODO: write the methods which are needed in the LobbyController

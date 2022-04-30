@@ -2,10 +2,11 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import org.dom4j.rule.Pattern;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import org.json.*;
 
-public class Stairs {
+public class Stairs implements Serializable {
 
     private PatternLine[] patternLines = new PatternLine[5];
 
