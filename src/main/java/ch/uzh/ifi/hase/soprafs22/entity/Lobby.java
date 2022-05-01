@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -59,7 +60,6 @@ public class Lobby  {
 
 
     @ElementCollection
-    //@JoinColumn(nullable = false) //Go read les docs in case this does not work we just used @JoinColumn.
     //private List<User> users = new ArrayList<>(); //IMPORTANT: define a list always like this! It will not give you specific errors.
     private List<Long> players = new ArrayList<>();
 
@@ -160,5 +160,15 @@ public class Lobby  {
 
     public boolean checkIfMoveValid(Move attemptedMove) {
         return game.checkIfMoveValid(attemptedMove);
+    }
+
+    public JSONObject jsonify() {
+        JSONObject json = new JSONObject();
+        JSONArray playersArray = new JSONArray();
+        for (int i = 0; i < players.size(); i++) {
+            playersArray.put(players.get(i));
+        }
+        json.put("players", playersArray);
+        return json;
     }
 }

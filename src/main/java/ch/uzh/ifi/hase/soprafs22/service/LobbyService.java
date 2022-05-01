@@ -101,9 +101,7 @@ public class LobbyService {
     }
 
     public JSONObject getGameOfUser(Long id) {
-
         Lobby lobby = getLobbyOfUser(id);
-
         if (lobby.getGame() == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
