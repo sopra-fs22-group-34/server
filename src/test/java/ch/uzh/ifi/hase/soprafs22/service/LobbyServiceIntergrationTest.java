@@ -87,10 +87,12 @@ public class LobbyServiceIntergrationTest {
         testLobby.setIs_public(true);
         testLobby.setIs_open(true);
         testLobby.setTotal_players(4L);
+        testLobby.setCurrent_players(4L);
 
         //when
         Lobby createdLobby = lobbyService.createLobby(testLobby);
-        createdLobby.startGame(4);
+        lobbyService.startGame(createdLobby.getId());
+        createdLobby = lobbyService.getLobbyById(createdLobby.getId());
 
         assertNotNull(createdLobby.getGame());
         System.out.println(createdLobby.getGame().jsonify());

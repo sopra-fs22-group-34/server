@@ -144,13 +144,7 @@ public class Lobby  {
     }
 
     // is user in lobby
-    public boolean isUserInLobby(Long id){
-        return this.players.contains(id);
-    }
-
-    public void startGame(int playerCount){
-        game = new Game(playerCount);
-    }
+    public boolean isUserInLobby(Long id){ return this.players.contains(id); }
 
     public Game getGame() {
         return game;

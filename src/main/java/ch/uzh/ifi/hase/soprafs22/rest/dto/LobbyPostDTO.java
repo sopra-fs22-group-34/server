@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.rest.dto;
 
 public class LobbyPostDTO {
-
     private Long host_id;
 
     private String name;
@@ -34,7 +33,6 @@ public class LobbyPostDTO {
         is_public = aPublic;
     }
 
-
     public Long getTotal_players() {
         return total_players;
     }
@@ -42,4 +40,5 @@ public class LobbyPostDTO {
     public void setTotal_players(Long total_players) {
         this.total_players = total_players;
     }
+
 }

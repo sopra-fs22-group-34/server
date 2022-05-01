@@ -32,14 +32,12 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class LobbyService {
 
-    // no fking idea what this does
     private final Logger log = LoggerFactory.getLogger(LobbyService.class);
 
     private final LobbyRepository lobbyRepository;
 
     private final UserRepository userRepository;
 
-    // no idea what this does
     @Autowired
     public LobbyService(@Qualifier("lobbyRepository") LobbyRepository lobbyRepository,
                         @Qualifier("userRepository") UserRepository userRepository) {
@@ -109,7 +107,6 @@ public class LobbyService {
         if (lobby.getGame() == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
-        System.out.println("THIS IS THE SHIT" + lobby.getGame().jsonify());
         return lobby.getGame().jsonify();
 
     }
@@ -201,9 +198,9 @@ public class LobbyService {
     }
 
     public void startGame(Long lobbyId){
-        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        //lobby.startGame(lobby.getCurrent_players().intValue());
+        Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
         lobby.setGame(new Game(lobby.getCurrent_players().intValue()));
+        lobby.setIs_open(false);
     }
 
     public void executeMove(Move move, Long lobbyId) {
