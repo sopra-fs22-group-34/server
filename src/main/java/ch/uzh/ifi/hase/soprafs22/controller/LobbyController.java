@@ -148,9 +148,6 @@ public class LobbyController {
         //PLACEHOLDER
     }
 
-
-    //TODO: Discuss how to implement checking if a move is possible
-
     @PutMapping("/lobbies/{lobbyId}/game/moves")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
@@ -158,10 +155,11 @@ public class LobbyController {
         lobbyService.executeMove(move, lobbyId);
     }
 
-    @GetMapping("/lobbies/{lobbyId}/game/moves")
+    @GetMapping("/lobbies/{lobbyId}/game/moves/{originIndex}/{colorIndex}/{targetRowIndex}/{tileAmount}/{playerIndex}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public boolean checkIfMoveValid(@PathVariable long lobbyId, @RequestBody Move attemptedMove) {
+    public boolean checkIfMoveValid(@PathVariable long lobbyId, @PathVariable int originIndex, @PathVariable int colorIndex, @PathVariable int targetRowIndex, @PathVariable int tileAmount, @PathVariable int playerIndex) {
+        Move attemptedMove = new Move(originIndex, colorIndex, targetRowIndex, tileAmount, playerIndex);
         return lobbyService.checkIfMoveValid(attemptedMove, lobbyId);
     }
 }

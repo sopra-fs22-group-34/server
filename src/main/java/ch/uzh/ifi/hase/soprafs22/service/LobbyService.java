@@ -208,7 +208,9 @@ public class LobbyService {
 
     public void executeMove(Move move, Long lobbyId) {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        if (!lobby.checkIfMoveValid(move)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This move is not valid.");
         lobby.executeMove(move);
+
     }
 
     public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {
