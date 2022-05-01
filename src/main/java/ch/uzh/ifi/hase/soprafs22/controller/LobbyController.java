@@ -92,6 +92,13 @@ public class LobbyController {
         return lobbyService.getGameOfUser(userId).toString();
     }
 
+    @GetMapping("/lobbies/{lobbyId}/game/players")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public String getPlayersOfLobby(@PathVariable long lobbyId){
+        return lobbyService.getPlayersOfLobby(lobbyId).toString();
+    }
+
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/join")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
