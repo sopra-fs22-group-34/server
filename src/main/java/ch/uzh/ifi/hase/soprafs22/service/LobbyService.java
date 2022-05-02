@@ -193,17 +193,53 @@ public class LobbyService {
     public void setNumberOfPlayers() {
 
     }
+    public String getPlayerUsername(Long id, int playerIndex){
+        Lobby lobby = getLobbyById(id);
+        return userRepository.findUserById(lobby.getPlayers().get(playerIndex)).getUsername();
+    }
+
     public JSONObject getPlayersOfLobby(Long id){
+        //TODO: this is a horrible nightmare. Someone make this better
         Lobby lobby = getLobbyById(id);
         if (lobby.getPlayers() == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no players available, check if they're added in a Lobby");
         }
-        return lobby.jsonify();
+        JSONObject json = new JSONObject();
+        json.put("one", 0);
+        json.put("two", 0);
+        json.put("three", 0);
+        json.put("four", 0);
+        json.put("nameOne", 0);
+        json.put("nameTwo", 0);
+        json.put("nameThree", 0);
+        json.put("nameFour", 0);
+        json.put("current_players", lobby.getCurrent_players());
+        for (int i = 0; i < lobby.getPlayers().size(); i++) {
+            if (i == 0) {
+                json.put("one", lobby.getPlayers().get(i));
+                json.put("nameOne", getPlayerUsername(id, i));
+            }
+            else if (i == 1) {
+                json.put("two", lobby.getPlayers().get(i));
+                json.put("nameTwo", getPlayerUsername(id, i));
+            }
+            else if (i == 2) {
+                json.put("three", lobby.getPlayers().get(i));
+                json.put("nameThree", getPlayerUsername(id, i));
+            }
+            else if (i == 3) {
+                json.put("four", lobby.getPlayers().get(i));
+                json.put("nameFour", getPlayerUsername(id, i));
+            }
+        }
+        return json;
     }
     public void startGame(Long lobbyId){
         Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
-        lobby.setGame(new Game(lobby.getCurrent_players().intValue()));
-        lobby.setIs_open(false);
+        if (lobby.getGame() == null) {
+            lobby.setGame(new Game(lobby.getCurrent_players().intValue()));
+            lobby.setIs_open(false);
+        }
     }
 
     public void executeMove(Move move, Long lobbyId) {

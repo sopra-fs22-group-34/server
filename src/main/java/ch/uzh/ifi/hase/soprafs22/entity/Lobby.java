@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 
+import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,7 +23,7 @@ import java.util.List;
 
 @Entity
 @Table(name="LOBBY")
-public class Lobby  {
+public class Lobby {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,11 +33,11 @@ public class Lobby  {
 
     @Column(nullable = false)
     private String name;
-/*
-    @OneToOne
-    @JoinColumn
-    private User host;
-*/
+    /*
+        @OneToOne
+        @JoinColumn
+        private User host;
+    */
     @Lob
     @Column(nullable = true)
     private Game game;
@@ -135,16 +137,18 @@ public class Lobby  {
         this.players = players;
     }
 
-    public void addPlayer(Long id){
+    public void addPlayer(Long id) {
         this.players.add(id);
     }
 
-    public void removePlayer(Long id){
+    public void removePlayer(Long id) {
         this.players.remove(id);
     }
 
     // is user in lobby
-    public boolean isUserInLobby(Long id){ return this.players.contains(id); }
+    public boolean isUserInLobby(Long id) {
+        return this.players.contains(id);
+    }
 
     public Game getGame() {
         return game;
@@ -160,15 +164,5 @@ public class Lobby  {
 
     public boolean checkIfMoveValid(Move attemptedMove) {
         return game.checkIfMoveValid(attemptedMove);
-    }
-
-    public JSONObject jsonify() {
-        JSONObject json = new JSONObject();
-        JSONArray playersArray = new JSONArray();
-        for (int i = 0; i < players.size(); i++) {
-            playersArray.put(players.get(i));
-        }
-        json.put("players", playersArray);
-        return json;
     }
 }
