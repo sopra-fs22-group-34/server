@@ -92,6 +92,13 @@ public class LobbyController {
         return lobbyService.getGameOfUser(userId).toString();
     }
 
+    @GetMapping("/lobbies/{lobbyId}/game")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public String getGameOfLobby(@PathVariable long lobbyId){
+        return lobbyService.getGameOfLobby(lobbyId).toString();
+    }
+
     @GetMapping("/lobbies/{lobbyId}/game/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -139,13 +146,6 @@ public class LobbyController {
     @ResponseBody
     public void changeLobbySizeAsHost(@PathVariable long lobbyId, @RequestBody Long size){
         lobbyService.changeLobbySize(lobbyId, size);
-    }
-
-    @GetMapping("/lobbies/{lobbyId}/game")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public void getGameOfLobby(@PathVariable long lobbyId) {
-        //PLACEHOLDER
     }
 
     @PutMapping("/lobbies/{lobbyId}/game/moves")

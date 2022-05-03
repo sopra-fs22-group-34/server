@@ -105,7 +105,15 @@ public class LobbyService {
         if (lobby.getGame() == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
-        return lobby.getGame().jsonify();
+        return lobby.getGame().jsonify().put("playerData", getPlayersOfLobby(id));
+    }
+
+    public JSONObject getGameOfLobby(Long id) {
+        Lobby lobby = getLobbyById(id);
+        if (lobby.getGame() == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
+        }
+        return lobby.getGame().jsonify().put("playerData", getPlayersOfLobby(id));
     }
 
     public void joinLobby(Long lobbyId, Long id){
