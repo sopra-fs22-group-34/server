@@ -86,18 +86,18 @@ public class LobbyService {
 
     public boolean isInAnyLobby(Long id){
         List<Lobby> allLobbies = getLobbies();
-        for (Lobby lobby1: allLobbies) {
-            if (lobby1.isUserInLobby(id)) { return true; }
+        for (Lobby lobby: allLobbies) {
+            if (lobby.isUserInLobby(id)) { return true; }
         }
         return false;
     }
 
     public Lobby getLobbyOfUser(Long id){
         List<Lobby> allLobbies = getLobbies();
-        for (Lobby lobby1: allLobbies) {
-            if (lobby1.isUserInLobby(id)) { return lobby1; }
+        for (Lobby lobby: allLobbies) {
+            if (lobby.isUserInLobby(id)) { return lobby; }
         }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not in any lobby");
+        return null;
     }
 
     public JSONObject getGameOfUser(Long id) {

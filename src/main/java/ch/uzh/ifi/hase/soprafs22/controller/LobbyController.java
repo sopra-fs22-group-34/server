@@ -73,8 +73,8 @@ public class LobbyController {
     @GetMapping("/users/{userId}/lobbies")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public boolean isUserInAnyLobby(@PathVariable long userId){
-        return lobbyService.isInAnyLobby(userId);
+    public Lobby getUserLobby(@PathVariable long userId){
+        return lobbyService.getLobbyOfUser(userId);
     }
 
 
