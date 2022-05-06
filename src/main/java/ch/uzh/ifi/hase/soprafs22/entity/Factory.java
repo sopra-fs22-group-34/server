@@ -44,7 +44,10 @@ public class Factory implements Field, Serializable {
 
     //this needs to return an Integer array to reflect the leftover tiles that need to be placed in the middle
     public Integer[] executeMove(Move move) {
-        Integer[] leftoverColorAmounts = colorAmounts;
+        Integer[] leftoverColorAmounts = colorAmounts.clone();
+        for (int i = 0; i < 5; i++) {
+            leftoverColorAmounts[i] = colorAmounts[i];
+        }
         leftoverColorAmounts[move.getColorIndex()] = 0;
 
         for (int i = 0; i < 5; i++) {

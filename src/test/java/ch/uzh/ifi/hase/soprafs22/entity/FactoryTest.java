@@ -82,7 +82,10 @@ public class FactoryTest {
 
 
         //create arrays for expected returned colorAmounts and expected colorAmounts in the Factory
-        Integer[] expectedLeftoverColorAmounts = colorAmounts;
+        Integer[] expectedLeftoverColorAmounts = colorAmounts.clone();
+        for (int i = 0; i < 5; i++) {
+            expectedLeftoverColorAmounts[i] = colorAmounts[i];
+        }
         expectedLeftoverColorAmounts[colorIndex] = 0;
 
         Integer[] emptyFactoryColorAmounts = new Integer[5];
