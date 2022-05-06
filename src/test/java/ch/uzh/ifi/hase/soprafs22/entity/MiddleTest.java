@@ -92,5 +92,11 @@ public class MiddleTest {
         JSONObject json = testMiddle.jsonify();
         String expected = "{\"hasMinusTile\":true,\"colorAmounts\":[0,0,0,0,0]}";
         assertEquals(expected, json.toString());
+
+        Integer[] leftoverTiles = {0,2,1,0,0};
+        testMiddle.placeLeftoverTiles(leftoverTiles);
+        json = testMiddle.jsonify();
+        expected = "{\"hasMinusTile\":true,\"colorAmounts\":[0,2,1,0,0]}";
+        assertEquals(expected, json.toString());
     }
 }
