@@ -76,7 +76,8 @@ public class Game implements Serializable {
         }
 
         else {
-            factories[move.getOriginIndex()].executeMove(move);
+            Integer[] leftoverTiles = factories[move.getOriginIndex()].executeMove(move);
+            middle.placeLeftoverTiles(leftoverTiles);
         }
 
         players[move.getPlayerIndex()].executeMove(move);
