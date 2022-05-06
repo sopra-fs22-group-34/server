@@ -39,7 +39,7 @@ public class Lobby {
         private User host;
     */
     @Lob
-    @Column(nullable = true)
+    @Column()
     private Game game;
 
     @Column(nullable = false)
@@ -59,6 +59,9 @@ public class Lobby {
 
     @Column(nullable = false)
     private Boolean is_public;
+
+    @Column()
+    private int timer;
 
 
     @ElementCollection
@@ -85,9 +88,7 @@ public class Lobby {
         return is_public;
     }
 
-    public void setIs_public(Boolean isPublic) {
-        is_public = isPublic;
-    }
+    public void setIs_public(Boolean isPublic) { is_public = isPublic; }
 
     public Boolean getIs_open() {
         return is_open;
@@ -137,18 +138,9 @@ public class Lobby {
         this.players = players;
     }
 
-    public void addPlayer(Long id) {
-        this.players.add(id);
-    }
+    public void addPlayer(Long id) { this.players.add(id); }
 
-    public void removePlayer(Long id) {
-        this.players.remove(id);
-    }
-
-    // is user in lobby
-    public boolean isUserInLobby(Long id) {
-        return this.players.contains(id);
-    }
+    public void removePlayer(Long id) { this.players.remove(id); }
 
     public Game getGame() {
         return game;
@@ -157,6 +149,12 @@ public class Lobby {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public int getTimer() { return timer; }
+
+    public void setTimer(int timer) { this.timer = timer; }
+
+    public boolean isUserInLobby(Long id) { return this.players.contains(id); }
 
     public void executeMove(Move move) {
         game.executeMove(move);

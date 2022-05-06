@@ -14,6 +14,7 @@ public class LobbyGetDTO {
     private Long current_players;
     private List<Long> players;
     private String host_name;
+    private int timer;
 
 
     public Long getId() {
@@ -87,4 +88,8 @@ public class LobbyGetDTO {
     public void setHost_name(String host_name) {
         this.host_name = host_name;
     }
+
+    public int getTimer() { return timer; }
+
+    public void setTimer(int timer) { this.timer = timer; }
 }

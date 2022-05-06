@@ -8,7 +8,7 @@ public class UserGetDTO {
   private String username;
   private Date creation_date;
   private boolean logged_in;
-  private Date birthday;
+  private Long lobby;
 
   public Long getId() {
     return id;
@@ -41,10 +41,10 @@ public class UserGetDTO {
         return creation_date;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setLobby(Long lobby) {
+        this.lobby = lobby;
     }
-    public Date getBirthday() {
-        return birthday;
+    public Long getLobby() {
+        return lobby;
     }
 }

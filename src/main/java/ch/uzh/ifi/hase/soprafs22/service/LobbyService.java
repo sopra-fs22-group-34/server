@@ -6,7 +6,6 @@ import ch.uzh.ifi.hase.soprafs22.entity.Move;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
-import com.sun.xml.bind.v2.TODO;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Lobby Service
@@ -68,11 +66,13 @@ public class LobbyService {
     //TODO add function to frontend which asks user how to set up PrivacySettings
     public Lobby createLobby(Lobby newLobby) {
         new Lobby();
+        User host = userRepository.findUserById(newLobby.getHost_id());
+        host.setLobby(newLobby.getId());
         newLobby.setIs_open(true);
         newLobby.setIs_public(true); //public by default if one wants to change to private host has to change with updatePrivacy
         newLobby.setCurrent_players(1L);
         newLobby.addPlayer(newLobby.getHost_id());
-        newLobby.setHost_name(userRepository.findUserById(newLobby.getHost_id()).getUsername());
+        newLobby.setHost_name(host.getUsername());
         newLobby = this.lobbyRepository.save(newLobby);
         lobbyRepository.flush();
         log.debug("Created Information for User: {}", newLobby);
@@ -105,7 +105,7 @@ public class LobbyService {
         if (lobby.getGame() == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
-        return lobby.getGame().jsonify().put("playerData", getPlayersOfLobby(id));
+        return lobby.getGame().jsonify().put("lobbyData", getLobbyData(id));
     }
 
     public JSONObject getGameOfLobby(Long id) {
@@ -113,28 +113,37 @@ public class LobbyService {
         if (lobby.getGame() == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
-        return lobby.getGame().jsonify().put("playerData", getPlayersOfLobby(id));
+        return lobby.getGame().jsonify().put("lobbyData", getLobbyData(id));
     }
 
     public void joinLobby(Long lobbyId, Long id){
+        User user = userRepository.findUserById(id);
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        if (isInThisLobby(lobbyId, id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are already in this Lobby"); }
-        else if (isInAnyLobby(id)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already in a Lobby"); }
-        lobby.addPlayer(id); //add User into players
-        lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
-        updateLobby(lobbyId); //update the lobby via its id
-        this.lobbyRepository.flush();
+        if (isInAnyLobby(id) && !isInThisLobby(lobbyId, id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already in a different Lobby");
+        } else if (!isInThisLobby(lobbyId, id)) {
+            user.setLobby(lobbyId);
+            lobby.addPlayer(id); //add User into players
+            lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
+            updateLobby(lobbyId); //update the lobby via its id
+            this.lobbyRepository.flush();
+        }
     }
 
     public void hostLeaves(Long lobbyId){
+        Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
+        for (Long playerId: lobby.getPlayers()) {
+            User player = userRepository.findUserById(playerId);
+            player.setLobby(0L);
+        }
         lobbyRepository.deleteById(lobbyId);
         this.lobbyRepository.flush();
     }
 
     public void playerLeaves(Lobby lobby, Long id){
+        User player = userRepository.findUserById(id);
         if (lobby.getPlayers().contains(id)) {
+            player.setLobby(0L);
             lobby.removePlayer(id);
             lobby.setCurrent_players(lobby.getCurrent_players() - 1); //adjust player count
         } else {
@@ -190,35 +199,16 @@ public class LobbyService {
         if (updatedLobby.getCurrent_players().equals(updatedLobby.getTotal_players())) {updatedLobby.setIs_open(false);}
     }
 
-    public void checkIfTaken(Long id, String un){
-        Lobby lobbyByUN = lobbyRepository.findLobbyByName(un);
-        if (lobbyByUN != null && lobbyRepository.findLobbyById(id) != lobbyByUN) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "This LobbyName is already taken.");
-        }
-    }
-
-
     public String getPlayerUsername(Long id, int playerIndex){
         Lobby lobby = getLobbyById(id);
         return userRepository.findUserById(lobby.getPlayers().get(playerIndex)).getUsername();
     }
 
-    public JSONObject getPlayersOfLobby(Long id){
-        //TODO: this is a horrible nightmare. Someone make this better
+    public JSONObject getLobbyData(Long id){
         Lobby lobby = getLobbyById(id);
-        if (lobby.getPlayers() == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no players available, check if they're added in a Lobby");
-        }
         JSONObject json = new JSONObject();
-        json.put("one", 0);
-        json.put("two", 0);
-        json.put("three", 0);
-        json.put("four", 0);
-        json.put("nameOne", 0);
-        json.put("nameTwo", 0);
-        json.put("nameThree", 0);
-        json.put("nameFour", 0);
         json.put("current_players", lobby.getCurrent_players());
+        json.put("timer", lobby.getTimer());
         for (int i = 0; i < lobby.getPlayers().size(); i++) {
             if (i == 0) {
                 json.put("one", lobby.getPlayers().get(i));
@@ -239,6 +229,7 @@ public class LobbyService {
         }
         return json;
     }
+
     public void startGame(Long lobbyId){
         Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
         if (lobby.getGame() == null) {
@@ -251,7 +242,6 @@ public class LobbyService {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         if (!lobby.checkIfMoveValid(move)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This move is not valid.");
         lobby.executeMove(move);
-
     }
 
     public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {

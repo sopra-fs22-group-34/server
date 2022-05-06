@@ -9,6 +9,8 @@ public class LobbyPostDTO {
 
     private Long total_players;
 
+    private int timer;
+
     public Long getHost_id() {
         return host_id;
     }
@@ -41,4 +43,7 @@ public class LobbyPostDTO {
         this.total_players = total_players;
     }
 
+    public int getTimer() { return timer; }
+
+    public void setTimer(int timer) { this.timer = timer; }
 }

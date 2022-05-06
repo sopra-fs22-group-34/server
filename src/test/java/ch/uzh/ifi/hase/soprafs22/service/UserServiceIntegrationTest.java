@@ -54,7 +54,7 @@ public class UserServiceIntegrationTest {
     assertNotNull(createdUser.getToken());
     assertTrue(createdUser.getLogged_in());
     assertNotNull(createdUser.getCreation_date());
-    assertNull(createdUser.getBirthday());
+    assertEquals(0L, createdUser.getLobby());
   }
 
   @Test

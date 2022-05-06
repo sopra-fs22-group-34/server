@@ -70,7 +70,8 @@ class LobbyServiceTest {
     }
 
 
-    @Test public void createLobbyValidInput(){
+    @Test
+    public void createLobbyValidInput() {
         Lobby createdLobby = lobbyService.createLobby(testLobby);
 
         // then
@@ -106,53 +107,71 @@ class LobbyServiceTest {
     }
 
 
-    @Test public void joinLobbyValidInput(){
+    @Test
+    public void joinLobbyValidInput() {
         lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser2);
         lobbyService.joinLobby(testLobby.getId(), testUser2.getId());
 
         //check that current players count of the updated lobby has changed
         assertTrue(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(2, testLobby.getCurrent_players());
+        assertEquals(1L, testUser2.getLobby());
     }
 
-    @Test public void joinLobbyTwiceThrowsException(){
+    @Test
+    public void joinLobbyTwiceDoesNothing() {
         lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser2);
         lobbyService.joinLobby(testLobby.getId(), testUser2.getId());
-        //check that current players count of the updated lobby has changed
+
+        // joining once
         assertTrue(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(2, testLobby.getCurrent_players());
+        assertEquals(1L, testUser2.getLobby());
 
-        assertThrows(ResponseStatusException.class, () -> lobbyService.joinLobby(testLobby.getId(), testUser2.getId()));
+        // joining a second time
+        lobbyService.joinLobby(testLobby.getId(), testUser2.getId());
+        assertEquals(2, testLobby.getCurrent_players());
+        assertEquals(1L, testUser2.getLobby());
     }
 
-    @Test public void leaveLobbyAsUser(){
+    @Test
+    public void leaveLobbyAsUser() {
         lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser2);
 
         lobbyService.joinLobby(testLobby.getId(), testUser2.getId());
         assertTrue(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(2, testLobby.getCurrent_players());
+        assertEquals(1L, testUser2.getLobby());
 
         lobbyService.leaveLobby(testLobby.getId(), testUser2.getUsername());
         assertFalse(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(1, testLobby.getCurrent_players());
+        assertEquals(0L, testUser2.getLobby());
     }
 
-    @Test public void leaveLobbyAsHost(){
+    @Test
+    public void leaveLobbyAsHost() {
         Lobby lobbyToDelete = lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(lobbyToDelete);
 
         assertTrue(lobbyToDelete.getPlayers().contains(testUser.getId()));
         assertEquals(1, lobbyToDelete.getCurrent_players());
+        assertEquals(1L, testUser.getLobby());
 
         lobbyService.leaveLobby(lobbyToDelete.getId(), testUser.getUsername());
         Mockito.verify(lobbyRepository, Mockito.times(1)).deleteById(Mockito.any());
+        assertEquals(0L, testUser.getLobby());
 
     }
 
-    @Test public void leaveLobbyWithInvalidData(){
+    @Test
+    public void leaveLobbyWithInvalidData() {
         lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
 
@@ -160,21 +179,26 @@ class LobbyServiceTest {
 
     }
 
-    @Test public void kickUserValidInput(){
+    @Test
+    public void kickUserValidInput() {
         lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser2);
 
         lobbyService.joinLobby(testLobby.getId(), testUser2.getId());
         assertTrue(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(2, testLobby.getCurrent_players());
+        assertEquals(1L, testUser2.getLobby());
 
         lobbyService.kickUserFromLobby(testLobby.getId(), testLobby.getHost_id(), testUser2.getId());
         assertFalse(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(1, testLobby.getCurrent_players());
+        assertEquals(0L, testUser2.getLobby());
 
     }
 
-    @Test public void kickUserInvalidInput(){
+    @Test
+    public void kickUserInvalidInput() {
         lobbyService.createLobby(testLobby);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
 
@@ -187,10 +211,12 @@ class LobbyServiceTest {
 
     }
 
-    @Test public void updateLobbyValidInput(){
+    @Test
+    public void updateLobbyValidInput() {
         lobbyService.createLobby(testLobby);
         testLobby.setTotal_players(2L);
         Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser2);
         assertTrue(testLobby.getIs_open());
         lobbyService.joinLobby(testLobby.getId(), testUser2.getId());
 
@@ -200,34 +226,4 @@ class LobbyServiceTest {
         assertFalse(testLobby.getIs_open());
 
     }
-
-
-// TODO: is implemented in lobbyService but never used   @Test public void checkIfTakenValidInput(){
-//
-//    }
-
-// TODO: is implemented in lobbyService but never used   @Test public void checkIfTakenInvalidInput(){
-//
-//    }
-
-// TODO: has been implemented but is never used  @Test public void startGameValidInput(){
-
-//        lobbyService.createLobby(testLobby);
-//        testLobby.setCurrent_players(4L);
-//        assertEquals(testLobby.getCurrent_players(), testLobby.getTotal_players());
-//    }
-
-// TODO: has been implemented but is never used @Test public void startGameInvalidInput(){
-//
-//    }
-
-// TODO: not yet implemented in LobbyService:     @Test public void setNumberOfPlayersValidInput(){
-//
-//    }
-
-//  TODO: not yet implemented in LobbyService:  @Test public void setNumberOfPlayersInvalidInput(){
-//
-//    }
-
 }
-

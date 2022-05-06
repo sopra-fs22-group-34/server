@@ -37,7 +37,7 @@ public class User implements Serializable {
   private boolean logged_in;
 
   @Column()
-  private Date birthday;
+  private Long lobby = 0L;
 
   @Column(nullable = false)
   private String password;
@@ -85,9 +85,9 @@ public class User implements Serializable {
     this.logged_in = logged_in;
   }
 
-  public Date getBirthday() { return birthday; }
+  public Long getLobby() { return lobby; }
 
-  public void setBirthday(Date birthday) { this.birthday = birthday; }
+  public void setLobby(Long lobby) { this.lobby = lobby; }
 
   public String getPassword() { return password; }
 

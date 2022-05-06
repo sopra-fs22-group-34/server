@@ -55,7 +55,7 @@ public class UserServiceTest {
     assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertNotNull(createdUser.getToken());
     assertNotNull(createdUser.getCreation_date());
-    assertNull(createdUser.getBirthday());
+    assertEquals(0L, createdUser.getLobby());
     assertTrue(createdUser.getLogged_in());
   }
 
@@ -140,16 +140,13 @@ public class UserServiceTest {
       Mockito.when(userRepository.findUserById(Mockito.any())).thenReturn(testUser);
       //create new data
       User updatedInfo = new User();
-      updatedInfo.setBirthday(new Date());
       updatedInfo.setUsername("newUsername");
 
       assertNotEquals(testUser.getUsername(), updatedInfo.getUsername());
-      assertNotEquals(testUser.getBirthday(), updatedInfo.getBirthday());
 
       userService.updateUser(1L, updatedInfo);
 
       assertEquals(testUser.getUsername(), updatedInfo.getUsername());
-      assertEquals(testUser.getBirthday(), updatedInfo.getBirthday());
   }
 
   @Test

@@ -90,7 +90,6 @@ public class UserService {
   public User updateUser(Long ID, User updatedUser){
 
       User userToEdit = getUserById(ID);
-      if (updatedUser.getBirthday() != null) { userToEdit.setBirthday(updatedUser.getBirthday()); }
       if (updatedUser.getUsername() != null) { userToEdit.setUsername(updatedUser.getUsername()); }
 
       return userToEdit;

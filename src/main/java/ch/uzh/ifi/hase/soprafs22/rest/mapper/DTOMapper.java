@@ -34,13 +34,14 @@ public interface DTOMapper {
   @Mapping(source = "username", target = "username")
   @Mapping(source = "creation_date", target = "creation_date")
   @Mapping(source = "logged_in", target = "logged_in")
-  @Mapping(source = "birthday", target = "birthday")
+  @Mapping(source = "lobby", target = "lobby")
   UserGetDTO convertEntityToUserGetDTO(User user);
 
   @Mapping(source = "host_id", target = "host_id")
   @Mapping(source = "name", target = "name")
   @Mapping(source = "is_public", target = "is_public")
   @Mapping(source = "total_players", target = "total_players")
+  @Mapping(source = "timer", target = "timer")
   Lobby convertLobbyPostDTOtoEntity(LobbyPostDTO lobbyPostDTO);
 
   @Mapping(source = "id", target = "id")
@@ -52,6 +53,6 @@ public interface DTOMapper {
   @Mapping(source = "is_open", target = "is_open")
   @Mapping(source = "is_public", target = "is_public")
   @Mapping(source = "players", target = "players")
-
+  @Mapping(source = "timer", target = "timer")
   LobbyGetDTO convertEntityToLobbyGetDTO(Lobby lobby);
 }
