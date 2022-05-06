@@ -261,7 +261,4 @@ public class LobbyService {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         return lobby.checkIfMoveValid(attemptedMove);
     }
-
-    //TODO: write the methods which are needed in the LobbyController
-
 }
