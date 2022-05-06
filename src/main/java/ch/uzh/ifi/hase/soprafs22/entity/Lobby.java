@@ -85,8 +85,8 @@ public class Lobby {
         return is_public;
     }
 
-    public void setIs_public(Boolean aPublic) {
-        is_public = aPublic;
+    public void setIs_public(Boolean isPublic) {
+        is_public = isPublic;
     }
 
     public Boolean getIs_open() {

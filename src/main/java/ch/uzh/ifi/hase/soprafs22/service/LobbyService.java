@@ -164,7 +164,7 @@ public class LobbyService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player to kick with this Id exists."); }
     }
 
-    public void updatePrivacy(Long lobbyId, boolean privacy){
+    public void updatePrivacy(Long lobbyId,  boolean privacy){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         lobby.setIs_public(privacy);
     }
@@ -197,10 +197,7 @@ public class LobbyService {
         }
     }
 
-    //these are placeholders
-    public void setNumberOfPlayers() {
 
-    }
     public String getPlayerUsername(Long id, int playerIndex){
         Lobby lobby = getLobbyById(id);
         return userRepository.findUserById(lobby.getPlayers().get(playerIndex)).getUsername();
