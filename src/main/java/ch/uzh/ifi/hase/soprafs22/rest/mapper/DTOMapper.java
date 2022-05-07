@@ -35,6 +35,9 @@ public interface DTOMapper {
   @Mapping(source = "creation_date", target = "creation_date")
   @Mapping(source = "logged_in", target = "logged_in")
   @Mapping(source = "lobby", target = "lobby")
+  @Mapping(source = "score", target = "score")
+  @Mapping(source = "games", target = "games")
+  @Mapping(source = "is_public", target = "is_public")
   UserGetDTO convertEntityToUserGetDTO(User user);
 
   @Mapping(source = "host_id", target = "host_id")

@@ -75,6 +75,10 @@ public class UserService {
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setLogged_in(true);
     newUser.setCreation_date(new Date());
+    newUser.setLobby(0L);
+    newUser.setScore(1000);
+    newUser.setGames(0);
+    newUser.setIs_public(true);
 
     checkIfUserExists(newUser);
 

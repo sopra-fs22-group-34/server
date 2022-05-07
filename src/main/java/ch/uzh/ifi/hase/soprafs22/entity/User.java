@@ -37,7 +37,16 @@ public class User implements Serializable {
   private boolean logged_in;
 
   @Column()
-  private Long lobby = 0L;
+  private Long lobby;
+
+  @Column()
+  private int score;
+
+  @Column()
+  private int games;
+
+  @Column()
+  private boolean is_public;
 
   @Column(nullable = false)
   private String password;
@@ -96,4 +105,16 @@ public class User implements Serializable {
   public void setCreation_date(Date creation_date) { this.creation_date = creation_date; }
 
   public Date getCreation_date() { return creation_date; }
+
+  public int getScore() { return score; }
+
+  public void setScore(int score) { this.score = score; }
+
+  public int getGames() { return games; }
+
+  public void setGames(int games) { this.games = games; }
+
+  public boolean getIs_public() { return is_public; }
+
+  public void setIs_public(boolean is_public) { this.is_public = is_public; }
 }

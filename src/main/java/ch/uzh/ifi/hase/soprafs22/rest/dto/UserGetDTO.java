@@ -9,6 +9,9 @@ public class UserGetDTO {
   private Date creation_date;
   private boolean logged_in;
   private Long lobby;
+  private int score;
+  private int games;
+  private boolean is_public;
 
   public Long getId() {
     return id;
@@ -47,4 +50,16 @@ public class UserGetDTO {
     public Long getLobby() {
         return lobby;
     }
+
+    public int getScore() { return score; }
+
+    public void setScore(int score) { this.score = score; }
+
+    public int getGames() { return games; }
+
+    public void setGames(int games) { this.games = games; }
+
+    public boolean getIs_public() { return is_public; }
+
+    public void setIs_public(boolean is_public) { this.is_public = is_public; }
 }

@@ -86,8 +86,8 @@ public class LobbyController {
     @GetMapping("/users/{userId}/game")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public String getGameOfUser(@PathVariable long userId){
-        return lobbyService.getGameOfUser(userId).toString();
+    public boolean isUserInGame(@PathVariable long userId){
+        return lobbyService.isUserInGame(userId);
     }
 
     @GetMapping("/lobbies/{lobbyId}/game")
@@ -149,8 +149,8 @@ public class LobbyController {
     @PutMapping("/lobbies/{lobbyId}/game/moves")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void executeGameMove(@PathVariable long lobbyId, @RequestBody Move move) {
-        lobbyService.executeMove(move, lobbyId);
+    public boolean executeGameMove(@PathVariable long lobbyId, @RequestBody Move move) {
+        return lobbyService.executeMove(move, lobbyId);
     }
 
     @GetMapping("/lobbies/{lobbyId}/game/moves/{originIndex}/{colorIndex}/{targetRowIndex}/{tileAmount}/{playerIndex}")

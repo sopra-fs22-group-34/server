@@ -91,6 +91,12 @@ public class LobbyService {
         }
         return false;
     }
+    
+    public boolean isUserInGame(Long id){
+        Lobby lobby = getLobbyOfUser(id);
+        // return true if the user is in a lobby and that lobby is closed (game already started)
+        return lobby != null && !lobby.getIs_open();
+    }
 
     public Lobby getLobbyOfUser(Long id){
         List<Lobby> allLobbies = getLobbies();
@@ -238,10 +244,11 @@ public class LobbyService {
         }
     }
 
-    public void executeMove(Move move, Long lobbyId) {
+    public boolean executeMove(Move move, Long lobbyId) {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         if (!lobby.checkIfMoveValid(move)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This move is not valid.");
         lobby.executeMove(move);
+        return lobby.checkIfMoveValid(move);
     }
 
     public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {
