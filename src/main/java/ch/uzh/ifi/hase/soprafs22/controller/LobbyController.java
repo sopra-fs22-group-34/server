@@ -147,10 +147,17 @@ public class LobbyController {
     }
 
     @PutMapping("/lobbies/{lobbyId}/game/moves")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public boolean executeGameMove(@PathVariable long lobbyId, @RequestBody Move move) {
         return lobbyService.executeMove(move, lobbyId);
+    }
+
+    @PutMapping("/lobbies/{lobbyId}/game/skip")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void skipTurn(@PathVariable long lobbyId) {
+        lobbyService.skipTurn(lobbyId);
     }
 
     @GetMapping("/lobbies/{lobbyId}/game/moves/{originIndex}/{colorIndex}/{targetRowIndex}/{tileAmount}/{playerIndex}")

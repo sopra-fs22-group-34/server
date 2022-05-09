@@ -251,6 +251,11 @@ public class LobbyService {
         return lobby.checkIfMoveValid(move);
     }
 
+    public void skipTurn(Long lobbyId) {
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        lobby.nextTurn();
+    }
+
     public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         return lobby.checkIfMoveValid(attemptedMove);

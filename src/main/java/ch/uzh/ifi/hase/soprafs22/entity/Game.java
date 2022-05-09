@@ -86,8 +86,12 @@ public class Game implements Serializable {
         }
 
         else {
-            playerTurn = (playerTurn+1)%playerCount;
+            nextTurn();
         }
+    }
+
+    public void nextTurn(){
+        playerTurn = (playerTurn+1)%playerCount;
     }
 
     public boolean isRoundOver() {

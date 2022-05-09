@@ -160,6 +160,8 @@ public class Lobby {
         game.executeMove(move);
     }
 
+    public void nextTurn() { game.nextTurn(); }
+
     public boolean checkIfMoveValid(Move attemptedMove) {
         return game.checkIfMoveValid(attemptedMove);
     }
