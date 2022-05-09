@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs22.entity.Move;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
@@ -577,6 +579,101 @@ public class LobbyControllerTest {
 
         // then
         mockMvc.perform(putRequest).andExpect(status().isConflict());
+
+    }
+
+    @Test
+    public void put_validMove() throws Exception{
+        //given
+
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+        // Move move = [0, 0, 4, 1, 1];
+        Move move = new Move(0, 0, 4, 1, 1);
+
+        doThrow(new ResponseStatusException(HttpStatus.OK))
+                .when(lobbyService)
+                .executeMove(move, lobby.getId());
+
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/game/moves")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(move));
+
+        // then
+        mockMvc.perform(putRequest).andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void put_invalidMove() throws Exception{
+        //given
+
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+        // Move move = [0, 0, 4, 1, 1];
+        Move illegalMove = new Move(6, 6, 6, 6, 6);
+
+        doThrow(new ResponseStatusException(HttpStatus.FORBIDDEN))
+                .when(lobbyService)
+                .executeMove(Mockito.any(), Mockito.any());
+                //.executeMove(illegalMove, lobby.getId());
+
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/game/moves")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(illegalMove));
+
+        // then
+        mockMvc.perform(putRequest).andExpect(status().isForbidden());
+
+    }
+
+    @Test
+    public void put_skipTurn() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
+                .when(lobbyService)
+                .skipTurn(lobby.getId());
+
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/game/skip")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(putRequest).andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    public void get_validMovePossibility() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+        // Move move = [0, 0, 4, 1, 1];
+        Move attemptedMove = new Move(0, 0, 4, 1, 1);
+
+
+        given(lobbyService.checkIfMoveValid(attemptedMove, lobby.getId())).willReturn(Boolean.TRUE);
+
+
+        MockHttpServletRequestBuilder getRequest = get("/lobbies/"+lobby.getId()+"/game/moves/"+0+"/"+0+"/"+4+"/"+1+"/"+1)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk());
 
     }
 
