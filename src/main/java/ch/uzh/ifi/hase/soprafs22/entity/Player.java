@@ -19,7 +19,6 @@ public class Player implements Serializable {
         this.score = 0;
     }
 
-
     public PlayerBoard getPlayerBoard() {
         return playerBoard;
     }
@@ -27,7 +26,6 @@ public class Player implements Serializable {
     public int getScore(){
         return score;
     }
-
 
     public boolean checkIfMoveValid(Move attemptedMove) {
         return playerBoard.checkIfMoveValid(attemptedMove);

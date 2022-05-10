@@ -160,6 +160,13 @@ public class LobbyController {
         lobbyService.skipTurn(lobbyId);
     }
 
+    @PutMapping("/lobbies/{lobbyId}/game/{playerId}/leave")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void leaveGame(@PathVariable long lobbyId, @PathVariable long playerId) {
+        lobbyService.leaveGame(lobbyId, playerId);
+    }
+
     @GetMapping("/lobbies/{lobbyId}/game/moves/{originIndex}/{colorIndex}/{targetRowIndex}/{tileAmount}/{playerIndex}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

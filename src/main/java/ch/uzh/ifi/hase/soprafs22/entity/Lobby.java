@@ -63,9 +63,8 @@ public class Lobby {
     @Column()
     private int timer;
 
-
     @ElementCollection
-    //private List<User> users = new ArrayList<>(); //IMPORTANT: define a list always like this! It will not give you specific errors.
+    //IMPORTANT: define a list always like this! It will not give you specific errors.
     private List<Long> players = new ArrayList<>();
 
     public Long getId() {
@@ -161,6 +160,12 @@ public class Lobby {
     }
 
     public void nextTurn() { game.nextTurn(); }
+
+    public void leaveGame(Long id) {
+        for (int i = 0; i < current_players; i++) {
+            if (this.players.get(i).equals(id)) game.leaveGame(i);
+        }
+    }
 
     public boolean checkIfMoveValid(Move attemptedMove) {
         return game.checkIfMoveValid(attemptedMove);

@@ -7,23 +7,30 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Random;
 
 
 public class Game implements Serializable {
+
+    boolean gameOver;
 
     int playerCount;
     int factoryCount;
 
     Player[] players;
+    Player[] activePlayers;
 
     Factory[] factories;
 
     Middle middle = new Middle();
 
-    int playerTurn = 0;
+    int playerTurn;
+    int firstNextTurn;
 
     public Game(int playerNumber) {
+
+        gameOver = false;
+
         playerCount = playerNumber;
         factoryCount = 2*playerCount+1;
 
@@ -33,14 +40,23 @@ public class Game implements Serializable {
             players[i] = new Player(i);
         }
 
+        activePlayers = players.clone();
+
         factories = new Factory[factoryCount];
 
         for (int i = 0; i < factoryCount; i++) {
             factories[i] = new Factory();
         }
 
-        int playerTurn = 0;
+        playerTurn = 0;
+        // TODO: make this random instead of always 0
+        // (Using getRandomNumber(playerCount) causes some tests to fail)
 
+    }
+
+    public int getRandomNumber(int max) {
+        Random generator = new Random();
+        return generator.nextInt(max);
     }
 
     public boolean checkIfMoveValid(Move attemptedMove) {
@@ -91,15 +107,28 @@ public class Game implements Serializable {
     }
 
     public void nextTurn(){
-        playerTurn = (playerTurn+1)%playerCount;
+        do {
+            playerTurn = (playerTurn+1)%playerCount;
+        } // repeat process if player is no longer in game
+        while (activePlayers[playerTurn] == null);
+    }
+
+    public void leaveGame(int id){
+        activePlayers[id] = null;
+        if (activePlayersCount() < 2) processEndOfGame();
+        if (playerTurn == id) nextTurn();
+    }
+
+    public int activePlayersCount(){
+        int activePlayersAmount = 0;
+        for (int i = 0; i < playerCount; i++){
+            if (activePlayers[i] == null) activePlayersAmount++;
+        }
+        return activePlayersAmount;
     }
 
     public boolean isRoundOver() {
-        boolean result = true;
-
-        if (!middle.isEmpty()) {
-            result = false;
-        }
+        boolean result = middle.isEmpty();
 
         for (int i = 0; i < factoryCount; i++) {
             if (!factories[i].isEmpty()) {
@@ -160,7 +189,17 @@ public class Game implements Serializable {
         }
         json.put("players", playersArray);
 
+        JSONArray activePlayersArray = new JSONArray();
+        for (int i = 0; i < playerCount; i++) {
+            if (activePlayers[i] != null) {
+                activePlayersArray.put(i);
+            } else { activePlayersArray.put("x"); }
+        }
+        json.put("activePlayers", activePlayersArray);
+
         json.put("playerTurnId", playerTurn);
+
+        json.put("gameOver", gameOver);
 
         return json;
     }

@@ -67,7 +67,6 @@ public class LobbyService {
     public Lobby createLobby(Lobby newLobby) {
         new Lobby();
         User host = userRepository.findUserById(newLobby.getHost_id());
-        host.setLobby(newLobby.getId());
         newLobby.setIs_open(true);
         newLobby.setIs_public(true); //public by default if one wants to change to private host has to change with updatePrivacy
         newLobby.setCurrent_players(1L);
@@ -75,33 +74,34 @@ public class LobbyService {
         newLobby.setHost_name(host.getUsername());
         newLobby = this.lobbyRepository.save(newLobby);
         lobbyRepository.flush();
+        host.setLobby(newLobby.getId());
         log.debug("Created Information for User: {}", newLobby);
         return newLobby;
     }
 
     public boolean isInThisLobby(Long lobbyId, Long id){
-        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
-        return lobby.getPlayers().contains(id);
+        User player = userRepository.findUserById(id);
+        return player.getLobby() != null && player.getLobby().equals(lobbyId);
     }
 
     public boolean isInAnyLobby(Long id){
         List<Lobby> allLobbies = getLobbies();
         for (Lobby lobby: allLobbies) {
-            if (lobby.isUserInLobby(id)) { return true; }
+            if (isInThisLobby(lobby.getId(), id)) { return true; }
         }
         return false;
     }
     
     public boolean isUserInGame(Long id){
         Lobby lobby = getLobbyOfUser(id);
-        // return true if the user is in a lobby and that lobby is closed (game already started)
-        return lobby != null && !lobby.getIs_open();
+        // return true if the user is in a lobby, the lobby is closed, and the user didn't leave
+        return lobby != null && !lobby.getIs_open() &&  userRepository.findUserById(id).getLobby() != null && userRepository.findUserById(id).getLobby() != 0L;
     }
 
     public Lobby getLobbyOfUser(Long id){
         List<Lobby> allLobbies = getLobbies();
         for (Lobby lobby: allLobbies) {
-            if (lobby.isUserInLobby(id)) { return lobby; }
+            if (isInThisLobby(lobby.getId(), id)) { return lobby; }
         }
         return null;
     }
@@ -147,14 +147,18 @@ public class LobbyService {
     }
 
     public void playerLeaves(Lobby lobby, Long id){
-        User player = userRepository.findUserById(id);
         if (lobby.getPlayers().contains(id)) {
-            player.setLobby(0L);
+            resetPlayer(id);
             lobby.removePlayer(id);
             lobby.setCurrent_players(lobby.getCurrent_players() - 1); //adjust player count
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player is not in this lobby.");
         }
+    }
+
+    public void resetPlayer(Long id){
+        User player = userRepository.findUserById(id);
+        player.setLobby(0L);
     }
 
     public void leaveLobby(Long lobbyId, String id){
@@ -254,6 +258,12 @@ public class LobbyService {
     public void skipTurn(Long lobbyId) {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         lobby.nextTurn();
+    }
+
+    public void leaveGame(Long lobbyId, Long id){
+        Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
+        lobby.leaveGame(id);
+        resetPlayer(id);
     }
 
     public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {
