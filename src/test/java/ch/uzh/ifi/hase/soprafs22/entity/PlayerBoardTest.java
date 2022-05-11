@@ -74,8 +74,20 @@ public class PlayerBoardTest {
         JSONObject json = testPlayerBoard.jsonify();
         String expected = "{\"stairs\":[{\"length\":1,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":2,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":3,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":4,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":5,\"colorIndex\":-1,\"tilesAmount\":0}],\"floorLine\":[],\"wall\":{\"colorsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}}";
         assertEquals(expected,json.toString());
+        Move testMove = new Move(0,2,0,1,0);
+        testPlayerBoard.executeMove(testMove);
 
+        //verify that placing 1 tile of color 2 in top row of stairs, and then processing end of round, leads to the wall
+        //correctly displaying row 0 and color 2, and row 0 and column 2 respectively, as occupied
+        json = testPlayerBoard.jsonify();
+        expected = "{\"stairs\":[{\"length\":1,\"colorIndex\":2,\"tilesAmount\":1},{\"length\":2,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":3,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":4,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":5,\"colorIndex\":-1,\"tilesAmount\":0}],\"floorLine\":[],\"wall\":{\"colorsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}}";
+        assertEquals(expected,json.toString());
 
+        testPlayerBoard.processEndOfRound();
+
+        json = testPlayerBoard.jsonify();
+        expected = "{\"stairs\":[{\"length\":1,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":2,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":3,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":4,\"colorIndex\":-1,\"tilesAmount\":0},{\"length\":5,\"colorIndex\":-1,\"tilesAmount\":0}],\"floorLine\":[],\"wall\":{\"colorsOccupied\":[[false,false,true,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[false,false,true,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}}";
+        assertEquals(expected,json.toString());
 
     }
 }

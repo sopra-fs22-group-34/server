@@ -105,5 +105,15 @@ public class WallTest {
         expected = "{\"colorsOccupied\":[[true,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[true,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}";
         assertEquals(expected,jsonTwo.toString());
 
+        testWall.placeTileInRowAndColor(0,1);
+        jsonTwo = testWall.jsonify();
+        expected = "{\"colorsOccupied\":[[true,true,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[true,true,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}";
+        assertEquals(expected,jsonTwo.toString());
+
+        testWall.placeTileInRowAndColor(1,0);
+        jsonTwo = testWall.jsonify();
+        expected = "{\"colorsOccupied\":[[true,true,false,false,false],[true,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]],\"positionsOccupied\":[[true,true,false,false,false],[false,true,false,false,false],[false,false,false,false,false],[false,false,false,false,false],[false,false,false,false,false]]}";
+        assertEquals(expected,jsonTwo.toString());
+
     }
 }
