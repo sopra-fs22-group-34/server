@@ -88,7 +88,11 @@ public class Game implements Serializable {
 
     public void executeMove(Move move) {
         if (move.getOriginIndex() == -1) {
-            middle.executeMove(move);
+            boolean minusTilePickedUp = middle.executeMove(move);
+            if (minusTilePickedUp){
+                firstNextTurn = move.getPlayerIndex();
+                players[move.getPlayerIndex()].placeMinusTile();
+            }
         }
         else {
             Integer[] leftoverTiles = factories[move.getOriginIndex()].executeMove(move);
@@ -147,6 +151,7 @@ public class Game implements Serializable {
         if (isGameOver()) {
             processEndOfGame();
         }
+        playerTurn = firstNextTurn;
 
         for (int i = 0; i < factoryCount; i++) {
             factories[i] = new Factory();

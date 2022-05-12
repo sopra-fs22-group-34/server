@@ -73,6 +73,10 @@ public class FloorLine implements Serializable {
 
     }
 
+    public void placeMinusTile() {
+        placeTile(-1);
+    }
+
 
     public int processEndOfRound() {
         int minusPoints = getMinusCount();

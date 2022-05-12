@@ -32,6 +32,8 @@ public class PlayerBoard implements Serializable {
         return floorLine;
     }
 
+    public void placeMinusTile() { floorLine.placeMinusTile(); }
+
     public int processEndOfRound(){
         int scoreDifference = 0;
 

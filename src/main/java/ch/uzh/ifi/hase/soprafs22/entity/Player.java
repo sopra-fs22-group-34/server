@@ -35,6 +35,8 @@ public class Player implements Serializable {
         playerBoard.executeMove(move);
     }
 
+    public void placeMinusTile() { playerBoard.placeMinusTile(); }
+
     public void processEndOfRound() {
         score += playerBoard.processEndOfRound();
         if (score < 0) {
