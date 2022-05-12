@@ -74,7 +74,7 @@ public class FloorLine implements Serializable {
     }
 
     public void placeMinusTile() {
-        placeTile(-1);
+        placeTile(5);
     }
 
 
