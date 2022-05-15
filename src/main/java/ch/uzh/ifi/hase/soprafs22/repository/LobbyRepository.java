@@ -13,5 +13,4 @@ public interface LobbyRepository extends JpaRepository<Lobby, Long> {
 
     void deleteById(Long ID);
 
-
 }

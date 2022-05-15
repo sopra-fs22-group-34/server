@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs22.entity.Move;
+import ch.uzh.ifi.hase.soprafs22.entity.Game;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
@@ -173,5 +174,11 @@ public class LobbyController {
     public boolean checkIfMoveValid(@PathVariable long lobbyId, @PathVariable int originIndex, @PathVariable int colorIndex, @PathVariable int targetRowIndex, @PathVariable int tileAmount, @PathVariable int playerIndex) {
         Move attemptedMove = new Move(originIndex, colorIndex, targetRowIndex, tileAmount, playerIndex);
         return lobbyService.checkIfMoveValid(attemptedMove, lobbyId);
+    }
+
+    @DeleteMapping("/lobbies/{lobbyId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteLobby(@PathVariable long lobbyId){
+        lobbyService.deleteLobby(lobbyId);
     }
 }

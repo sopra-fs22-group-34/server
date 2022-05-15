@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.OptimisticLockException;
 import java.util.List;
 
 /**
@@ -269,5 +270,15 @@ public class LobbyService {
     public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         return lobby.checkIfMoveValid(attemptedMove);
+    }
+
+    public void deleteLobby(Long lobbyId) {
+        Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
+        Game game = lobby.getGame();
+        if (lobby.getIs_open() == false && lobby.getGame() != null && game.isGameOver() == true) {
+            //TODO for each Player set Lobby id to 0
+            lobbyRepository.deleteById(lobbyId);
+            this.lobbyRepository.flush();
+        }
     }
 }
