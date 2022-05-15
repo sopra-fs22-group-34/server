@@ -50,6 +50,9 @@ public class PlayerBoard implements Serializable {
     }
 
     public boolean checkIfMoveValid(Move attemptedMove) {
+        if (attemptedMove.getTargetRowIndex() == -1) {
+            return true;
+        }
         boolean wallSpotOccupied = wall.isColorOccupied(attemptedMove.getTargetRowIndex(), attemptedMove.getColorIndex());
         if (!wallSpotOccupied) {
             return stairs.checkIfMoveValid(attemptedMove);
