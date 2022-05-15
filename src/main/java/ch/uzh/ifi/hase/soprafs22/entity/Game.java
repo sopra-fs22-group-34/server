@@ -172,7 +172,7 @@ public class Game implements Serializable {
     }
 
     public void processEndOfGame() {
-
+        gameOver = true;
     }
 
     public JSONObject jsonify() {
