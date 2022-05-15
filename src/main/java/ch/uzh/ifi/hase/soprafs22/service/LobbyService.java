@@ -276,7 +276,9 @@ public class LobbyService {
         Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
         Game game = lobby.getGame();
         if (lobby.getIs_open() == false && lobby.getGame() != null && game.isGameOver() == true) {
-            //TODO for each Player set Lobby id to 0
+            for (long i = 0; i < lobby.getPlayers().size(); i++) {
+                getLobbyOfUser(i).setId(null);
+            }
             lobbyRepository.deleteById(lobbyId);
             this.lobbyRepository.flush();
         }
