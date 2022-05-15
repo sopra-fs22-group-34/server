@@ -4,6 +4,7 @@ public class Move {
     //-1 stands for Middle, any nonnegative integer n stands for n-th Factory
     private final int originIndex;
     private final int colorIndex;
+    //-1 stands for FloorLine, any nonnegative integer n stands for n-th row
     private final int targetRowIndex;
     private final int tileAmount;
     private final int playerIndex;

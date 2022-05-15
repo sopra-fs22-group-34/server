@@ -62,13 +62,20 @@ public class PlayerBoard implements Serializable {
     }
 
     public void executeMove(Move move) {
-        int excessTiles = stairs.executeMove(move);
-
-        //place excess tiles in FloorLine
-
-        for (int i = 0; i < excessTiles; i++) {
-            floorLine.placeTile(move.getColorIndex());
+        if (move.getTargetRowIndex()==-1) {
+            for (int i = 0; i < move.getTileAmount(); i++) {
+                floorLine.placeTile(move.getColorIndex());
+            }
         }
+        else {
+            int excessTiles = stairs.executeMove(move);
+            //place excess tiles in FloorLine
+
+            for (int i = 0; i < excessTiles; i++) {
+                floorLine.placeTile(move.getColorIndex());
+            }
+        }
+
     }
 
     public boolean hasFullWallRow() {

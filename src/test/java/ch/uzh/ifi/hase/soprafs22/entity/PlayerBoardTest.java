@@ -68,6 +68,15 @@ public class PlayerBoardTest {
     }
 
     @Test
+    public void placeTilesOnFloorLine() {
+        PlayerBoard testPlayerBoard = new PlayerBoard();
+        Move testMove = new Move(0,0,-1,2,0);
+        testPlayerBoard.executeMove(testMove);
+        int minusCount = testPlayerBoard.getFloorLine().getMinusCount();
+        assertEquals(2, minusCount);
+    }
+
+    @Test
     public void jsonifyTest() {
         PlayerBoard testPlayerBoard = new PlayerBoard();
 
