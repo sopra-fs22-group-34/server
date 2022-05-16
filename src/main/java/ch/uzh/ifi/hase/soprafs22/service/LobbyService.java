@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.OptimisticLockException;
 import java.util.List;
 
 /**
@@ -137,7 +136,7 @@ public class LobbyService {
         }
     }
 
-    public void hostLeaves(Long lobbyId){
+    public void deleteLobby(Long lobbyId){
         Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
         for (Long playerId: lobby.getPlayers()) {
             User player = userRepository.findUserById(playerId);
@@ -165,11 +164,11 @@ public class LobbyService {
     public void leaveLobby(Long lobbyId, String id){
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         try {
-            if (lobby.getHost_id() == Long.parseLong(id)){ hostLeaves(lobbyId); } // delete the lobby if the host leaves
+            if (lobby.getHost_id() == Long.parseLong(id)){ deleteLobby(lobbyId); } // delete the lobby if the host leaves
             else { playerLeaves(lobby, Long.parseLong(id)); }// remove player from the list of joined players
         } catch (NumberFormatException notID) { // if input cannot be converted into an ID, it must be a username
             Long newId = userRepository.findByUsername(id).getId(); // generate ID from the username
-            if (lobby.getHost_id().equals(newId)){ hostLeaves(lobbyId); }
+            if (lobby.getHost_id().equals(newId)){ deleteLobby(lobbyId); }
             else { playerLeaves(lobby, newId); }
         }
     }
@@ -270,17 +269,5 @@ public class LobbyService {
     public boolean checkIfMoveValid(Move attemptedMove, Long lobbyId) {
         Lobby lobby = this.lobbyRepository.findLobbyById(lobbyId);
         return lobby.checkIfMoveValid(attemptedMove);
-    }
-
-    public void deleteLobby(Long lobbyId) {
-        Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
-        Game game = lobby.getGame();
-        if (lobby.getIs_open() == false && lobby.getGame() != null && game.isGameOver() == true) {
-            for (long i = 0; i < lobby.getPlayers().size(); i++) {
-                getLobbyOfUser(i).setId(null);
-            }
-            lobbyRepository.deleteById(lobbyId);
-            this.lobbyRepository.flush();
-        }
     }
 }
