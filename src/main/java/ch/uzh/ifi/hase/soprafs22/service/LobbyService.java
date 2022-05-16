@@ -139,8 +139,7 @@ public class LobbyService {
     public void deleteLobby(Long lobbyId){
         Lobby lobby = lobbyRepository.findLobbyById(lobbyId);
         for (Long playerId: lobby.getPlayers()) {
-            User player = userRepository.findUserById(playerId);
-            player.setLobby(0L);
+            resetPlayer(playerId);
         }
         lobbyRepository.deleteById(lobbyId);
         this.lobbyRepository.flush();
