@@ -6,7 +6,6 @@ import ch.uzh.ifi.hase.soprafs22.entity.Move;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -212,6 +212,8 @@ public class LobbyService {
 
     public void spectateGame(Long lobbyId, Long id) {
         Lobby lobby = getLobbyById(lobbyId);
+        User spectator = userRepository.findUserById(id);
+        spectator.setLobby(lobbyId);
         lobby.addSpectator(id);
     }
     public void stopSpectating(Long lobbyId, Long id) {
@@ -224,24 +226,24 @@ public class LobbyService {
         JSONObject json = new JSONObject();
         json.put("current_players", lobby.getCurrent_players());
         json.put("timer", lobby.getTimer());
-        json.put("players", lobby.getPlayers());
-        JSONArray playersArray = new JSONArray();
         for (int i = 0; i < lobby.getPlayers().size(); i++) {
-            JSONObject player = new JSONObject();
-            player.put("id", lobby.getPlayers().get(i));
-            player.put("name", getPlayerUsername(id, i));
-            playersArray.put(player);
+            if (i == 0) {
+                json.put("one", lobby.getPlayers().get(i));
+                json.put("nameOne", getPlayerUsername(id, i));
+            }
+            else if (i == 1) {
+                json.put("two", lobby.getPlayers().get(i));
+                json.put("nameTwo", getPlayerUsername(id, i));
+            }
+            else if (i == 2) {
+                json.put("three", lobby.getPlayers().get(i));
+                json.put("nameThree", getPlayerUsername(id, i));
+            }
+            else if (i == 3) {
+                json.put("four", lobby.getPlayers().get(i));
+                json.put("nameFour", getPlayerUsername(id, i));
+            }
         }
-        json.put("players", playersArray);
-        json.put("spectators", lobby.getSpectators());
-        JSONArray spectatorsArray = new JSONArray();
-        for (int i = 0; i < lobby.getPlayers().size(); i++) {
-            JSONObject spectator = new JSONObject();
-            spectator.put("id", lobby.getSpectators().get(i));
-            spectator.put("name", getSpectatorUsername(id, i));
-            spectatorsArray.put(spectator);
-        }
-        json.put("players", spectatorsArray);
         return json;
     }
 
