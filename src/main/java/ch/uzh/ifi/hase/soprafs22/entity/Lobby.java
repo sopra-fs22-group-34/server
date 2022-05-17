@@ -67,6 +67,9 @@ public class Lobby {
     //IMPORTANT: define a list always like this! It will not give you specific errors.
     private List<Long> players = new ArrayList<>();
 
+    @ElementCollection
+    private List<Long> activePlayers = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -129,12 +132,18 @@ public class Lobby {
         this.current_players = current_players;
     }
 
-    public List<Long> getPlayers() {
-        return players;
-    }
+    public List<Long> getPlayers() { return players; }
 
     public void setPlayers(List<Long> players) {
         this.players = players;
+    }
+
+    public List<Long> getActivePlayers() {
+        return activePlayers;
+    }
+
+    public void setActivePlayers(List<Long> activePlayers) {
+        this.activePlayers = activePlayers;
     }
 
     public void addPlayer(Long id) { this.players.add(id); }
@@ -165,6 +174,7 @@ public class Lobby {
         for (int i = 0; i < current_players; i++) {
             if (this.players.get(i).equals(id)) game.leaveGame(i);
         }
+        this.activePlayers.remove(id);
     }
 
     public boolean checkIfMoveValid(Move attemptedMove) {

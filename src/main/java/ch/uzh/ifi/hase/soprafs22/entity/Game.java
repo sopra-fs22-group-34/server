@@ -59,6 +59,10 @@ public class Game implements Serializable {
         return generator.nextInt(max);
     }
 
+    public int getPlayerScore(int id){
+        return players[id].getScore();
+    }
+
     public boolean checkIfMoveValid(Move attemptedMove) {
         if (playerTurn != attemptedMove.getPlayerIndex()) {
             return false;

@@ -224,6 +224,39 @@ class LobbyServiceTest {
         assertTrue(testLobby.getPlayers().contains(testUser2.getId()));
         assertEquals(2, testLobby.getCurrent_players());
         assertFalse(testLobby.getIs_open());
+    }
 
+    @Test
+    public void calculateRankingTest() {
+        int[] scores1 = new int[]{50, 60, 20, 35};
+        int[] ranking1 = lobbyService.calculateRanking(scores1);
+        assertArrayEquals(new int[]{2, 1, 4, 3}, ranking1);
+
+        int[] scores2 = new int[]{50, 60, 20, 60};
+        int[] ranking2 = lobbyService.calculateRanking(scores2);
+        assertArrayEquals(new int[]{3, 1, 4, 1}, ranking2);
+
+        int[] scores3 = new int[]{50, 60, 60, 50};
+        int[] ranking3 = lobbyService.calculateRanking(scores3);
+        assertArrayEquals(new int[]{3, 1, 1, 3}, ranking3);
+
+        int[] scores4 = new int[]{50, 60, 20};
+        int[] ranking4 = lobbyService.calculateRanking(scores4);
+        assertArrayEquals(new int[]{2, 1, 3}, ranking4);
+    }
+
+    @Test
+    public void calculateRewardTest() {
+        assertEquals(90, lobbyService.calculateReward(60, 1, 4));
+        assertEquals(60, lobbyService.calculateReward(40, 2, 4));
+        assertEquals(30, lobbyService.calculateReward(20, 3, 4));
+        assertEquals(-15, lobbyService.calculateReward(20, 4, 4));
+
+        assertEquals(67, lobbyService.calculateReward(60, 1, 3));
+        assertEquals(45, lobbyService.calculateReward(40, 2, 3));
+        assertEquals(-10, lobbyService.calculateReward(20, 3, 3));
+
+        assertEquals(45, lobbyService.calculateReward(60, 1, 2));
+        assertEquals(0, lobbyService.calculateReward(40, 2, 2));
     }
 }

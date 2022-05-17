@@ -110,9 +110,13 @@ public class User implements Serializable {
 
   public void setScore(int score) { this.score = score; }
 
+  public void addScore(int added) {this.score += added; }
+
   public int getGames() { return games; }
 
   public void setGames(int games) { this.games = games; }
+
+  public void finishedGame() { this.games += 1; }
 
   public boolean getIs_public() { return is_public; }
 
