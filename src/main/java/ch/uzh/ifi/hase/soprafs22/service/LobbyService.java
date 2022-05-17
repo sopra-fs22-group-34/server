@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs22.entity.Move;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,23 +49,22 @@ public class LobbyService {
         return this.lobbyRepository.findAll();
     }
 
-    public Lobby getLobbyById(Long ID) {
-        Lobby lobbyByID = lobbyRepository.findLobbyById(ID);
-        if (lobbyByID == null) {
+    public Lobby getLobbyById(Long id) {
+        Lobby lobbyById = lobbyRepository.findLobbyById(id);
+        if (lobbyById == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Lobby with this ID exists.");
         }
-        return lobbyByID;
+        return lobbyById;
     }
 
-    public Lobby getLobbyByLobbyname(String lobbyname) {
-        Lobby lobbyByLobbyname = lobbyRepository.findLobbyByName(lobbyname);
-        if (lobbyByLobbyname == null) {
+    public Lobby getLobbyByLobbyName(String lobbyName) {
+        Lobby lobbyByLobbyName = lobbyRepository.findLobbyByName(lobbyName);
+        if (lobbyByLobbyName == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No lobby with this lobbyname exists.");
         }
-        return lobbyByLobbyname;
+        return lobbyByLobbyName;
     }
 
-    //TODO add function to frontend which asks user how to set up PrivacySettings
     public Lobby createLobby(Lobby newLobby) {
         new Lobby();
         User host = userRepository.findUserById(newLobby.getHost_id());
@@ -206,29 +205,41 @@ public class LobbyService {
         return userRepository.findUserById(lobby.getPlayers().get(playerIndex)).getUsername();
     }
 
+    public String getSpectatorUsername(Long id, int spectatorIndex){
+        Lobby lobby = getLobbyById(id);
+        return userRepository.findUserById(lobby.getSpectators().get(spectatorIndex)).getUsername();
+    }
+
+    public void spectateGame(Long lobbyId, Long id) {
+        Lobby lobby = getLobbyById(lobbyId);
+        User spectator = userRepository.findUserById(id);
+        spectator.setLobby(lobbyId);
+        lobby.addSpectator(id);
+    }
+
     public JSONObject getLobbyData(Long id){
         Lobby lobby = getLobbyById(id);
         JSONObject json = new JSONObject();
         json.put("current_players", lobby.getCurrent_players());
         json.put("timer", lobby.getTimer());
+        json.put("players", lobby.getPlayers());
+        JSONArray playersArray = new JSONArray();
         for (int i = 0; i < lobby.getPlayers().size(); i++) {
-            if (i == 0) {
-                json.put("one", lobby.getPlayers().get(i));
-                json.put("nameOne", getPlayerUsername(id, i));
-            }
-            else if (i == 1) {
-                json.put("two", lobby.getPlayers().get(i));
-                json.put("nameTwo", getPlayerUsername(id, i));
-            }
-            else if (i == 2) {
-                json.put("three", lobby.getPlayers().get(i));
-                json.put("nameThree", getPlayerUsername(id, i));
-            }
-            else if (i == 3) {
-                json.put("four", lobby.getPlayers().get(i));
-                json.put("nameFour", getPlayerUsername(id, i));
-            }
+            JSONObject player = new JSONObject();
+            player.put("id", lobby.getPlayers().get(i));
+            player.put("name", getPlayerUsername(id, i));
+            playersArray.put(player);
         }
+        json.put("players", playersArray);
+        json.put("spectators", lobby.getSpectators());
+        JSONArray spectatorsArray = new JSONArray();
+        for (int i = 0; i < lobby.getPlayers().size(); i++) {
+            JSONObject spectator = new JSONObject();
+            spectator.put("id", lobby.getSpectators().get(i));
+            spectator.put("name", getSpectatorUsername(id, i));
+            spectatorsArray.put(spectator);
+        }
+        json.put("players", spectatorsArray);
         return json;
     }
 

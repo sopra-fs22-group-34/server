@@ -70,6 +70,9 @@ public class Lobby {
     @ElementCollection
     private List<Long> activePlayers = new ArrayList<>();
 
+    @ElementCollection
+    private List<Long> spectators = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -146,9 +149,19 @@ public class Lobby {
         this.activePlayers = activePlayers;
     }
 
+    public List<Long> getSpectators() { return spectators; }
+
+    public void setSpectators(List<Long> spectators) {
+        this.spectators = spectators;
+    }
+
     public void addPlayer(Long id) { this.players.add(id); }
 
     public void removePlayer(Long id) { this.players.remove(id); }
+
+    public void addSpectator(Long id) { this.spectators.add(id); }
+
+    public void removeSpectator(Long id) { this.spectators.remove(id); }
 
     public Game getGame() {
         return game;

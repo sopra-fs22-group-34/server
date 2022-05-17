@@ -2,7 +2,6 @@ package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs22.entity.Move;
-import ch.uzh.ifi.hase.soprafs22.entity.Game;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
@@ -58,7 +57,7 @@ public class LobbyController {
         // fetch lobby by specified ID
         try { lobby = lobbyService.getLobbyById(Long.parseLong(lobbyId)); }
         // if the path cannot be converted into an ID, it must be a lobbyname. Therefore, fetch by username
-        catch (NumberFormatException notID){ lobby = lobbyService.getLobbyByLobbyname(lobbyId); }
+        catch (NumberFormatException notID){ lobby = lobbyService.getLobbyByLobbyName(lobbyId); }
         return DTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
     }
 
@@ -110,6 +109,13 @@ public class LobbyController {
     @ResponseBody
     public void joinLobbyWithUser(@PathVariable long lobbyId, @PathVariable long userId){
         lobbyService.joinLobby(lobbyId, userId);
+    }
+
+    @PutMapping("/lobbies/{lobbyId}/users/{userId}/spectate")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void spectateGame(@PathVariable long lobbyId, @PathVariable long userId){
+        lobbyService.spectateGame(lobbyId, userId);
     }
 
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/leave")

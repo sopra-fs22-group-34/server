@@ -12,9 +12,6 @@ import org.mockito.MockitoAnnotations;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyServiceTest {
@@ -98,10 +95,10 @@ class LobbyServiceTest {
     public void getLobbyByLobbyName() {
         lobbyService.createLobby(testLobby);
         // throw error for nonexistent lobby
-        assertThrows(ResponseStatusException.class, () -> lobbyService.getLobbyByLobbyname("wrongLobbyName"));
+        assertThrows(ResponseStatusException.class, () -> lobbyService.getLobbyByLobbyName("wrongLobbyName"));
         // find given lobby
         Mockito.when(lobbyRepository.findLobbyByName(Mockito.any())).thenReturn(testLobby);
-        assertEquals(lobbyService.getLobbyByLobbyname("testLobby"), testLobby);
+        assertEquals(lobbyService.getLobbyByLobbyName("testLobby"), testLobby);
     }
 
 
