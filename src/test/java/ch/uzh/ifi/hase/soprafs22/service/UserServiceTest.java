@@ -56,6 +56,8 @@ public class UserServiceTest {
     assertNotNull(createdUser.getToken());
     assertNotNull(createdUser.getCreation_date());
     assertEquals(0L, createdUser.getLobby());
+    assertEquals(1000, createdUser.getScore());
+    assertEquals(0, createdUser.getGames());
     assertTrue(createdUser.getLogged_in());
   }
 

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -105,14 +106,6 @@ public class LobbyService {
             if (isInThisLobby(lobby.getId(), id)) { return lobby; }
         }
         return null;
-    }
-
-    public JSONObject getGameOfUser(Long id) {
-        Lobby lobby = getLobbyOfUser(id);
-        if (lobby.getGame() == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
-        }
-        return lobby.getGame().jsonify().put("lobbyData", getLobbyData(id));
     }
 
     public JSONObject getGameOfLobby(Long id) {
@@ -242,10 +235,16 @@ public class LobbyService {
     public void startGame(Long lobbyId){
         Lobby lobby = getLobbyById(lobbyId);
         if (lobby.getGame() == null) {
-            lobby.setGame(new Game(lobby.getCurrent_players().intValue()));
+            lobby.setGame(new Game(lobby.getCurrent_players().intValue(),getIdSum(lobby)));
             lobby.setActivePlayers(initializeActivePlayers(lobby));
             lobby.setIs_open(false);
         }
+    }
+
+    public int getIdSum(Lobby lobby){
+        int sum = 0;
+        for (int i = 0; i < lobby.getPlayers().size(); i++) sum += lobby.getPlayers().get(i).intValue() * i;
+        return sum + lobby.getId().intValue();
     }
 
     public List<Long> initializeActivePlayers(Lobby lobby) {
@@ -290,7 +289,7 @@ public class LobbyService {
         int[] ranking = calculateRanking(scores);
         for (int i = 0; i < lobby.getPlayers().size(); i++) {
             User player = userRepository.findUserById(lobby.getPlayers().get(i));
-            int reward = calculateReward(scores[i], ranking[i], scores.length);
+            int reward = calculateReward(i, scores[i], ranking, scores.length);
             if (isValidGame(lobby) && isActivePlayer(lobby, player)) {
                 player.addScore(reward);
                 player.finishedGame();
@@ -314,13 +313,20 @@ public class LobbyService {
         return ranking;
     }
 
-    public int calculateReward(int score, int ranking, int players) {
-        if (ranking == 1) return (30 + score/4) * players/2;
-        else if (ranking == 2 && players > 2) return (20 + score/4) * players/2;
-        else if (ranking == 2 && players == 2) return (-10 + score/4);
-        else if (ranking == 3 && players > 3) return (10 + score/4) * players/2;
-        else if (ranking == 3 && players == 3) return (-15 + score/4);
+    public int calculateReward(int playerIndex, int score, int[] ranking, int players) {
+        if (ranking[playerIndex] == 1) return (30 + score/4) * players/2 / isTied(ranking, playerIndex);
+        else if (ranking[playerIndex] == 2 && players > 2) return (20 + score/4) * players/2 / isTied(ranking, playerIndex);
+        else if (ranking[playerIndex] == 2 && players == 2) return (-10 + score/4);
+        else if (ranking[playerIndex] == 3 && players > 3) return (10 + score/4) * players/2 / isTied(ranking, playerIndex);
+        else if (ranking[playerIndex] == 3 && players == 3) return (-15 + score/4);
         return (-20 + score/4);
+    }
+
+    public int isTied(int[] ranking, int playerIndex) {
+        int rank = ranking[playerIndex];
+        int counted = 0;
+        for (int r: ranking) if (r == rank) counted += 1;
+        return counted;
     }
 
     public boolean isValidGame(Lobby lobby) {

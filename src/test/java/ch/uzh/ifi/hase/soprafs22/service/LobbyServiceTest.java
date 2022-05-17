@@ -30,8 +30,6 @@ class LobbyServiceTest {
 
     private Lobby testLobby;
 
-    private UserService userService;
-
     private User testUser;
     private User testUser2;
 
@@ -246,17 +244,62 @@ class LobbyServiceTest {
     }
 
     @Test
+    public void isTiedTest(){
+        int[] ranking1 = new int[]{1,2,3,4};
+        assertEquals(1, lobbyService.isTied(ranking1,0));
+
+        int[] ranking2 = new int[]{1,2,2,4};
+        assertEquals(2, lobbyService.isTied(ranking2,2));
+
+        int[] ranking3 = new int[]{1,1,1,4};
+        assertEquals(3, lobbyService.isTied(ranking3,1));
+
+        int[] ranking4 = new int[]{1,1,1,1};
+        assertEquals(4, lobbyService.isTied(ranking4,3));
+    }
+
+    @Test
     public void calculateRewardTest() {
-        assertEquals(90, lobbyService.calculateReward(60, 1, 4));
-        assertEquals(60, lobbyService.calculateReward(40, 2, 4));
-        assertEquals(30, lobbyService.calculateReward(20, 3, 4));
-        assertEquals(-15, lobbyService.calculateReward(20, 4, 4));
+        int[] scores1 = new int[]{60, 40, 32, 20};
+        int[] ranking1 = lobbyService.calculateRanking(scores1);
+        assertEquals(90, lobbyService.calculateReward(0, 60, ranking1, 4));
+        assertEquals(60, lobbyService.calculateReward(1, 40, ranking1, 4));
+        assertEquals(36, lobbyService.calculateReward(2, 32, ranking1, 4));
+        assertEquals(-15, lobbyService.calculateReward(3, 20, ranking1, 4));
 
-        assertEquals(67, lobbyService.calculateReward(60, 1, 3));
-        assertEquals(45, lobbyService.calculateReward(40, 2, 3));
-        assertEquals(-10, lobbyService.calculateReward(20, 3, 3));
+        int[] scores2 = new int[]{60, 40, 20, 20};
+        int[] ranking2 = lobbyService.calculateRanking(scores2);
+        assertEquals(90, lobbyService.calculateReward(0, 60, ranking2, 4));
+        assertEquals(60, lobbyService.calculateReward(1, 40, ranking2, 4));
+        assertEquals(15, lobbyService.calculateReward(2, 20, ranking2, 4));
+        assertEquals(15, lobbyService.calculateReward(3, 20, ranking2, 4));
 
-        assertEquals(45, lobbyService.calculateReward(60, 1, 2));
-        assertEquals(0, lobbyService.calculateReward(40, 2, 2));
+        int[] scores3 = new int[]{60, 40, 20};
+        int[] ranking3 = lobbyService.calculateRanking(scores3);
+        assertEquals(67, lobbyService.calculateReward(0, 60, ranking3, 3));
+        assertEquals(45, lobbyService.calculateReward(1, 40, ranking3, 3));
+        assertEquals(-10, lobbyService.calculateReward(2, 20, ranking3, 3));
+
+        int[] scores4 = new int[]{60, 40, 40};
+        int[] ranking4 = lobbyService.calculateRanking(scores4);
+        assertEquals(67, lobbyService.calculateReward(0, 60, ranking4, 3));
+        assertEquals(22, lobbyService.calculateReward(1, 40, ranking4, 3));
+        assertEquals(22, lobbyService.calculateReward(2, 40, ranking4, 3));
+
+        int[] scores5 = new int[]{40, 40, 40};
+        int[] ranking5 = lobbyService.calculateRanking(scores5);
+        assertEquals(20, lobbyService.calculateReward(0, 40, ranking5, 3));
+        assertEquals(20, lobbyService.calculateReward(1, 40, ranking5, 3));
+        assertEquals(20, lobbyService.calculateReward(2, 40, ranking5, 3));
+
+        int[] scores6 = new int[]{60, 40};
+        int[] ranking6 = lobbyService.calculateRanking(scores6);
+        assertEquals(45, lobbyService.calculateReward(0, 60, ranking6, 2));
+        assertEquals(0, lobbyService.calculateReward(1, 40, ranking6, 2));
+
+        int[] scores7 = new int[]{60, 60};
+        int[] ranking7 = lobbyService.calculateRanking(scores7);
+        assertEquals(22, lobbyService.calculateReward(0, 60, ranking7, 2));
+        assertEquals(22, lobbyService.calculateReward(1, 60, ranking7, 2));
     }
 }

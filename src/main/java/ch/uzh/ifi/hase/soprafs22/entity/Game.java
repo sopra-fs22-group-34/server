@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 public class Game implements Serializable {
@@ -27,7 +26,7 @@ public class Game implements Serializable {
     int playerTurn;
     int firstNextTurn;
 
-    public Game(int playerNumber) {
+    public Game(int playerNumber, int idTotal) {
 
         gameOver = false;
 
@@ -48,15 +47,8 @@ public class Game implements Serializable {
             factories[i] = new Factory();
         }
 
-        playerTurn = 0;
-        // TODO: make this random instead of always 0
-        // (Using getRandomNumber(playerCount) causes some tests to fail)
+        playerTurn = idTotal%playerCount;
 
-    }
-
-    public int getRandomNumber(int max) {
-        Random generator = new Random();
-        return generator.nextInt(max);
     }
 
     public int getPlayerScore(int id){
@@ -130,7 +122,7 @@ public class Game implements Serializable {
     public int activePlayersCount(){
         int activePlayersAmount = 0;
         for (int i = 0; i < playerCount; i++){
-            if (activePlayers[i] == null) activePlayersAmount++;
+            if (activePlayers[i] != null) activePlayersAmount++;
         }
         return activePlayersAmount;
     }

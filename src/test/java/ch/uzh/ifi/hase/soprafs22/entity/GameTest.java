@@ -10,7 +10,7 @@ public class GameTest {
 
     @Test
     public void validFactoryMove() {
-        Game testGame = new Game(2);
+        Game testGame = new Game(2,0);
         JSONObject json = testGame.jsonify();
         JSONArray factories = (JSONArray) json.get("factories");
         JSONObject factory = (JSONObject) factories.get(0);
@@ -36,7 +36,7 @@ public class GameTest {
 
     @Test
     public void invalidFactoryMove() {
-        Game testGame = new Game(2);
+        Game testGame = new Game(2,0);
         JSONObject json = testGame.jsonify();
         JSONArray factories = (JSONArray) json.get("factories");
         JSONObject factory = (JSONObject) factories.get(0);
@@ -62,7 +62,7 @@ public class GameTest {
 
     @Test
     public void validMiddleMove() {
-        Game testGame = new Game(2);
+        Game testGame = new Game(2,0);
         JSONObject json = testGame.jsonify();
         JSONArray factories = (JSONArray) json.get("factories");
         JSONObject factory = (JSONObject) factories.get(0);
@@ -112,7 +112,7 @@ public class GameTest {
 
     @Test
     public void invalidMiddleMove() {
-        Game testGame = new Game(2);
+        Game testGame = new Game(2,0);
 
         Move testMove = new Move(-1,0,4,1,0);
 
@@ -125,16 +125,32 @@ public class GameTest {
     @Test
     public void roundNotOver() {
         //make sure that round is detected as ongoing upon invoking constructor
-        Game testGame = new Game(2);
+        Game testGame = new Game(2,0);
         assertFalse(testGame.isRoundOver());
     }
 
     @Test
     public void gameNotOver() {
         //make sure that game is detected as ongoing upon invoking constructor
-        Game testGame = new Game(2);
+        Game testGame = new Game(2,0);
         assertFalse(testGame.isGameOver());
     }
 
+    @Test
+    public void endGameWhenTooManyLeave(){
+        Game testGame = new Game(2,0);
+        assertFalse(testGame.gameOver);
+        testGame.leaveGame(0);
+        assertTrue(testGame.gameOver);
+    }
+
+    @Test
+    public void activePlayersTest(){
+        Game testGame = new Game(2,0);
+        assertEquals(2, testGame.activePlayersCount());
+
+        testGame.leaveGame(0);
+        assertEquals(1, testGame.activePlayersCount());
+    }
     
 }
