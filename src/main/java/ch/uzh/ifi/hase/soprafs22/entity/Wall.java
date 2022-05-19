@@ -44,7 +44,14 @@ public class Wall implements Serializable {
 
         positionIsOccupiedArray[row][column] = true;
 
-        return gainedScoreFromTilePlacement(row, column);
+        if (!hasAllTilesOfColor(color)) {
+            return gainedScoreFromTilePlacement(row, column);
+        }
+
+        else {
+            return gainedScoreFromTilePlacement(row, column)+10;
+        }
+
     }
 
 
@@ -61,6 +68,14 @@ public class Wall implements Serializable {
         return gainedScore;
     }
 
+    public boolean hasAllTilesOfColor(int colorIndex) {
+        for (int i = 0; i < 5; i++) {
+            if (!colorIsOccupiedArray[i][colorIndex]) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public int pointsFromFormedRow(int row, int column) {
         //amount of points gained from forming a row

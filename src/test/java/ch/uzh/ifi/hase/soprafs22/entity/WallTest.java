@@ -78,6 +78,20 @@ public class WallTest {
     }
 
     @Test
+    public void allTilesOfOneColor() {
+        Wall testWall = new Wall();
+
+
+        testWall.placeTileInRowAndColor(0,0);
+        testWall.placeTileInRowAndColor(1,0);
+        testWall.placeTileInRowAndColor(2,0);
+        testWall.placeTileInRowAndColor(3,0);
+
+        assertEquals(11, testWall.placeTileInRowAndColor(4,0));
+
+    }
+
+    @Test
     public void fullWallRowDetection() {
         Wall testWall = new Wall();
 
@@ -90,6 +104,21 @@ public class WallTest {
         testWall.placeTileInRowAndColor(0,4);
 
         assertTrue(testWall.hasFullWallRow());
+    }
+
+    @Test
+    public void allTilesOfColorDetection() {
+        Wall testWall = new Wall();
+
+        assertFalse(testWall.hasAllTilesOfColor(0));
+
+        testWall.placeTileInRowAndColor(0,0);
+        testWall.placeTileInRowAndColor(1,0);
+        testWall.placeTileInRowAndColor(2,0);
+        testWall.placeTileInRowAndColor(3,0);
+        testWall.placeTileInRowAndColor(4,0);
+
+        assertTrue(testWall.hasAllTilesOfColor(0));
     }
 
     @Test
