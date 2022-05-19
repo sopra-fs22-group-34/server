@@ -45,8 +45,8 @@ public class LobbyGetDTO {
         return is_public;
     }
 
-    public void setIs_public(Boolean aPublic) {
-        is_public = aPublic;
+    public void setIs_public(Boolean is_public) {
+        this.is_public = is_public;
     }
 
     public Boolean getIs_open() {
@@ -54,7 +54,7 @@ public class LobbyGetDTO {
     }
 
     public void setIs_open(Boolean open) {
-        is_open = open;
+        this.is_open = open;
     }
 
     public Long getTotal_players() {

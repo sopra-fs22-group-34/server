@@ -69,7 +69,7 @@ public class LobbyService {
         new Lobby();
         User host = userRepository.findUserById(newLobby.getHost_id());
         newLobby.setIs_open(true);
-        newLobby.setIs_public(true); //public by default if one wants to change to private host has to change with updatePrivacy
+        newLobby.setIs_public(newLobby.getIs_public());
         newLobby.setCurrent_players(1L);
         newLobby.addPlayer(newLobby.getHost_id());
         newLobby.setHost_name(host.getUsername());
@@ -212,9 +212,11 @@ public class LobbyService {
 
     public void spectateGame(Long lobbyId, Long id) {
         Lobby lobby = getLobbyById(lobbyId);
-        User spectator = userRepository.findUserById(id);
-        spectator.setLobby(lobbyId);
         lobby.addSpectator(id);
+    }
+    public void stopSpectating(Long lobbyId, Long id) {
+        Lobby lobby = getLobbyById(lobbyId);
+        lobby.removeSpectator(id);
     }
 
     public JSONObject getLobbyData(Long id){

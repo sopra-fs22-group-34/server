@@ -31,8 +31,8 @@ public class LobbyPostDTO {
         return is_public;
     }
 
-    public void setIs_public(Boolean aPublic) {
-        is_public = aPublic;
+    public void setIs_public(Boolean is_public) {
+        this.is_public = is_public;
     }
 
     public Long getTotal_players() {

@@ -117,6 +117,12 @@ public class LobbyController {
     public void spectateGame(@PathVariable long lobbyId, @PathVariable long userId){
         lobbyService.spectateGame(lobbyId, userId);
     }
+    @PutMapping("/lobbies/{lobbyId}/users/{userId}/spectate/leave")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void stopSpectating(@PathVariable long lobbyId, @PathVariable long userId){
+        lobbyService.stopSpectating(lobbyId, userId);
+    }
 
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/leave")
     @ResponseStatus(HttpStatus.NO_CONTENT)

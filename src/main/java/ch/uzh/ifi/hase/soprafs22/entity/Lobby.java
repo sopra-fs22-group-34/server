@@ -93,14 +93,14 @@ public class Lobby {
         return is_public;
     }
 
-    public void setIs_public(Boolean isPublic) { is_public = isPublic; }
+    public void setIs_public(Boolean is_public) { this.is_public = is_public; }
 
     public Boolean getIs_open() {
         return is_open;
     }
 
     public void setIs_open(Boolean open) {
-        is_open = open;
+        this.is_open = open;
     }
 
     public Long getHost_id() {
