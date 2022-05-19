@@ -214,12 +214,13 @@ public class LobbyService {
         Lobby lobby = getLobbyById(lobbyId);
         User spectator = userRepository.findUserById(id);
         spectator.setLobby(lobbyId);
-        lobby.addSpectator(id);
+        if (!lobby.getSpectators().contains(id)) lobby.addSpectator(id);
     }
 
     public void stopSpectating(Long lobbyId, Long id) {
         Lobby lobby = getLobbyById(lobbyId);
         lobby.removeSpectator(id);
+        resetPlayer(id);
     }
 
     public JSONObject getLobbyData(Long id){
