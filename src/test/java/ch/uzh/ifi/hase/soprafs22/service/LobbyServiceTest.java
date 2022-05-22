@@ -223,6 +223,68 @@ class LobbyServiceTest {
     }
 
     @Test
+    public void updatePrivacyValidInput() {
+        // create testLobby
+        lobbyService.createLobby(testLobby);
+        Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        // check if lobby is public
+        assertTrue(testLobby.getIs_public());
+
+        // change lobby to private
+        boolean privateLobby = false;
+        lobbyService.updatePrivacy(testLobby.getId(), privateLobby);
+
+        //check that privacy of the lobby has changed
+        assertFalse(testLobby.getIs_public());
+    }
+
+    @Test
+    public void changeLobbyNameValidInput() {
+        // create testLobby
+        lobbyService.createLobby(testLobby);
+        Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        // check if lobby is public
+        assertEquals("testLobby", testLobby.getName());
+
+        // change lobby to private
+        String newName = "testLobbyAgain";
+        lobbyService.changeLobbyName(testLobby.getId(), newName);
+
+        //check that name of the lobby has changed
+        assertEquals("testLobbyAgain", testLobby.getName());
+    }
+
+    @Test
+    public void changeLobbySizeValidInput() {
+        // create testLobby
+        lobbyService.createLobby(testLobby);
+        Mockito.when(lobbyRepository.findLobbyById(Mockito.any())).thenReturn(testLobby);
+        // check if lobby is public
+        assertEquals(4L, testLobby.getTotal_players());
+
+        // change lobby to private
+        long newSize = 3L;
+        lobbyService.changeLobbySize(testLobby.getId(), newSize);
+
+        //check that size of the lobby has changed
+        assertEquals(3L, testLobby.getTotal_players());
+    }
+
+    @Test
+    public void changeLobbySizeInvalidInput() {
+        // create testLobby
+        lobbyService.createLobby(testLobby);
+
+        // check if lobby is public
+        assertEquals(4L, testLobby.getTotal_players());
+
+        // change lobby to private
+        long newSize = 1L;
+        assertThrows(ResponseStatusException.class, () -> lobbyService.changeLobbySize(testLobby.getId(), newSize));
+
+    }
+
+    @Test
     public void calculateRankingTest() {
         int[] scores1 = new int[]{50, 60, 20, 35};
         int[] ranking1 = lobbyService.calculateRanking(scores1);
