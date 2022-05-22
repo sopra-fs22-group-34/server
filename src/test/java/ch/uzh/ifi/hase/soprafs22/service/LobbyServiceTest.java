@@ -41,6 +41,7 @@ class LobbyServiceTest {
         testLobby.setHost_name("Sam");
         testLobby.setTotal_players(4L);
         testLobby.setHost_id(2L);
+        testLobby.setIs_public(true);
         // when -> any object is being save in the lobbyRepository -> return the dummy
         // testLobby
         Mockito.when(lobbyRepository.save(Mockito.any())).thenReturn(testLobby);

@@ -31,6 +31,9 @@ public class Lobby {
     @GeneratedValue
     private Long id;
 
+    @Column()
+    private String secret_url;
+
     @Column(nullable = false)
     private String name;
     /*
@@ -79,6 +82,14 @@ public class Lobby {
 
     public void setId(Long lobbyId) {
         this.id = lobbyId;
+    }
+
+    public String getSecret_url() {
+        return secret_url;
+    }
+
+    public void setSecret_url(String secret_url) {
+        this.secret_url = secret_url;
     }
 
     public String getName() {

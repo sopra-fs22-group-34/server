@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Lobby Service
@@ -70,6 +71,9 @@ public class LobbyService {
         User host = userRepository.findUserById(newLobby.getHost_id());
         newLobby.setIs_open(true);
         newLobby.setIs_public(newLobby.getIs_public());
+        if (newLobby.getIs_public() == false) {
+            newLobby.setSecret_url(generate_URL());
+        }
         newLobby.setCurrent_players(1L);
         newLobby.addPlayer(newLobby.getHost_id());
         newLobby.setHost_name(host.getUsername());
@@ -78,6 +82,19 @@ public class LobbyService {
         host.setLobby(newLobby.getId());
         log.debug("Created Information for User: {}", newLobby);
         return newLobby;
+    }
+
+    public String generate_URL() {
+        Random random = new Random();
+        String characterPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String URL = "";
+
+        for (int i = 0; i < 8; i++) {
+            int randomInt = random.nextInt(62);
+            URL += characterPool.charAt(randomInt);
+        }
+
+        return URL;
     }
 
     public boolean isInThisLobby(Long lobbyId, Long id){
