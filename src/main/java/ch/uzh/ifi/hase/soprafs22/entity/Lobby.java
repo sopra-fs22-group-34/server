@@ -1,11 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 
-import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs22.service.LobbyService;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

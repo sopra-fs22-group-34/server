@@ -17,9 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.TimerTask;
+import java.util.Timer;
 
 /**
  * Lobby Service
@@ -97,62 +100,69 @@ public class LobbyService {
         return URL;
     }
 
-    public boolean isInThisLobby(Long lobbyId, Long id){
+    public boolean isInThisLobby(Long lobbyId, Long id) {
         User player = userRepository.findUserById(id);
         return player.getLobby() != null && player.getLobby().equals(lobbyId);
     }
 
-    public boolean isInAnyLobby(Long id){
+    public boolean isInAnyLobby(Long id) {
         List<Lobby> allLobbies = getLobbies();
-        for (Lobby lobby: allLobbies) {
-            if (isInThisLobby(lobby.getId(), id)) { return true; }
+        for (Lobby lobby : allLobbies) {
+            if (isInThisLobby(lobby.getId(), id)) {
+                return true;
+            }
         }
         return false;
     }
-    
-    public boolean isUserInGame(Long id){
+
+    public boolean isUserInGame(Long id) {
         Lobby lobby = getLobbyOfUser(id);
         // return true if the user is in a lobby, the lobby is closed, and the user didn't leave
-        return lobby != null && !lobby.getIs_open() &&  userRepository.findUserById(id).getLobby() != null && userRepository.findUserById(id).getLobby() != 0L;
+        return lobby != null && !lobby.getIs_open() && userRepository.findUserById(id).getLobby() != null && userRepository.findUserById(id).getLobby() != 0L;
     }
 
-    public Lobby getLobbyOfUser(Long id){
+    public Lobby getLobbyOfUser(Long id) {
         List<Lobby> allLobbies = getLobbies();
-        for (Lobby lobby: allLobbies) {
-            if (isInThisLobby(lobby.getId(), id)) { return lobby; }
+        for (Lobby lobby : allLobbies) {
+            if (isInThisLobby(lobby.getId(), id)) {
+                return lobby;
+            }
         }
         return null;
     }
 
     public JSONObject getGameOfLobby(Long id) {
         Lobby lobby = getLobbyById(id);
-        if (lobby.getGame() == null){
+        if (lobby.getGame() == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
         return lobby.getGame().jsonify().put("lobbyData", getLobbyData(id));
     }
 
-    public void joinLobby(Long lobbyId, Long id){
+    public void joinLobby(Long lobbyId, Long id) {
         User user = userRepository.findUserById(id);
         Lobby lobby = getLobbyById(lobbyId);
         if (isInAnyLobby(id) && !isInThisLobby(lobbyId, id)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already in a different Lobby");
-        } else if (!isInThisLobby(lobbyId, id)) {
+        }
+        else if (!isInThisLobby(lobbyId, id)) {
             user.setLobby(lobbyId);
             lobby.addPlayer(id); //add User into players
-            lobby.setCurrent_players(lobby.getCurrent_players()+1); //adjust player count
+            lobby.setCurrent_players(lobby.getCurrent_players() + 1); //adjust player count
             updateLobby(lobby);
             this.lobbyRepository.flush();
         }
     }
 
-    public void updateLobby(Lobby lobby){
-        if (lobby.getCurrent_players().equals(lobby.getTotal_players())) {startGame(lobby.getId());}
+    public void updateLobby(Lobby lobby) {
+        if (lobby.getCurrent_players().equals(lobby.getTotal_players())) {
+            startGame(lobby.getId());
+        }
     }
 
-    public void deleteLobby(Long lobbyId){
+    public void deleteLobby(Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
-        for (Long playerId: lobby.getPlayers()) {
+        for (Long playerId : lobby.getPlayers()) {
             resetPlayer(playerId);
         }
         if (!lobby.getIs_open()) rewardPlayers(lobby);
@@ -160,69 +170,84 @@ public class LobbyService {
         this.lobbyRepository.flush();
     }
 
-    public void playerLeaves(Lobby lobby, Long id){
+    public void playerLeaves(Lobby lobby, Long id) {
         if (lobby.getPlayers().contains(id)) {
             resetPlayer(id);
             lobby.removePlayer(id);
             lobby.setCurrent_players(lobby.getCurrent_players() - 1); //adjust player count
-        } else {
+        }
+        else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player is not in this lobby.");
         }
     }
 
-    public void resetPlayer(Long id){
+    public void resetPlayer(Long id) {
         User player = userRepository.findUserById(id);
         player.setLobby(0L);
     }
 
-    public void leaveLobby(Long lobbyId, String id){
+    public void leaveLobby(Long lobbyId, String id) {
         Lobby lobby = getLobbyById(lobbyId);
         try {
-            if (lobby.getHost_id() == Long.parseLong(id)){ deleteLobby(lobbyId); } // delete the lobby if the host leaves
-            else { playerLeaves(lobby, Long.parseLong(id)); }// remove player from the list of joined players
-        } catch (NumberFormatException notID) { // if input cannot be converted into an ID, it must be a username
+            if (lobby.getHost_id() == Long.parseLong(id)) {
+                deleteLobby(lobbyId);
+            } // delete the lobby if the host leaves
+            else {
+                playerLeaves(lobby, Long.parseLong(id));
+            }// remove player from the list of joined players
+        }
+        catch (NumberFormatException notID) { // if input cannot be converted into an ID, it must be a username
             Long newId = userRepository.findByUsername(id).getId(); // generate ID from the username
-            if (lobby.getHost_id().equals(newId)){ deleteLobby(lobbyId); }
-            else { playerLeaves(lobby, newId); }
+            if (lobby.getHost_id().equals(newId)) {
+                deleteLobby(lobbyId);
+            }
+            else {
+                playerLeaves(lobby, newId);
+            }
         }
     }
 
-    public void kickUserFromLobby(Long lobbyId, Long hostId, Long userToKickId){
+    public void kickUserFromLobby(Long lobbyId, Long hostId, Long userToKickId) {
         Lobby lobby = getLobbyById(lobbyId);
-        if (lobby.getHost_id().equals(hostId) && isInThisLobby(lobbyId, userToKickId)){
-            playerLeaves(lobby, userToKickId); }
+        if (lobby.getHost_id().equals(hostId) && isInThisLobby(lobbyId, userToKickId)) {
+            playerLeaves(lobby, userToKickId);
+        }
         else if (!lobby.getHost_id().equals(hostId)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can kick players. Make sure you are the host of the lobby before trying to kick someone."); }
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Only the host can kick players. Make sure you are the host of the lobby before trying to kick someone.");
+        }
         else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player to kick with this Id exists."); }
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Player to kick with this Id exists.");
+        }
     }
 
-    public void updatePrivacy(Long lobbyId,  boolean privacy){
+    public void updatePrivacy(Long lobbyId, boolean privacy) {
         Lobby lobby = getLobbyById(lobbyId);
         lobby.setIs_public(privacy);
     }
 
-    public void changeLobbyName(Long lobbyId, String name){
+    public void changeLobbyName(Long lobbyId, String name) {
         Lobby lobby = getLobbyById(lobbyId);
         lobby.setName(name);
     }
 
-    public void changeLobbySize(Long lobbyId, Long size){
+    public void changeLobbySize(Long lobbyId, Long size) {
         Lobby lobby = getLobbyById(lobbyId);
-        if (lobby.getCurrent_players() < size){
+        if (lobby.getCurrent_players() < size) {
             lobby.setTotal_players(size);
             updateLobby(lobby);
             this.lobbyRepository.flush();
         }
-        else {throw new ResponseStatusException(HttpStatus.CONFLICT, "You can't make the lobby smaller since all slots are full!");}
+        else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You can't make the lobby smaller since all slots are full!");
+        }
     }
 
-    public String getPlayerUsername(Long id, int playerIndex){
+    public String getPlayerUsername(Long id, int playerIndex) {
         Lobby lobby = getLobbyById(id);
         return userRepository.findUserById(lobby.getPlayers().get(playerIndex)).getUsername();
     }
 
-    public String getSpectatorUsername(Long id, int spectatorIndex){
+    public String getSpectatorUsername(Long id, int spectatorIndex) {
         Lobby lobby = getLobbyById(id);
         return userRepository.findUserById(lobby.getSpectators().get(spectatorIndex)).getUsername();
     }
@@ -240,7 +265,7 @@ public class LobbyService {
         resetPlayer(id);
     }
 
-    public JSONObject getLobbyData(Long id){
+    public JSONObject getLobbyData(Long id) {
         Lobby lobby = getLobbyById(id);
         JSONObject json = new JSONObject();
         json.put("current_players", lobby.getCurrent_players());
@@ -265,16 +290,17 @@ public class LobbyService {
         return json;
     }
 
-    public void startGame(Long lobbyId){
+    public void startGame(Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
         if (lobby.getGame() == null) {
-            lobby.setGame(new Game(lobby.getCurrent_players().intValue(),getIdSum(lobby)));
+            lobby.setGame(new Game(lobby.getCurrent_players().intValue(), getIdSum(lobby)));
             lobby.setActivePlayers(initializeActivePlayers(lobby));
             lobby.setIs_open(false);
+            Countdown(lobbyId);
         }
     }
 
-    public int getIdSum(Lobby lobby){
+    public int getIdSum(Lobby lobby) {
         int sum = 0;
         for (int i = 0; i < lobby.getPlayers().size(); i++) sum += lobby.getPlayers().get(i).intValue() * i;
         return sum + lobby.getId().intValue();
@@ -288,17 +314,20 @@ public class LobbyService {
 
     public boolean executeMove(Move move, Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
-        if (!lobby.checkIfMoveValid(move)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This move is not valid.");
+        if (!lobby.checkIfMoveValid(move))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This move is not valid.");
         lobby.executeMove(move);
+        Countdown(lobbyId);
         return lobby.checkIfMoveValid(move);
     }
 
     public void skipTurn(Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
         lobby.nextTurn();
+        Countdown(lobbyId);
     }
 
-    public void leaveGame(Long lobbyId, Long id){
+    public void leaveGame(Long lobbyId, Long id) {
         Lobby lobby = getLobbyById(lobbyId);
         lobby.leaveGame(id);
         resetPlayer(id);
@@ -317,7 +346,7 @@ public class LobbyService {
         return scores;
     }
 
-    public void rewardPlayers(Lobby lobby){
+    public void rewardPlayers(Lobby lobby) {
         int[] scores = getPlayerScores(lobby);
         int[] ranking = calculateRanking(scores);
         for (int i = 0; i < lobby.getPlayers().size(); i++) {
@@ -326,20 +355,22 @@ public class LobbyService {
             if (isValidGame(lobby) && isActivePlayer(lobby, player)) {
                 player.addScore(reward);
                 player.finishedGame();
-            } else if (isActivePlayer(lobby, player)){
-                player.addScore(reward/2);
-            } else {
-                if (reward > 0) player.addScore(reward/2);
-                else player.addScore(reward*2);
+            }
+            else if (isActivePlayer(lobby, player)) {
+                player.addScore(reward / 2);
+            }
+            else {
+                if (reward > 0) player.addScore(reward / 2);
+                else player.addScore(reward * 2);
             }
         }
     }
 
-    public int[] calculateRanking(int[] scores){
+    public int[] calculateRanking(int[] scores) {
         int[] ranking = new int[scores.length];
         for (int i = 0; i < scores.length; i++) {
             ranking[i] = 1;
-            for (int score: scores){
+            for (int score : scores) {
                 if (score > scores[i]) ranking[i] += 1;
             }
         }
@@ -347,18 +378,20 @@ public class LobbyService {
     }
 
     public int calculateReward(int playerIndex, int score, int[] ranking, int players) {
-        if (ranking[playerIndex] == 1) return (30 + score/4) * players/2 / isTied(ranking, playerIndex);
-        else if (ranking[playerIndex] == 2 && players > 2) return (20 + score/4) * players/2 / isTied(ranking, playerIndex);
-        else if (ranking[playerIndex] == 2 && players == 2) return (-10 + score/4);
-        else if (ranking[playerIndex] == 3 && players > 3) return (10 + score/4) * players/2 / isTied(ranking, playerIndex);
-        else if (ranking[playerIndex] == 3 && players == 3) return (-15 + score/4);
-        return (-20 + score/4);
+        if (ranking[playerIndex] == 1) return (30 + score / 4) * players / 2 / isTied(ranking, playerIndex);
+        else if (ranking[playerIndex] == 2 && players > 2)
+            return (20 + score / 4) * players / 2 / isTied(ranking, playerIndex);
+        else if (ranking[playerIndex] == 2 && players == 2) return (-10 + score / 4);
+        else if (ranking[playerIndex] == 3 && players > 3)
+            return (10 + score / 4) * players / 2 / isTied(ranking, playerIndex);
+        else if (ranking[playerIndex] == 3 && players == 3) return (-15 + score / 4);
+        return (-20 + score / 4);
     }
 
     public int isTied(int[] ranking, int playerIndex) {
         int rank = ranking[playerIndex];
         int counted = 0;
-        for (int r: ranking) if (r == rank) counted += 1;
+        for (int r : ranking) if (r == rank) counted += 1;
         return counted;
     }
 
@@ -366,7 +399,52 @@ public class LobbyService {
         return lobby.getActivePlayers().size() > 1;
     }
 
-    public boolean isActivePlayer(Lobby lobby, User player){
+    public boolean isActivePlayer(Lobby lobby, User player) {
         return lobby.getActivePlayers().contains(player.getId());
     }
+
+    //invoked by startGame(), skipTurn() and in executeMove() LobbyService
+    //Countdown has to be started new after each action, respectively start it after Game starts, after each skipped turn,
+    // after each move when the next player in the queue can attempt his move
+    public void Countdown(Long lobbyId){
+        Lobby lobby = getLobbyById(lobbyId);
+        Game game = lobby.getGame();
+        Long timerSetting = Long.valueOf(lobby.getTimer()); //Function takes chosen timer settings from Lobby
+        Long endTime = System.currentTimeMillis() + timerSetting;//endTime is the current systemTime + the timer
+        //next players' turn if systemTime is greater than the wanted endTime
+        if(System.currentTimeMillis() > endTime){
+            game.nextTurn();
+        }
+    }
 }
+
+
+
+
+
+    /*
+    public void Countdown(Long lobbyId) {
+        Lobby lobby = getLobbyById(lobbyId);
+        int timerSetting = lobby.getTimer();
+        boolean timerRunning = false;
+        int currentTime;
+
+        if (timerRunning) {
+            return;
+        }
+        timerRunning = true;
+        currentTime = timerSetting;
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask(){
+            public void run(){
+                timer.schedule(task, 1000, currentTime);
+                currentTime--;
+                if (currentTime <= 0) {
+                    timerRunning = false;
+                    timer.cancel();
+                }
+                return currentTime;
+            }
+        }
+    }
+    */
