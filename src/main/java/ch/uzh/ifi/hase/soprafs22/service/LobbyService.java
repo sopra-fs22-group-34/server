@@ -73,10 +73,7 @@ public class LobbyService {
         new Lobby();
         User host = userRepository.findUserById(newLobby.getHost_id());
         newLobby.setIs_open(true);
-        newLobby.setIs_public(newLobby.getIs_public());
-        if (newLobby.getIs_public() == false) {
-            newLobby.setSecret_url(generate_URL());
-        }
+        if (!newLobby.getIs_public()) { newLobby.setSecret_url(generate_URL()); }
         newLobby.setCurrent_players(1L);
         newLobby.addPlayer(newLobby.getHost_id());
         newLobby.setHost_name(host.getUsername());
@@ -408,12 +405,16 @@ public class LobbyService {
     // after each move when the next player in the queue can attempt his move
     public void Countdown(Long lobbyId){
         Lobby lobby = getLobbyById(lobbyId);
-        Game game = lobby.getGame();
-        Long timerSetting = Long.valueOf(lobby.getTimer()); //Function takes chosen timer settings from Lobby
-        Long endTime = System.currentTimeMillis() + timerSetting;//endTime is the current systemTime + the timer
-        //next players' turn if systemTime is greater than the wanted endTime
-        if(System.currentTimeMillis() > endTime){
-            game.nextTurn();
+        Long timer = lobby.getTimer();
+        int currentPlayer = lobby.getCurrentPlayer();
+        if (timer > 0) {
+            //TODO: while (currentPlayer == lobby.getCurrentPlayer()) {
+                Long endTime = System.currentTimeMillis() + timer;//endTime is the current systemTime + the timer
+                //next players' turn if systemTime is greater than the wanted endTime
+                if(System.currentTimeMillis() > endTime){
+                    lobby.nextTurn();
+                }
+            //}
         }
     }
 }

@@ -88,6 +88,7 @@ public class LobbyServiceIntergrationTest {
         testLobby.setIs_open(true);
         testLobby.setTotal_players(4L);
         testLobby.setCurrent_players(4L);
+        testLobby.setTimer(0L);
 
         //when
         Lobby createdLobby = lobbyService.createLobby(testLobby);

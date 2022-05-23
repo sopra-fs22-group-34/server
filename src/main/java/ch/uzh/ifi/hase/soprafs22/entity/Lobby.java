@@ -59,7 +59,7 @@ public class Lobby {
     private Boolean is_public;
 
     @Column()
-    private int timer;
+    private Long timer;
 
     @ElementCollection
     //IMPORTANT: define a list always like this! It will not give you specific errors.
@@ -177,9 +177,9 @@ public class Lobby {
         this.game = game;
     }
 
-    public int getTimer() { return timer; }
+    public Long getTimer() { return timer; }
 
-    public void setTimer(int timer) { this.timer = timer; }
+    public void setTimer(Long timer) { this.timer = timer; }
 
     public boolean isUserInLobby(Long id) { return this.players.contains(id); }
 
@@ -199,4 +199,6 @@ public class Lobby {
     public boolean checkIfMoveValid(Move attemptedMove) {
         return game.checkIfMoveValid(attemptedMove);
     }
+
+    public int getCurrentPlayer() { return game.playerTurn; }
 }
