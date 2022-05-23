@@ -195,7 +195,7 @@ public class LobbyControllerTest {
         given(lobbyService.isInAnyLobby(7L)).willReturn(Boolean.TRUE);
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/users/"+user.getId()+"/lobbies/")
+        MockHttpServletRequestBuilder getRequest = get("/users/"+user.getId()+"/lobby")
                 .contentType(MediaType.APPLICATION_JSON);
 
         // then
@@ -222,7 +222,7 @@ public class LobbyControllerTest {
         given(lobbyService.isInAnyLobby(8L)).willReturn(Boolean.FALSE);
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/users/"+8L+"/lobbies/")
+        MockHttpServletRequestBuilder getRequest = get("/users/"+8L+"/lobby")
                 .contentType(MediaType.APPLICATION_JSON);
 
         // then

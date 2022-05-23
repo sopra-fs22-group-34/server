@@ -363,4 +363,10 @@ class LobbyServiceTest {
         assertEquals(22, lobbyService.calculateReward(0, 60, ranking7, 2));
         assertEquals(22, lobbyService.calculateReward(1, 60, ranking7, 2));
     }
+
+    @Test
+    public void checkUrlLength(){
+        String url = lobbyService.generate_URL();
+        assertEquals(8, url.length());
+    }
 }
