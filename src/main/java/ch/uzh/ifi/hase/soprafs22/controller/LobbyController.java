@@ -68,7 +68,7 @@ public class LobbyController {
         return lobbyService.isInThisLobby(lobbyId, userId);
     }
 
-    @GetMapping("/users/{userId}/lobbies")
+    @GetMapping("/users/{userId}/lobby")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Lobby getUserLobby(@PathVariable long userId){
