@@ -6,6 +6,8 @@ import java.util.List;
 public class LobbyGetDTO {
 
     private Long id;
+
+    private String secret_url;
     private Long host_id;
     private String name;
     private Boolean is_public;
@@ -92,4 +94,12 @@ public class LobbyGetDTO {
     public int getTimer() { return timer; }
 
     public void setTimer(int timer) { this.timer = timer; }
+
+    public String getSecret_url() {
+        return secret_url;
+    }
+
+    public void setSecret_url(String secret_url) {
+        this.secret_url = secret_url;
+    }
 }
