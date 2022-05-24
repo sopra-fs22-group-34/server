@@ -61,6 +61,9 @@ public class Lobby {
     @Column()
     private Long timer;
 
+    @Column()
+    private Long end_time;
+
     @ElementCollection
     //IMPORTANT: define a list always like this! It will not give you specific errors.
     private List<Long> players = new ArrayList<>();
@@ -180,6 +183,10 @@ public class Lobby {
     public Long getTimer() { return timer; }
 
     public void setTimer(Long timer) { this.timer = timer; }
+
+    public Long getEnd_time() { return end_time; }
+
+    public void setEnd_time(Long time) { this.end_time = time; }
 
     public boolean isUserInLobby(Long id) { return this.players.contains(id); }
 

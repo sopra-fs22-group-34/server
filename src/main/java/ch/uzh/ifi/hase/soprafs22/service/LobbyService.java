@@ -73,7 +73,9 @@ public class LobbyService {
         new Lobby();
         User host = userRepository.findUserById(newLobby.getHost_id());
         newLobby.setIs_open(true);
-        if (!newLobby.getIs_public()) { newLobby.setSecret_url(generate_URL()); }
+        if (!newLobby.getIs_public()) {
+            newLobby.setSecret_url(generate_URL());
+        }
         newLobby.setCurrent_players(1L);
         newLobby.addPlayer(newLobby.getHost_id());
         newLobby.setHost_name(host.getUsername());
@@ -132,6 +134,10 @@ public class LobbyService {
         Lobby lobby = getLobbyById(id);
         if (lobby.getGame() == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
+        }
+        if (System.currentTimeMillis() > lobby.getEnd_time()) {
+            lobby.nextTurn();
+            updateTimer(id);
         }
         return lobby.getGame().jsonify().put("lobbyData", getLobbyData(id));
     }
@@ -268,6 +274,7 @@ public class LobbyService {
         json.put("current_players", lobby.getCurrent_players());
         json.put("current_spectators", lobby.getSpectators().size());
         json.put("timer", lobby.getTimer());
+        json.put("end_time", lobby.getEnd_time());
         JSONArray playersArray = new JSONArray();
         for (int i = 0; i < lobby.getPlayers().size(); i++) {
             JSONObject player = new JSONObject();
@@ -293,7 +300,7 @@ public class LobbyService {
             lobby.setGame(new Game(lobby.getCurrent_players().intValue(), getIdSum(lobby)));
             lobby.setActivePlayers(initializeActivePlayers(lobby));
             lobby.setIs_open(false);
-            Countdown(lobbyId);
+            updateTimer(lobbyId);
         }
     }
 
@@ -311,17 +318,17 @@ public class LobbyService {
 
     public boolean executeMove(Move move, Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
-        if (!lobby.checkIfMoveValid(move))
+        boolean isValid = lobby.checkIfMoveValid(move);
+        if (!isValid)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This move is not valid.");
         lobby.executeMove(move);
-        Countdown(lobbyId);
-        return lobby.checkIfMoveValid(move);
+        if (isValid) updateTimer(lobbyId);
+        return isValid;
     }
 
     public void skipTurn(Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
         lobby.nextTurn();
-        Countdown(lobbyId);
     }
 
     public void leaveGame(Long lobbyId, Long id) {
@@ -400,52 +407,11 @@ public class LobbyService {
         return lobby.getActivePlayers().contains(player.getId());
     }
 
-    //invoked by startGame(), skipTurn() and in executeMove() LobbyService
-    //Countdown has to be started new after each action, respectively start it after Game starts, after each skipped turn,
-    // after each move when the next player in the queue can attempt his move
-    public void Countdown(Long lobbyId){
+    public void updateTimer(Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
         Long timer = lobby.getTimer();
-        int currentPlayer = lobby.getCurrentPlayer();
         if (timer > 0) {
-            //TODO: while (currentPlayer == lobby.getCurrentPlayer()) {
-                Long endTime = System.currentTimeMillis() + timer;//endTime is the current systemTime + the timer
-                //next players' turn if systemTime is greater than the wanted endTime
-                if(System.currentTimeMillis() > endTime){
-                    lobby.nextTurn();
-                }
-            //}
+            lobby.setEnd_time(System.currentTimeMillis() + timer * 1000);
         }
     }
 }
-
-
-
-
-
-    /*
-    public void Countdown(Long lobbyId) {
-        Lobby lobby = getLobbyById(lobbyId);
-        int timerSetting = lobby.getTimer();
-        boolean timerRunning = false;
-        int currentTime;
-
-        if (timerRunning) {
-            return;
-        }
-        timerRunning = true;
-        currentTime = timerSetting;
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask(){
-            public void run(){
-                timer.schedule(task, 1000, currentTime);
-                currentTime--;
-                if (currentTime <= 0) {
-                    timerRunning = false;
-                    timer.cancel();
-                }
-                return currentTime;
-            }
-        }
-    }
-    */

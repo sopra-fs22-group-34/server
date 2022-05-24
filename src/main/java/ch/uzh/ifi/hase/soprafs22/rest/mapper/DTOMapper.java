@@ -57,6 +57,7 @@ public interface DTOMapper {
   @Mapping(source = "is_public", target = "is_public")
   @Mapping(source = "players", target = "players")
   @Mapping(source = "timer", target = "timer")
+  @Mapping(source = "end_time", target = "end_time")
   @Mapping(source = "secret_url", target = "secret_url")
   LobbyGetDTO convertEntityToLobbyGetDTO(Lobby lobby);
 }

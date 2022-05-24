@@ -16,7 +16,8 @@ public class LobbyGetDTO {
     private Long current_players;
     private List<Long> players;
     private String host_name;
-    private int timer;
+    private Long timer;
+    private Long end_time;
 
 
     public Long getId() {
@@ -91,9 +92,13 @@ public class LobbyGetDTO {
         this.host_name = host_name;
     }
 
-    public int getTimer() { return timer; }
+    public Long getTimer() { return timer; }
 
-    public void setTimer(int timer) { this.timer = timer; }
+    public void setTimer(Long timer) { this.timer = timer; }
+
+    public Long getEnd_time() { return end_time; }
+
+    public void setEnd_time(Long time) { this.end_time = time; }
 
     public String getSecret_url() {
         return secret_url;
