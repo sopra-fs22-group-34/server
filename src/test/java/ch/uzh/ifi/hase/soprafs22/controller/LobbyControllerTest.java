@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
@@ -676,6 +680,256 @@ public class LobbyControllerTest {
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
     }
+
+    @Test
+    public void get_allLobbies_validInput() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        List<Lobby> allLobbies = Collections.singletonList(lobby);
+
+        // this mocks the UserService -> we define above what the userService should
+        // return when getUsers() is called
+        given(lobbyService.getLobbies()).willReturn(allLobbies);
+
+        // when
+        MockHttpServletRequestBuilder getRequest = get("/lobbies").contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].name", is(lobby.getName())))
+                .andExpect(jsonPath("$[0].is_public", is(lobby.getIs_public())));
+
+    }
+
+    @Test
+    public void post_startGame_validInput() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        doThrow(new ResponseStatusException(HttpStatus.OK))
+                .when(lobbyService)
+                .startGame(lobby.getId());
+
+        MockHttpServletRequestBuilder postRequest = post("/lobbies/"+lobby.getId()+"/game")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(postRequest).andExpect(status().isOk());
+
+    }
+
+
+    @Test
+    public void get_isUserInGame_validInput() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        // user
+        User user = new User();
+        user.setId(8L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setLogged_in(true);
+
+        doThrow(new ResponseStatusException(HttpStatus.OK))
+                .when(lobbyService)
+                .isUserInGame(user.getId());
+
+        MockHttpServletRequestBuilder getRequest = get("/users/"+user.getId()+"/game")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk());
+
+
+    }
+
+    @Test
+    public void get_gameOfLobby_validInput() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        doThrow(new ResponseStatusException(HttpStatus.OK))
+                .when(lobbyService)
+                .getGameOfLobby(lobby.getId());
+
+        MockHttpServletRequestBuilder getRequest = get("/lobbies/"+lobby.getId()+"/game")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void get_gameOfLobby_invalidInput() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .when(lobbyService)
+                .getGameOfLobby(99999L);
+
+        MockHttpServletRequestBuilder getRequest = get("/lobbies/"+99999+"/game")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void get_playersOfLobby_validInput() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        doThrow(new ResponseStatusException(HttpStatus.OK))
+                .when(lobbyService)
+                .getLobbyData(lobby.getId());
+
+        MockHttpServletRequestBuilder getRequest = get("/lobbies/"+lobby.getId()+"/game"+"/players")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk());
+
+    }
+
+
+    @Test
+    public void put_spectateGame() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        // user
+        User user = new User();
+        user.setId(8L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setLogged_in(true);
+
+        doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
+                .when(lobbyService)
+                .spectateGame(lobby.getId(), user.getId());
+
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/users/"+user.getId()+"/spectate")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(putRequest).andExpect(status().isNoContent());
+
+    }
+
+
+    @Test
+    public void put_stopSpectateGame() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        // user
+        User user = new User();
+        user.setId(8L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setLogged_in(true);
+
+        doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
+                .when(lobbyService)
+                .stopSpectating(lobby.getId(), user.getId());
+
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/users/"+user.getId()+"/spectate/leave")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(putRequest).andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    public void put_leaveGame() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        // user
+        User user = new User();
+        user.setId(8L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setLogged_in(true);
+        long playerId = 3L ;
+
+        doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
+                .when(lobbyService)
+                .leaveGame(lobby.getId(), playerId);
+
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/"+lobby.getId()+"/game/"+playerId+"/leave")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(putRequest).andExpect(status().isNoContent());
+
+    }
+
+
+    @Test
+    public void delete_deleteLobby() throws Exception{
+        //given
+        Lobby lobby = new Lobby();
+        lobby.setHost_id(7L);
+        lobby.setName("ToxicMW2Lobby");
+        lobby.setIs_public(false);
+        lobby.setId(1L);
+
+        doThrow(new ResponseStatusException(HttpStatus.OK))
+                .when(lobbyService)
+                .deleteLobby(lobby.getId());
+
+        MockHttpServletRequestBuilder deleteRequest = delete("/lobbies/"+lobby.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(deleteRequest).andExpect(status().isOk());
+
+    }
+
 
 
 
