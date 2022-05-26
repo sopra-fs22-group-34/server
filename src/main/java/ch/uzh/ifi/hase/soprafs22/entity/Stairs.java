@@ -21,7 +21,7 @@ public class Stairs implements Serializable {
         PatternLine targetLine = patternLines[attemptedMove.getTargetRowIndex()];
 
         //if targetLine is empty, move is valid
-        if (targetLine.getColorIndex() == -1) {
+        if (targetLine.getTilesAmount() == 0) {
             return true;
         }
 

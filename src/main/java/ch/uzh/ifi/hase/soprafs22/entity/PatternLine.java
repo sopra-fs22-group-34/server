@@ -50,9 +50,8 @@ public class PatternLine implements Serializable {
             setColorIndex(-1);
             return returnedColor;
         }
-        else {
-            return -1;
-        }
+        if (tilesAmount == 0) { setColorIndex(-1); }
+        return -1;
     }
 
     public JSONObject jsonify() {
