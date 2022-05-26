@@ -108,21 +108,18 @@ public class LobbyController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void joinLobbyWithUser(@PathVariable long lobbyId, @PathVariable long userId){
-        lobbyService.joinLobby(lobbyId, userId);
-    }
+        lobbyService.joinLobby(lobbyId, userId);    }
 
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/spectate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void spectateGame(@PathVariable long lobbyId, @PathVariable long userId){
-        lobbyService.spectateGame(lobbyId, userId);
-    }
+        lobbyService.spectateGame(lobbyId, userId);    }
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/spectate/leave")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void stopSpectating(@PathVariable long lobbyId, @PathVariable long userId){
-        lobbyService.stopSpectating(lobbyId, userId);
-    }
+        lobbyService.stopSpectating(lobbyId, userId);    }
 
     @PutMapping("/lobbies/{lobbyId}/users/{userId}/leave")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -135,29 +132,25 @@ public class LobbyController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void kickUserFromLobbyWithHost(@PathVariable long lobbyId, @PathVariable long hostId, @PathVariable long userToKickId){
-        lobbyService.kickUserFromLobby(lobbyId, hostId, userToKickId);
-    }
+        lobbyService.kickUserFromLobby(lobbyId, hostId, userToKickId);    }
 
     @PutMapping("/lobbies/{lobbyId}/privacy")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void updatePrivacyAsHost(@PathVariable long lobbyId, @RequestBody boolean privacy){
-        lobbyService.updatePrivacy(lobbyId, privacy);
-    }
+        lobbyService.updatePrivacy(lobbyId, privacy);    }
 
     @PutMapping("/lobbies/{lobbyId}/name")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void changeLobbyNameAsHost(@PathVariable long lobbyId, @RequestBody String name){
-        lobbyService.changeLobbyName(lobbyId, name);
-    }
+        lobbyService.changeLobbyName(lobbyId, name);    }
 
     @PutMapping("/lobbies/{lobbyId}/size")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void changeLobbySizeAsHost(@PathVariable long lobbyId, @RequestBody Long size){
-        lobbyService.changeLobbySize(lobbyId, size);
-    }
+        lobbyService.changeLobbySize(lobbyId, size);    }
 
     @PutMapping("/lobbies/{lobbyId}/game/moves")
     @ResponseStatus(HttpStatus.OK)
@@ -177,8 +170,7 @@ public class LobbyController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void leaveGame(@PathVariable long lobbyId, @PathVariable long playerId) {
-        lobbyService.leaveGame(lobbyId, playerId);
-    }
+        lobbyService.leaveGame(lobbyId, playerId);    }
 
     @GetMapping("/lobbies/{lobbyId}/game/moves/{originIndex}/{colorIndex}/{targetRowIndex}/{tileAmount}/{playerIndex}")
     @ResponseStatus(HttpStatus.OK)
