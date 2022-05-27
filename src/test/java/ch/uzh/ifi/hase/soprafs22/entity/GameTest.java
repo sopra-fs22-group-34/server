@@ -152,5 +152,24 @@ public class GameTest {
         testGame.leaveGame(0);
         assertEquals(1, testGame.activePlayersCount());
     }
+
+    @Test
+    public void generateRandomMove(){
+        Game testGame = new Game(2,0);
+
+        for (int i = 0; i < 10; i++) {
+            Move randomMove = testGame.generateRandomMove();
+            assertTrue(testGame.checkIfMoveValid(randomMove));
+            testGame.executeMove(randomMove);
+
+            randomMove = testGame.generateRandomMove();
+            assertTrue(testGame.checkIfMoveValid(randomMove));
+            testGame.executeMove(randomMove);
+        }
+
+
+
+
+    }
     
 }

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game implements Serializable {
 
@@ -136,6 +137,42 @@ public class Game implements Serializable {
         }
 
         return result;
+    }
+
+    public Move generateRandomMove() {
+        //generate all possible factory Moves
+
+        List<Move> possibleMoves = new ArrayList<>();
+
+        for (int origin = 0; origin < factoryCount; origin++) {
+            for (int color = 0; color < 5; color++) {
+                for (int targetRow = -1; targetRow < 5; targetRow++) {
+                    for (int tileAmount = 1; tileAmount < 5; tileAmount++) {
+                        Move move = new Move(origin,color,targetRow,tileAmount,playerTurn);
+                        if (checkIfMoveValid(move)) {
+                            possibleMoves.add(move);
+                        }
+                    }
+                }
+            }
+        }
+
+        //generate all possible middle Moves
+
+        for (int color = 0; color < 5; color++) {
+            for (int targetRow = -1; targetRow < 5; targetRow++) {
+                for (int tileAmount = 1; tileAmount < 28; tileAmount++) {
+                    Move move = new Move(-1,color,targetRow,tileAmount,playerTurn);
+                    if (checkIfMoveValid(move)) {
+                        possibleMoves.add(move);
+                    }
+                }
+            }
+        }
+        Random rand = new Random();
+        Move randomMove = possibleMoves.get(rand.nextInt(possibleMoves.size()));
+
+        return randomMove;
     }
 
     public void processEndOfRound() {
