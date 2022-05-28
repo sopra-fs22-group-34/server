@@ -276,6 +276,7 @@ public class LobbyService {
         json.put("current_players", lobby.getCurrent_players());
         json.put("current_spectators", lobby.getSpectators().size());
         json.put("timer", lobby.getTimer());
+        json.put("time_left", calculateTimeLeft(lobby));
         json.put("end_time", lobby.getEnd_time());
         JSONArray playersArray = new JSONArray();
         for (int i = 0; i < lobby.getPlayers().size(); i++) {
@@ -415,5 +416,9 @@ public class LobbyService {
         if (timer > 0) {
             lobby.setEnd_time(System.currentTimeMillis() + timer * 1000);
         }
+    }
+
+    public Long calculateTimeLeft(Lobby lobby){
+        return lobby.getEnd_time() - System.currentTimeMillis();
     }
 }
