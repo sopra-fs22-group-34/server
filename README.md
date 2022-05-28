@@ -1,11 +1,17 @@
-# SoPra RESTful Service Template FS22
+# Azul Server
 
-## Getting started with Spring Boot 
+We really like the board game Azul and wanted to make a digital version of it.
+
+# Technologies
+We use JPA for database functionality, REST/Spring for RESTful API, the rest is mostly Java.
+
+# Launch & Deployment
+## Getting started with Spring Boot
 
 -   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
 -   Guides: http://spring.io/guides
-    -   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
-    -   Building REST services with Spring: http://spring.io/guides/tutorials/bookmarks/
+  -   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
+  -   Building REST services with Spring: http://spring.io/guides/tutorials/bookmarks/
 
 ## Setup this Template with your IDE of choice
 
@@ -94,3 +100,15 @@ do the following:
 ## Testing
 
 Have a look here: https://www.baeldung.com/spring-boot-testing
+
+# Roadmap
+- Add new game modes with different amounts of colors (e.g. 4 or 6), meaning there would be a 4x4 or 6x6 wall, 4 or 6 stair lines
+- Add easy mode where colors can be placed somewhat freely on the wall, requiring only a sudoku-like pattern of not placing the same color twice in the same row or column, but not having to adhere to the strict color pattern as when playing with normal rules
+- Add AI opponents so one can play ~forever~ alone
+
+# Authors and acknowledgement
+- Samuel Brander
+- Ethan Ohlin
+- Nora Beringer
+- Robin Meister
+- Maximilian Hausdorf
