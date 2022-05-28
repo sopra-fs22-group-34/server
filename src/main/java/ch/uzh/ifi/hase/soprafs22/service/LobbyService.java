@@ -328,7 +328,7 @@ public class LobbyService {
 
     public void skipTurn(Long lobbyId) {
         Lobby lobby = getLobbyById(lobbyId);
-        lobby.nextTurn();
+        lobby.executeMove(lobby.getGame().generateRandomMove());
     }
 
     public void leaveGame(Long lobbyId, Long id) {
