@@ -135,9 +135,11 @@ public class LobbyService {
         if (lobby.getGame() == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no game running");
         }
-        if (System.currentTimeMillis() > lobby.getEnd_time()) {
-            skipTurn(id);
-            updateTimer(id);
+        if (lobby.getEnd_time() != null) {
+            if (System.currentTimeMillis() > lobby.getEnd_time()) {
+                skipTurn(id);
+                updateTimer(id);
+            }
         }
         return lobby.getGame().jsonify().put("lobbyData", getLobbyData(id));
     }
