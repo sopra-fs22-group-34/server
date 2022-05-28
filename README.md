@@ -104,7 +104,7 @@ Have a look here: https://www.baeldung.com/spring-boot-testing
 # Roadmap
 - Add new game modes with different amounts of colors (e.g. 4 or 6), meaning there would be a 4x4 or 6x6 wall, 4 or 6 stair lines
 - Add easy mode where colors can be placed somewhat freely on the wall, requiring only a sudoku-like pattern of not placing the same color twice in the same row or column, but not having to adhere to the strict color pattern as when playing with normal rules
-- Add AI opponents so one can play ~forever~ alone
+- Add AI opponents so one can play forever alone
 
 # Authors and acknowledgement
 - Samuel Brander
