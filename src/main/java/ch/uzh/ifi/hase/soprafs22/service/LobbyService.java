@@ -87,12 +87,11 @@ public class LobbyService {
     }
 
     public String generate_URL() {
-        Random random = new Random();
         String characterPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         String URL = "";
 
         for (int i = 0; i < 8; i++) {
-            int randomInt = random.nextInt(62);
+            int randomInt = new Random().nextInt(62);
             URL += characterPool.charAt(randomInt);
         }
 

@@ -169,8 +169,7 @@ public class Game implements Serializable {
                 }
             }
         }
-        Random rand = new Random();
-        Move randomMove = possibleMoves.get(rand.nextInt(possibleMoves.size()));
+        Move randomMove = possibleMoves.get(new Random().nextInt(possibleMoves.size()));
 
         return randomMove;
     }
