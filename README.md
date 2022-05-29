@@ -144,5 +144,8 @@ Have a look here: https://www.baeldung.com/spring-boot-testing
 # Authors and acknowledgement
 Samuel Brander, Ethan Ohlin, Nora Beringer, Robin Meister, Maximilian Hausdorf
 
+Shoutout to:
+- Michael Kiesling (the creator of Azul) and publishers of the game
+
 # License
 Apache License 2.0
