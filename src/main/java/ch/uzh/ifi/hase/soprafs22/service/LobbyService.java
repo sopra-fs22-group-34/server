@@ -42,6 +42,8 @@ public class LobbyService {
 
     private final UserRepository userRepository;
 
+    private Random random = new Random();
+
     @Autowired
     public LobbyService(@Qualifier("lobbyRepository") LobbyRepository lobbyRepository,
                         @Qualifier("userRepository") UserRepository userRepository) {
@@ -91,7 +93,7 @@ public class LobbyService {
         String URL = "";
 
         for (int i = 0; i < 8; i++) {
-            int randomInt = new Random().nextInt(62);
+            int randomInt = random.nextInt(62);
             URL += characterPool.charAt(randomInt);
         }
 

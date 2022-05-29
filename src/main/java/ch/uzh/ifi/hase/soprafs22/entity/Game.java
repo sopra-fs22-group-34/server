@@ -26,6 +26,8 @@ public class Game implements Serializable {
     int playerTurn;
     int firstNextTurn;
 
+    Random random = new Random();
+
     public Game(int playerNumber, int idTotal) {
 
         gameOver = false;
@@ -169,7 +171,7 @@ public class Game implements Serializable {
                 }
             }
         }
-        Move randomMove = possibleMoves.get(new Random().nextInt(possibleMoves.size()));
+        Move randomMove = possibleMoves.get(random.nextInt(possibleMoves.size()));
 
         return randomMove;
     }
