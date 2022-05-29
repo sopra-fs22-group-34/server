@@ -3,6 +3,10 @@
   <img src="https://github.com/sopra-fs22-group-34/client/blob/master/src/assets/logo.png?raw=true" />
 </p>
 
+![example workflow](https://github.com/sopra-fs22-group-34/server/actions/workflows/deploy.yml/badge.svg) 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-34_server&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-34_server) 
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-34_server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-34_server)
+
 # Introduction
 Azul, famous for winning board game of the year 2018,  is a board game we all love to play, especially with each other. “In Azul players collect sets of similarly colored tiles which they place on their player board. When a row is filled, one of the tiles is moved into a square pattern on the right side of the player board, where it garners points depending on where it is placed in relation to other tiles on the board.” We used to play this game between lessons but then Covid struck and we couldn’t meet up anymore at the university to play. Not living close to each other makes it unfortunately very difficult to plan a date outside of university to play the game together. For this reason we created our own online version of this amazing game to play together wherever and whenever we want to. Also we thought it might be a cool idea to present the game to more peers, as most of them don’t know the game yet which we think is a pity. In our version of the game we implemented multiple automatic features (e.g. the points are calculated automatically) in order for the players to focus more on the fun while playing and the strategic aspects of the game.
 
