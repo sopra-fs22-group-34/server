@@ -1,9 +1,44 @@
 # Azul Server
+<p align="center">
+  <img src="https://github.com/sopra-fs22-group-34/client/blob/master/src/assets/logo.png?raw=true" />
+</p>
 
-We really like the board game Azul and wanted to make a digital version of it.
+[Open Server](https://sopra-fs22-group-34-server.herokuapp.com/)
+
+[Open Client](https://sopra-fs22-group-34-client.herokuapp.com/)
+
+![example workflow](https://github.com/sopra-fs22-group-34/server/actions/workflows/deploy.yml/badge.svg) 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-34_server&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-34_server) 
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-34_server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-34_server)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-34_client&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-34_client)
+
+# Introduction
+Azul, famous for winning board game of the year 2018,  is a board game we all love to play, especially with each other. “In Azul players collect sets of similarly colored tiles which they place on their player board. When a row is filled, one of the tiles is moved into a square pattern on the right side of the player board, where it garners points depending on where it is placed in relation to other tiles on the board.” We used to play this game between lessons but then Covid struck and we couldn’t meet up anymore at the university to play. Not living close to each other makes it unfortunately very difficult to plan a date outside of university to play the game together. For this reason we created our own online version of this amazing game to play together wherever and whenever we want to. Also we thought it might be a cool idea to present the game to more peers, as most of them don’t know the game yet which we think is a pity. In our version of the game we implemented multiple automatic features (e.g. the points are calculated automatically) in order for the players to focus more on the fun while playing and the strategic aspects of the game.
 
 # Technologies
 We use JPA for database functionality, REST/Spring for RESTful API, the rest is mostly Java.
+
+# High-level Components
+## Game
+Role: The game state, moves, and players are stored and controlled in this class. 
+
+Relation: Every Lobby has a Game, and the game is invoked and controlled through its lobby
+
+[Link](https://github.com/sopra-fs22-group-34/server/blob/master/src/main/java/ch/uzh/ifi/hase/soprafs22/entity/Game.java)
+
+## Lobby
+Role: Allows Users to join a game, and acts as a waiting room. Keeps track of various game settings
+
+Relation: Is the bridge between Users and the Game
+
+[Link](https://github.com/sopra-fs22-group-34/server/blob/master/src/main/java/ch/uzh/ifi/hase/soprafs22/entity/Lobby.java)
+
+## User
+Role: Represents a real life person and keeps tracks of their settings (password, etc.)
+
+Relation: Needs to join a Lobby in order to play Game
+
+[Link](https://github.com/sopra-fs22-group-34/server/blob/master/src/main/java/ch/uzh/ifi/hase/soprafs22/entity/User.java)
 
 # Launch & Deployment
 ## Getting started with Spring Boot
@@ -107,8 +142,7 @@ Have a look here: https://www.baeldung.com/spring-boot-testing
 - Add AI opponents so one can play forever alone
 
 # Authors and acknowledgement
-- Samuel Brander
-- Ethan Ohlin
-- Nora Beringer
-- Robin Meister
-- Maximilian Hausdorf
+Samuel Brander, Ethan Ohlin, Nora Beringer, Robin Meister, Maximilian Hausdorf
+
+# License
+Apache License 2.0
